@@ -40,7 +40,7 @@ const Header: React.FC = () => {
             Sign up
           </button>
           <button
-            onClick={() => navigate("/sign-in")}
+            onClick={() => navigate("/SignIn")}
             className="text-black px-8 py-2 border rounded-md text-md font-semibold"
           >
             Sign in

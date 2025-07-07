@@ -34,7 +34,7 @@ const Header: React.FC = () => {
         {/* Contact Button */}
         <div className="hidden md:flex gap-x-4 lg:gap-x-8">
           <button
-            onClick={() => navigate("/sign-up")}
+            onClick={() => navigate("/SignUp")}
             className="text-black px-8 py-2 rounded-md text-md font-semibold bg-[var(--green1)]"
           >
             Sign up
@@ -92,13 +92,13 @@ const Header: React.FC = () => {
           </a>
           <div className=" flex gap-4 justify-center pt-6">
             <button
-              onClick={() => navigate("/sign-up")}
+              onClick={() => navigate("/SignUp")}
               className="text-black px-8 py-2 rounded-md text-md font-semibold bg-[var(--green1)]"
             >
               Sign up
             </button>
             <button
-              onClick={() => navigate("/sign-in")}
+              onClick={() => navigate("/SignIn")}
               className="text-black px-8 py-2 border rounded-md text-md font-semibold"
             >
               Sign in

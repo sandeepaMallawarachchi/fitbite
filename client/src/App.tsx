@@ -5,6 +5,7 @@ import Header from './layout/Header';
 import Home from './pages/Home';
 import Sample from './pages/Sample';
 import SignIn from './auth/SignIn';
+import SignUp from './auth/SignUp';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sample" element={<Sample />} />
           <Route path="/SignIn" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
         </Routes>
         {/* <Footer /> */}
       </Router>

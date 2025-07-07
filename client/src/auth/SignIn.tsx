@@ -105,7 +105,7 @@ export default function SignIn() {
               </div>
             </div>
             {/* Right Column - Social Logins */}
-            <div className="w-full lg:w-1/2 lg:pl-12 space-y-4">
+            <div className="w-full lg:w-1/2 lg:pl-12 space-y-4 lg:pt-14">
               <button className="flex items-center justify-center gap-3 border border-gray-300 font-semibold rounded-full py-3 px-4 w-full hover:bg-gray-50 text-sm sm:text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

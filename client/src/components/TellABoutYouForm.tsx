@@ -29,7 +29,7 @@ function TellABoutYouForm() {
   };
 
   return (
-    <div className="w-full max-h-80% bg-white p-6 md:p-10 pt-20">
+    <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
@@ -49,7 +49,7 @@ function TellABoutYouForm() {
         {/* Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column */}
-          <div className="space-y-6">
+          <div className="space-y-3">
             {/* Name Field */}
             <div>
               <label
@@ -108,7 +108,49 @@ function TellABoutYouForm() {
                 required
               />
             </div>
+           
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-black mb-2"
+              >
+                Password<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
+            <div className="mt-4">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-black mb-2"
+              >
+                Confirm Password<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Re-enter your password"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
+            
             {/* Birthday */}
             <div>
               <label
@@ -131,7 +173,6 @@ function TellABoutYouForm() {
                 <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               </div>
             </div>
-
             {/* Gender */}
             <div>
               <label className="block text-sm font-medium text-black mb-3">
@@ -172,10 +213,6 @@ function TellABoutYouForm() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="space-y-6">
             {/* Weight and Height Row */}
             <div className="grid grid-cols-2 gap-4">
               {/* Weight Field */}
@@ -326,7 +363,7 @@ function TellABoutYouForm() {
             </div>
 
             {/* Next Button */}
-            <div className="pt-8">
+            <div className="pt-4">
               <button
                 onClick={handleSubmit}
                 className="bg-gray-300 hover:bg-gray-400 text-black font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200"

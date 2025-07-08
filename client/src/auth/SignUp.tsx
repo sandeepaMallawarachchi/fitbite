@@ -12,7 +12,7 @@ export default function SignUp() {
       />
 
       {/* Logo */}
-      <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
+      <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10 ">
         <a href="/">
           <img
             src="/vite.png"

@@ -96,7 +96,7 @@ export default function SignIn() {
                 <div className="text-center text-sm sm:text-md text-gray-600 pt-4 ">
                   No Account?{" "}
                   <a
-                    href="#"
+                    href="SignUp"
                     className="text-[#00BBF6] hover:underline font-semibold"
                   >
                     Sign Up

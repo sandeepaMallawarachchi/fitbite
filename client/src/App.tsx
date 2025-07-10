@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './layout/Header';
-import Footer from './layout/Footer';
+// import Footer from './layout/Footer';
 import Home from './pages/Home';
 import Sample from './pages/Sample';
 
@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sample" element={<Sample />} />
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </Router>
     </div>
   );

@@ -1,7 +1,7 @@
 // src/layout/Header.tsx
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -16,13 +16,13 @@ const Header: React.FC = () => {
     >
       <div className="max-w-[1600px] mx-auto px-6 md:px-[40px] mt-[20px] mb-[10px] flex items-center justify-between">
         {/* Logo */}
-        <a href="/">
+        <Link to={"/"}>
           <img
             src="/logo1.png"
             alt="fite bite Logo"
             className="h-10 w-auto cursor-pointer"
           />
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-1 justify-center space-x-10 lg:space-x-20 font-bold text-md">

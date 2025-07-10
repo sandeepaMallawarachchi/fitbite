@@ -12,6 +12,8 @@ function TellABoutYouForm() {
     birthday: "",
     gender: "",
     activityLevel: "",
+    password: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e) => {
@@ -108,7 +110,7 @@ function TellABoutYouForm() {
                 required
               />
             </div>
-           
+
             <div>
               <label
                 htmlFor="password"
@@ -150,7 +152,7 @@ function TellABoutYouForm() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            
+
             {/* Birthday */}
             <div>
               <label

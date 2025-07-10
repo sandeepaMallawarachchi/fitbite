@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "react-router-dom";
 import TellABoutYouForm from "../components/TellABoutYouForm";
 
 export default function SignUp() {
@@ -13,15 +14,16 @@ export default function SignUp() {
 
       {/* Logo */}
       <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10 ">
-        <a href="/">
+        <Link to={"/"}>
           <img
-            src="/vite.png"
+            src="/logo2.png"
             alt="fitbite Logo"
             className="h-8 sm:h-10 w-auto cursor-pointer"
           />
-        </a>
+        </Link>
       </div>
       <div className="z-10 bg-white rounded-xl shadow-xl max-w-5xl w-full mx-8 sm:mx-8 md:mx-24 lg:px-18 px-4 md:px-6  py-6 space-y-6">
+        {/* <SignUp/> */}
         <TellABoutYouForm />
       </div>
     </section>

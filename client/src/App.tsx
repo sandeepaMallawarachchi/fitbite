@@ -1,11 +1,11 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './layout/Header';
-import Footer from './layout/Footer';
 import Home from './pages/Home';
 import Sample from './pages/Sample';
 import SignIn from './auth/SignIn';
 import SignUp from './auth/SignUp';
+import SignUpForm from './auth/SignUpForm';
 
 function AppContent() {
   const location = useLocation();
@@ -18,9 +18,8 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/sample" element={<Sample />} />
         <Route path="/SignIn" element={<SignIn />} />
-        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/SignUp" element={<SignUpForm />} />
       </Routes>
-      {!hideHeaderFooter && <Footer />}
     </>
   );
 }

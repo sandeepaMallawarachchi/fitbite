@@ -18,7 +18,7 @@ export default function SignIn() {
       <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
         <a href="/">
           <img
-            src="/vite.png"
+            src="/logo2.png"
             alt="fitbite Logo"
             className="h-8 sm:h-10 w-auto cursor-pointer"
           />

@@ -11,7 +11,7 @@ import HowtoCalcTDEE from './components/HowtoCalcTDEE';
 
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1";
+  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE";
 
   return (
     <>

@@ -176,7 +176,7 @@ export default function SignUpForm() {
                     }}
                     className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${
                       isFormValid
-                        ? "bg-green-300 text-white hover:opacity-90"
+                        ? "bg-green-300 text-white hover:opacity-90 cursor-pointer"
                         : "bg-gray-200 text-gray-800 cursor-not-allowed"
                     }`}
                   >

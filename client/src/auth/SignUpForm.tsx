@@ -7,16 +7,19 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash, FaCheck } from "react-icons/fa";
 import { MdInfoOutline, MdError } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState<boolean | null>(null);
-  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+  const [confirmPasswordTouched, seConfirmPasswordTouched] = useState(false);
 
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const navigate = useNavigate();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -168,6 +171,9 @@ export default function SignUpForm() {
                   <button
                     type="submit"
                     disabled={!isFormValid}
+                    onClick={() => {
+                      if (isFormValid) navigate("/SignUpStep1");
+                    }}
                     className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${
                       isFormValid
                         ? "bg-green-300 text-white hover:opacity-90"

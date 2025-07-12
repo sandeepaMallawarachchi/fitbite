@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Calendar, ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function TellABoutYouForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     weight: "",
@@ -13,8 +15,20 @@ function TellABoutYouForm() {
     gender: "",
     activityLevel: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.mobileNumber.trim() !== "" &&
+    formData.birthday.trim() !== "" &&
+    formData.gender !== "" &&
+    formData.weight.trim() !== "" &&
+    formData.height.trim() !== "" &&
+    formData.activityLevel !== "" &&
+    formData.password !== "" &&
+    formData.confirmPassword !== "" &&
+    formData.password === formData.confirmPassword;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,13 +40,15 @@ function TellABoutYouForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission logic here
+    if (isFormValid) {
+      console.log("Form submitted:", formData);
+      navigate("/YourTDEE");
+    }
   };
 
   return (
     <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
           <h1 className="text-2xl md:text-4xl font-bold text-black">
@@ -110,49 +126,6 @@ function TellABoutYouForm() {
                 required
               />
             </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-black mb-2"
-              >
-                Password<span className="text-red-500">*</span>
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="mt-4">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-black mb-2"
-              >
-                Confirm Password<span className="text-red-500">*</span>
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Re-enter your password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="space-y-6">
-
             {/* Birthday */}
             <div>
               <label
@@ -215,6 +188,10 @@ function TellABoutYouForm() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
             {/* Weight and Height Row */}
             <div className="grid grid-cols-2 gap-4">
               {/* Weight Field */}
@@ -365,10 +342,15 @@ function TellABoutYouForm() {
             </div>
 
             {/* Next Button */}
-            <div className="pt-4">
+            <div className="pt-32 mb-10">
               <button
                 onClick={handleSubmit}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200"
+                disabled={!isFormValid}
+                className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
+                  isFormValid
+                    ? "bg-green-300 text-white hover:opacity-90"
+                    : "bg-gray-300 text-black cursor-not-allowed"
+                }`}
               >
                 Next
               </button>

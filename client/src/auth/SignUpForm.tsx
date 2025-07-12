@@ -14,7 +14,7 @@ export default function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState<boolean | null>(null);
-  const [confirmPasswordTouched, seConfirmPasswordTouched] = useState(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);

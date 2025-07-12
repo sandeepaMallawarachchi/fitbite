@@ -49,12 +49,12 @@ export default function YourTDEE() {
             </p>
           </div>
           <div className="text-center">
-            <a
-              href="#"
+            <Link
+              to="/HowtoCalcTDEE"
               className="text-gray-600 hover:text-black transition-colors underline"
             >
               Want to see how we calculated this?
-            </a>
+            </Link>
           </div>
           <div className="flex justify-center pt-24">
             <button className="bg-[var(--green1)] hover:bg-[var(--green2)] text-white font-medium px-16 py-3 rounded-lg transition-colors">

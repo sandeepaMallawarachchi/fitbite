@@ -7,6 +7,7 @@ import SignIn from './auth/SignIn';
 import SignUpForm from './auth/SignUpForm';
 import YourTDEE from './components/YourTDEE';
 import SignUpStep1 from "./auth/SignUpStep1"
+import HowtoCalcTDEE from './components/HowtoCalcTDEE';
 
 function AppContent() {
   const location = useLocation();
@@ -23,8 +24,8 @@ function AppContent() {
 
         <Route path="/YourTDEE" element={<YourTDEE />} />
         <Route path="/SignUpStep1" element={<SignUpStep1 />} />
+        <Route path="/HowtoCalcTDEE" element={<HowtoCalcTDEE />} />
 
-        
       </Routes>
     </>
   );

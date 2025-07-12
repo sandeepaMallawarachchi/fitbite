@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Calendar, ChevronLeft } from "lucide-react";
+import {  ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function TellABoutYouForm() {
@@ -134,12 +134,12 @@ function TellABoutYouForm() {
                   type="date"
                   id="birthday"
                   name="birthday"
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
+                  className="w-full px-4 py-3 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
                   value={formData.birthday}
                   onChange={handleChange}
                   required
                 />
-                <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                {/* <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" /> */}
               </div>
             </div>
             {/* Gender */}
@@ -346,7 +346,7 @@ function TellABoutYouForm() {
           </div>
         </div>
         {/* Back button */}
-        <button className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200">
+        <button  onClick={() => navigate(-1)} className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200">
           <ChevronLeft className="h-5 w-5 text-gray-600" />
         </button>
       </div>

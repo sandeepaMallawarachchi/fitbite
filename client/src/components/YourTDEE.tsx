@@ -2,8 +2,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function YourTDEE() {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen bg-white flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -61,7 +63,7 @@ export default function YourTDEE() {
           </div>
           {/* Back button */}
           <div className="absolute bottom-6 right-6 z-10">
-            <button className="bg-gray-300 hover:bg-gray-400 p-3 rounded-lg transition-colors duration-200">
+            <button className="bg-gray-300 hover:bg-gray-400 p-3 rounded-lg transition-colors duration-200"  onClick={() => navigate(-1)}>
               <ChevronLeft className="h-5 w-5 text-gray-600" />
             </button>
           </div>

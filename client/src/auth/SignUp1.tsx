@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import TellABoutYouForm from "../components/TellABoutYouForm";
 
-export default function SignUp() {
+export default function SignUp1() {
   return (
     <section className="relative min-h-screen bg-white overflow-hidden flex items-center justify-center">
       {/* Background Image */}

@@ -27,7 +27,7 @@ export default function YourTDEE() {
 
       {/* Card */}
       <div className="z-10 bg-white rounded-xl shadow-xl max-w-5xl w-full mx-8 sm:mx-8 md:mx-24 lg:px-18 px-4  md:px-6  py-6 space-y-6">
-         <div className="max-w-2xl mx-auto space-y-10">
+        <div className="max-w-2xl mx-auto space-y-10">
           <h1 className="text-4xl font-bold text-center">
             Your Total Daily Energy Expenditure
           </h1>
@@ -55,18 +55,17 @@ export default function YourTDEE() {
             </a>
           </div>
           <div className="flex justify-center pt-24">
-            <button className="bg-[#89E2AD] hover:bg-[#78d49e] text-white font-medium px-16 py-3 rounded-lg transition-colors">
+            <button className="bg-[var(--green1)] hover:bg-[var(--green2)] text-white font-medium px-16 py-3 rounded-lg transition-colors">
               Continue
             </button>
           </div>
+          {/* Back button */}
+          <div className="absolute bottom-6 right-6 z-10">
+            <button className="bg-gray-300 hover:bg-gray-400 p-3 rounded-lg transition-colors duration-200">
+              <ChevronLeft className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
         </div>
-      </div>
-
-      {/* Back button */}
-      <div className="absolute bottom-6 right-6 z-10">
-        <button className="bg-gray-300 hover:bg-gray-400 p-3 rounded-lg transition-colors duration-200">
-          <ChevronLeft className="h-5 w-5 text-gray-600" />
-        </button>
       </div>
     </section>
   );

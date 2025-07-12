@@ -29,7 +29,7 @@ function TellABoutYouForm() {
   formData.activityLevel !== "";
 
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -37,7 +37,7 @@ function TellABoutYouForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
       console.log("Form submitted:", formData);

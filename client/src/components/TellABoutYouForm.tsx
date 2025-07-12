@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Calendar, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,18 +17,17 @@ function TellABoutYouForm() {
     password: "",
     confirmPassword: "",
   });
-  const isFormValid =
-    formData.name.trim() !== "" &&
-    formData.email.trim() !== "" &&
-    formData.mobileNumber.trim() !== "" &&
-    formData.birthday.trim() !== "" &&
-    formData.gender !== "" &&
-    formData.weight.trim() !== "" &&
-    formData.height.trim() !== "" &&
-    formData.activityLevel !== "" &&
-    formData.password !== "" &&
-    formData.confirmPassword !== "" &&
-    formData.password === formData.confirmPassword;
+
+ const isFormValid =
+  formData.name.trim() !== "" &&
+  formData.email.trim() !== "" &&
+  formData.mobileNumber.trim() !== "" &&
+  formData.birthday.trim() !== "" &&
+  formData.gender !== "" &&
+  formData.weight.trim() !== "" &&
+  formData.height.trim() !== "" &&
+  formData.activityLevel !== "";
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,14 +55,12 @@ function TellABoutYouForm() {
           </h1>
           <span className="text-blue-500 font-medium">Step 1 of 6</span>
         </div>
-
         {/* Description */}
         <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl">
           Enter your basic information to create a personalized meal plan. These
           details will help calculate your TDEE and nutritional needs, ensuring
           an accurate and effective plan tailored to your fitness goal.
         </p>
-
         {/* Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column */}
@@ -87,7 +84,6 @@ function TellABoutYouForm() {
                 required
               />
             </div>
-
             {/* Email Field */}
             <div>
               <label
@@ -106,7 +102,6 @@ function TellABoutYouForm() {
                 onChange={handleChange}
               />
             </div>
-
             {/* Mobile Number */}
             <div>
               <label
@@ -136,16 +131,15 @@ function TellABoutYouForm() {
               </label>
               <div className="relative">
                 <input
-                  type="text"
+                  type="date"
                   id="birthday"
                   name="birthday"
-                  placeholder="DD/MM/YYYY"
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
                   value={formData.birthday}
                   onChange={handleChange}
                   required
                 />
-                <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
               </div>
             </div>
             {/* Gender */}
@@ -189,7 +183,6 @@ function TellABoutYouForm() {
               </div>
             </div>
           </div>
-
           {/* Right Column */}
           <div className="space-y-6">
             {/* Weight and Height Row */}
@@ -213,7 +206,6 @@ function TellABoutYouForm() {
                   required
                 />
               </div>
-
               {/* Height Field */}
               <div>
                 <label
@@ -234,7 +226,6 @@ function TellABoutYouForm() {
                 />
               </div>
             </div>
-
             {/* Physical Activity Level */}
             <div>
               <label className="block text-sm font-medium text-black mb-3">
@@ -279,7 +270,6 @@ function TellABoutYouForm() {
                     </label>
                   </div>
                 </div>
-
                 {/* Second Row */}
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex items-center">
@@ -317,7 +307,6 @@ function TellABoutYouForm() {
                     </label>
                   </div>
                 </div>
-
                 {/* Third Row */}
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex items-center">
@@ -340,7 +329,6 @@ function TellABoutYouForm() {
                 </div>
               </div>
             </div>
-
             {/* Next Button */}
             <div className="pt-32 mb-10">
               <button
@@ -348,8 +336,8 @@ function TellABoutYouForm() {
                 disabled={!isFormValid}
                 className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
                   isFormValid
-                    ? "bg-green-300 text-white hover:opacity-90"
-                    : "bg-gray-300 text-black cursor-not-allowed"
+                    ? "bg-green-300 text-black hover:bg-green-400"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
                 Next
@@ -357,7 +345,6 @@ function TellABoutYouForm() {
             </div>
           </div>
         </div>
-
         {/* Back button */}
         <button className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200">
           <ChevronLeft className="h-5 w-5 text-gray-600" />

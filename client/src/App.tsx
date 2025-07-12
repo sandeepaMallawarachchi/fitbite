@@ -4,12 +4,12 @@ import Header from './layout/Header';
 import Home from './pages/Home';
 import Sample from './pages/Sample';
 import SignIn from './auth/SignIn';
-import SignUp from './auth/SignUp';
 import SignUpForm from './auth/SignUpForm';
+import YourTDEE from './components/YourTDEE';
 
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp";
+  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE";
 
   return (
     <>
@@ -19,6 +19,9 @@ function AppContent() {
         <Route path="/sample" element={<Sample />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUpForm />} />
+
+        <Route path="/YourTDEE" element={<YourTDEE />} />
+        
       </Routes>
     </>
   );

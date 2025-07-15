@@ -3,10 +3,42 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== confirmPassword) {
+      return alert("Passwords do not match");
+    }
+
+    try {
+      const payload = { ...formData };
+
+      await axios.post("http://localhost:5000/auth/register", payload);
+
+      toast.success("Registration successful!");
+      navigate("/");
+    } catch (err) {
+      toast.error("Registration failed");
+    }
+  };
 
   return (
     <section className="relative min-h-screen bg-white overflow-hidden flex items-center justify-center">
@@ -49,16 +81,22 @@ export default function SignUpForm() {
           <div className="flex flex-col lg:flex-row p-6 sm:pb-8 lg:pb-10">
             {/* Left Column - Form */}
             <div className="w-full lg:w-1/2 lg:pr-12 lg:border-r-2 border-gray-300 mb-8 lg:mb-0 ">
-              <div className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
                 <input
                   type="email"
+                  name="email"
                   placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full border-1 border-gray-300 rounded-lg p-3 text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-blue-400"
                 />
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
                     placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-blue-400"
                   />
                   <button
@@ -73,6 +111,8 @@ export default function SignUpForm() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Re-enter Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-blue-400"
                   />
                   <button
@@ -113,7 +153,7 @@ export default function SignUpForm() {
                     Sign In
                   </Link>
                 </div>
-              </div>
+              </form>
             </div>
             {/* Right Column - Social Logins */}
             <div className="w-full lg:w-1/2 lg:pl-12 space-y-4 lg:pt-14">

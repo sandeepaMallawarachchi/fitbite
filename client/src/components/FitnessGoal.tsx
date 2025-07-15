@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 
 function FitnessGoal() {
+  // Add this above the component body
+  const goalDescriptions: Record<string, string> = {
+    Maintain: "You will maintain the current weight.",
+    "Fat Loss": "You will reduce body fat with a calorie deficit.",
+    "Muscle Gain": "You will increase muscle mass with a calorie surplus.",
+  };
+
   const [selectedGoal, setSelectedGoal] = useState("");
   const navigate = useNavigate();
 
@@ -84,9 +91,15 @@ function FitnessGoal() {
               </label>
             </div>
           </fieldset>
+          {/* Show description for selected goal */}
+          {selectedGoal && (
+            <p className=" text-md text-gray-600">
+              {goalDescriptions[selectedGoal]}
+            </p>
+          )}
 
           {/* Next Button */}
-          <div className="w-full max-w-xs pt-20">
+          <div className="w-full max-w-xs pt-18">
             <button
               type="submit"
               disabled={!isFormValid}

@@ -1,9 +1,9 @@
 "use client";
 
 import { Link } from "react-router-dom";
-import TellABoutYouForm from "../components/TellABoutYouForm";
+import FitnessGoal from "../components/FitnessGoal";
 
-export default function SignUp() {
+export default function SignUpStep2() {
   return (
     <section className="relative min-h-screen bg-white overflow-hidden flex items-center justify-center">
       {/* Background Image */}
@@ -24,7 +24,7 @@ export default function SignUp() {
       </div>
       <div className="z-10 bg-white rounded-xl shadow-xl max-w-5xl w-full mx-8 sm:mx-8 md:mx-24 lg:px-18 px-4 md:px-6  py-6 space-y-6">
         {/* <SignUp/> */}
-        <TellABoutYouForm />
+        <FitnessGoal />
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import {  ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BackButton from "./BackButton";
 
 function TellABoutYouForm() {
   const navigate = useNavigate();
@@ -346,9 +346,7 @@ function TellABoutYouForm() {
           </div>
         </div>
         {/* Back button */}
-        <button  onClick={() => navigate(-1)} className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200">
-          <ChevronLeft className="h-5 w-5 text-gray-600" />
-        </button>
+        <BackButton />
       </div>
     </div>
   );

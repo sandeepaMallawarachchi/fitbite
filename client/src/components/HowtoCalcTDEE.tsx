@@ -1,11 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import BackButton from "./BackButton";
 import { useNavigate } from "react-router-dom";
 
 export default function HowtoCalcTDEE() {
-  const navigate = useNavigate();
+      const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen bg-white flex items-center justify-center overflow-hidden">
@@ -72,7 +72,7 @@ export default function HowtoCalcTDEE() {
 
           {/* Continue Button */}
           <div className="flex justify-center pt-8">
-            <button className="bg-[var(--green1)] hover:bg-[var(--green2)] text-white font-medium px-16 py-3 rounded-lg transition-colors">
+            <button onClick={() => navigate("/SignUpStep2")} className="bg-[var(--green1)] hover:bg-[var(--green2)] text-white font-medium px-16 py-3 rounded-lg transition-colors">
               Continue
             </button>
           </div>
@@ -82,12 +82,7 @@ export default function HowtoCalcTDEE() {
       </div>
       {/* Back Button (bottom-right) */}
         <div className="absolute bottom-6 right-6 z-10">
-          <button
-            className="bg-gray-300 hover:bg-gray-400 p-3 rounded-lg transition-colors duration-200"
-            onClick={() => navigate(-1)}
-          >
-            <ChevronLeft className="h-5 w-5 text-gray-600" />
-          </button>
+          <BackButton />
         </div>
     </section>
   );

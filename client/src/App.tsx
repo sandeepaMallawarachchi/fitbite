@@ -10,6 +10,7 @@ import SignUpStep1 from "./auth/SignUpStep1";
 import SignUpStep2 from "./auth/SignUpStep2"
 import HowtoCalcTDEE from './components/HowtoCalcTDEE';
 import FitnessGoal from './components/FitnessGoal';
+import Background from './components/Background';
 
 function AppContent() {
   const location = useLocation();
@@ -24,7 +25,7 @@ function AppContent() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUpForm />} />
 
-        <Route path="/SignUpStep1" element={<SignUpStep1 />} />
+        <Route path="/SignUpStep1" element={<Background />} />
         <Route path="/SignUpStep2" element={<SignUpStep2 />} />
 
         <Route path="/YourTDEE" element={<YourTDEE />} />

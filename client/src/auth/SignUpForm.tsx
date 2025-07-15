@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash, FaCheck } from "react-icons/fa";
 import { MdInfoOutline, MdError } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +48,26 @@ export default function SignUpForm() {
       setConfirmPasswordTouched(true);
     }
   };
+
+  const handleSubmit = async () => {
+    if (!isFormValid) return;
+
+    try {
+      const res = await axios.post("http://localhost:5000/auth/register", {
+        email,
+        password,
+      });
+
+      console.log("Registration success:", res.data);
+      navigate("/SignUpStep1");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        alert(err.response?.data?.message || "Registration failed");
+      } else {
+        alert("Unexpected error occurred");
+      }
+    }
+  }
 
   return (
     <section className="relative min-h-screen bg-white overflow-hidden flex items-center justify-center">
@@ -117,13 +138,12 @@ export default function SignUpForm() {
                     placeholder="Re-enter Password"
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
-                    className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${
-                      passwordsMatch === false
-                        ? "border-red-500 focus:ring-red-400"
-                        : passwordsMatch === true
+                    className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${passwordsMatch === false
+                      ? "border-red-500 focus:ring-red-400"
+                      : passwordsMatch === true
                         ? "border-green-500 focus:ring-green-400"
                         : "border-gray-300 focus:ring-blue-400"
-                    }`}
+                      }`}
                   />
                   <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
                     {confirmPasswordTouched &&
@@ -171,14 +191,11 @@ export default function SignUpForm() {
                   <button
                     type="submit"
                     disabled={!isFormValid}
-                    onClick={() => {
-                      if (isFormValid) navigate("/SignUpStep1");
-                    }}
-                    className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${
-                      isFormValid
-                        ? "bg-green-300 text-white hover:opacity-90 cursor-pointer"
-                        : "bg-gray-200 text-gray-800 cursor-not-allowed"
-                    }`}
+                    onClick={handleSubmit}
+                    className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${isFormValid
+                      ? "bg-green-300 text-white hover:opacity-90 cursor-pointer"
+                      : "bg-gray-200 text-gray-800 cursor-not-allowed"
+                      }`}
                   >
                     Sign Up
                   </button>

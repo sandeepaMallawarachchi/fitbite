@@ -6,15 +6,20 @@ import HowtoCalcTDEE from "./HowtoCalcTDEE";
 import { ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { useFormContext } from "../context/FormContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const YourTDEE = () => {
   const navigate = useNavigate();
   const [showCalc, setShowCalc] = useState(false);
-  const { formData } = useFormContext();
+  const { formData, setFormData } = useFormContext();
+  const storedUser = localStorage.getItem("user");
+
+  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+  const userId = parsedUser?.id;
 
   const { weight, height, birthday, activityLevel } = formData;
 
-  // Fallback defaults
   const safeWeight = parseFloat(weight?.toString().replace(/[^\d.]/g, "") || "0");
   const safeHeight = parseFloat(height?.toString().replace(/[^\d.]/g, "") || "0");
   const age = birthday ? calculateAge(birthday) : 0;
@@ -37,6 +42,26 @@ const YourTDEE = () => {
 
   const multiplier = multipliers[activityLevel || "Moderate Active"];
   const TDEE = Math.round(BMR * multiplier);
+
+  const handleContinue = async () => {
+    try {
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData: {
+          TDEE: TDEE.toString(),
+        },
+      });
+
+      setFormData({
+        TDEE: TDEE.toString(),
+      });
+
+      navigate("/SignUpStep2");
+    } catch (err) {
+      console.error("Failed to update TDEE", err);
+      toast.error("Failed to update TDEE")
+    }
+  };
 
   return (
     <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full min-h-[90vh] mt-10 sm:mt-0 lg:px-18 px-4 md:px-6 py-6 space-y-6">
@@ -75,7 +100,7 @@ const YourTDEE = () => {
         )}
         <div className="flex justify-center">
           <button
-            onClick={() => navigate("/SignUpStep2")}
+            onClick={handleContinue}
             className="font-medium py-3 px-8 rounded-lg w-1/2 transition-colors duration-200 bg-green-300 text-black hover:bg-green-400 cursor-pointer"
           >
             Continue

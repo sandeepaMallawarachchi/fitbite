@@ -2,16 +2,22 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "./BackButton";
+import axios from "axios";
+import { useFormContext } from "../context/FormContext";
+import toast from "react-hot-toast";
 
 const FitnessGoal = () => {
   const navigate = useNavigate();
-  const { state: prevState } = useLocation();
-  const prefilledWeight = prevState?.weight || "";
+  const { formData, setFormData } = useFormContext();
+  const currentWeight = formData?.weight || "";
+  
+  const storedUser = localStorage.getItem("user");
+  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+  const userId = parsedUser?.id;
 
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");
   const [goalWeight, setGoalWeight] = useState("");
-  const [currentWeight] = useState(prefilledWeight);
 
 
   const goalDescriptions: Record<string, string> = {
@@ -29,18 +35,45 @@ const FitnessGoal = () => {
     setGoalWeight("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      navigate("/SignUpStep3", {
-        state: {
-          ...prevState,
-          selectedGoal,
-          progressRate,
+
+    if (!isFormValid) return;
+
+    try {
+      const updateData = {
+        fitnessGoal: {
+          primaryGoal: selectedGoal,
+          goalWeight: selectedGoal === "Maintain" ? "" : goalWeight,
+          progress: selectedGoal === "Maintain" ? "" : progressRate,
+        },
+      };
+
+      if (!userId) {
+        toast.error("User ID is missing.");
+        return;
+      }
+
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData,
+      });
+
+      setFormData({
+        selectedGoal,
+        goalWeight,
+        progressRate,
+        fitnessGoal: {
+          primaryGoal: selectedGoal as "Maintain" | "FatLoss" | "MuscleGain",
           goalWeight,
-          currentWeight,
+          progress: progressRate,
         },
       });
+
+      navigate("/SignUpStep3");
+    } catch (err) {
+      console.error("Failed to update fitness goal", err);
+      toast.error("Failed to update fitness goal")
     }
   };
 

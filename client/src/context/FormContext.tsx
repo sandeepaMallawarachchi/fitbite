@@ -1,19 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-
-type FormData = {
-  name?: string;
-  email?: string;
-  phone?: string;
-  weight?: string;
-  height?: string;
-  birthday?: string;
-  gender?: string;
-  activityLevel?: string;
-  selectedGoal?: string;
-  goalWeight?: string;
-  progressRate?: string;
-};
+import type { FormData } from '../types/FormData';
 
 type FormContextType = {
   formData: FormData;
@@ -33,6 +20,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       ? JSON.parse(initialData)
       : {
           email: parsedUser?.email || "",
+          userId: parsedUser?.userId || parsedUser?._id || "",
         };
   });
 

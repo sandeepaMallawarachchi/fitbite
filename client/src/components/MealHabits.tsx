@@ -37,12 +37,6 @@ function MealHabit() {
     navigate("/SignUpStep4");
   };
 
-  const timeOptions = Array.from({ length: 12 }, (_, i) => i + 1)
-    .map((hour) =>
-      ["am", "pm"].map((period) => `${hour < 10 ? "0" : ""}${hour} ${period}`)
-    )
-    .flat();
-
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">
       <div className="max-w-12xl mx-auto">
@@ -103,19 +97,13 @@ function MealHabit() {
                     <label className="block text-md text-gray-600 mb-1">
                       Breakfast
                     </label>
-                    <select
+                    <input
                       name="breakfast"
                       value={schedule.breakfast}
+                      type="time"
                       onChange={handleTimeChange}
                       className="border rounded-md px-3 py-2 w-full text-md"
-                    >
-                      <option value="">00 am</option>
-                      {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
                   {/* Lunch */}
@@ -123,19 +111,13 @@ function MealHabit() {
                     <label className="block text-md text-gray-600 mb-1">
                       Lunch
                     </label>
-                    <select
-                      name="lunch"
+                    <input
+                      name="breakfast"
                       value={schedule.lunch}
+                      type="time"
                       onChange={handleTimeChange}
                       className="border rounded-md px-3 py-2 w-full text-md"
-                    >
-                      <option value="">00 pm</option>
-                      {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
 
                   {/* Dinner (goes to 2nd row left) */}
@@ -143,19 +125,13 @@ function MealHabit() {
                     <label className="block text-md text-gray-600 mb-1">
                       Dinner
                     </label>
-                    <select
-                      name="dinner"
+                    <input
+                      name="breakfast"
                       value={schedule.dinner}
+                      type="time"
                       onChange={handleTimeChange}
                       className="border rounded-md px-3 py-2 w-full text-md"
-                    >
-                      <option value="">00 pm</option>
-                      {timeOptions.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                 </div>
               </div>
@@ -242,11 +218,10 @@ function MealHabit() {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
-                    isFormValid
+                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
                       ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   Next
                 </button>

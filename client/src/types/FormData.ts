@@ -1,0 +1,53 @@
+export type FormData = {
+  userId?: string;
+  TDEE?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  weight?: string;
+  height?: string;
+  birthday?: string;
+  gender?: string;
+  activityLevel?: string;
+  selectedGoal?: string;
+  goalWeight?: string;
+  progressRate?: string;
+
+  // fitnessGoal
+  fitnessGoal?: {
+    primaryGoal?: "Maintain" | "FatLoss" | "MuscleGain";
+    goalWeight?: string;
+    progress?: string;
+  };
+
+  // mealHabits
+  mealHabits?: {
+    dailyMeals?: string;
+    mealsSchedule?: {
+      breakfast?: string;
+      lunch?: string;
+      dinner?: string;
+    };
+    cookAtHome?: "Daily" | "Rarely" | "Few";
+    ability?: "Yes" | "No";
+    grosatyBudget?: "Friendly" | "Moderate" | "Flexible";
+  };
+
+  // dietaryDetails
+  dietaryDetails?: {
+    preference?: "Omnivore" | "Vegan" | "Vegitarian";
+    avoid?: "Yes" | "No";
+    restrictions?: "Yes" | "No";
+    allergies?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
+    performanceMeals?: "preWorkout" | "postWorkout";
+  };
+
+  // medicalDetails
+  medicalDetails?: {
+    medicalConditions?: "Yes" | "No";
+    medicationsAffect?: "Yes" | "No";
+    supplements?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
+    openToSupplements?: "preWorkout" | "postWorkout";
+    notes?: string;
+  };
+};

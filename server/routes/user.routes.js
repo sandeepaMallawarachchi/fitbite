@@ -5,5 +5,6 @@ const { verifyToken, authorizeRoles } = require('../middlewares/auth.middleware'
 
 // Public
 router.patch('/updateUser', userController.UpdateUserDetails);
+router.patch('/updateFitness', userController.updateFitnessDetails);
 
 module.exports = router;

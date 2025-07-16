@@ -1,13 +1,12 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash, FaCheck } from "react-icons/fa";
 import { MdInfoOutline, MdError } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useFormContext } from "../context/FormContext"; // adjust path as needed
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,10 +14,11 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState<boolean | null>(null);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
-
   const [email, setEmail] = useState("");
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setFormData } = useFormContext();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -26,7 +26,6 @@ export default function SignUpForm() {
     confirmPassword !== "" &&
     passwordsMatch === true;
 
-  // Check if passwords match whenever either password changes
   useEffect(() => {
     if (confirmPasswordTouched) {
       if (confirmPassword === "") {
@@ -48,6 +47,7 @@ export default function SignUpForm() {
 
   const handleSubmit = async () => {
     if (!isFormValid) return;
+    setLoading(true);
 
     try {
       const res = await axios.post("http://localhost:5000/auth/register", {
@@ -55,37 +55,38 @@ export default function SignUpForm() {
         password,
       });
 
-      console.log("Registration success:", res.data);
-      navigate("/SignUpStep1");
+      if (res.status === 200 || res.status === 201) {
+        // Save email to context for next steps
+        setFormData({ email });
+        navigate("/SignUpStep1");
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Registration failed");
       } else {
         toast.error("Unexpected error occurred");
       }
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <section className="z-10 bg-white rounded-xl shadow-xl  sm:w-5xl w-full mt-10 sm:mt-0 lg:px-18 px-4 md:px-6  py-6 space-y-6">
-      {/* Sign In Header */}
+    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full min-h-[90vh] mt-10 sm:mt-0 lg:px-18 px-4 md:px-6 py-6 space-y-6">
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-[#268FD0] mb-4 sm:mb-6 lg:mb-8 text-center">
         Sign Up
       </h1>
-      {/* Main Card */}
+
       <div className="w-full max-w-5xl bg-white">
-        {/* Notification Box */}
         <div className="bg-[#f9f7f2] rounded-lg p-4 sm:p-5 md:py-6 mb-5 flex items-center justify-center gap-3 sm:gap-4 mx-auto max-w-4xl">
           <MdInfoOutline className="text-xl sm:text-2xl text-gray-700 mt-1 flex-shrink-0" />
           <p className="text-gray-800 text-xs sm:text-sm text-center">
-            Sign up by entering a valid username and strong password to create
-            your account
+            Sign up by entering a valid email and strong password to create your account.
           </p>
         </div>
-        {/* Two Column Layout */}
+
         <div className="flex flex-col lg:flex-row p-6 sm:pb-8 lg:pb-10">
-          {/* Left Column - Form */}
-          <div className="w-full lg:w-1/2 lg:pr-12 lg:border-r-2 border-gray-300 mb-8 lg:mb-0 ">
+          <div className="w-full lg:w-1/2 lg:pr-12 lg:border-r-2 border-gray-300 mb-8 lg:mb-0">
             <div className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
               <input
                 type="email"
@@ -93,6 +94,7 @@ export default function SignUpForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border-1 border-gray-300 rounded-lg p-3 text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
+
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -109,27 +111,29 @@ export default function SignUpForm() {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Re-enter Password"
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
-                  className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${passwordsMatch === false
-                    ? "border-red-500 focus:ring-red-400"
-                    : passwordsMatch === true
+                  className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${
+                    passwordsMatch === false
+                      ? "border-red-500 focus:ring-red-400"
+                      : passwordsMatch === true
                       ? "border-green-500 focus:ring-green-400"
                       : "border-gray-300 focus:ring-blue-400"
-                    }`}
+                  }`}
                 />
                 <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
-                  {confirmPasswordTouched &&
-                    confirmPassword !== "" &&
-                    (passwordsMatch ? (
+                  {confirmPasswordTouched && confirmPassword !== "" && (
+                    passwordsMatch ? (
                       <FaCheck className="text-green-500" />
                     ) : (
                       <MdError className="text-red-500" />
-                    ))}
+                    )
+                  )}
                 </div>
                 <button
                   type="button"
@@ -139,83 +143,64 @@ export default function SignUpForm() {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-              {confirmPasswordTouched &&
-                confirmPassword !== "" &&
-                !passwordsMatch && (
-                  <p className="text-red-500 text-xs mt-1">
-                    Passwords do not match
-                  </p>
-                )}
+
+              {confirmPasswordTouched && confirmPassword && !passwordsMatch && (
+                <p className="text-red-500 text-xs mt-1">Passwords do not match</p>
+              )}
               {confirmPasswordTouched && passwordsMatch && (
                 <p className="text-green-500 text-xs mt-1">Passwords match</p>
               )}
+
               <div className="w-full flex items-center gap-4 pl-5 pt-4 sm:pt-6 lg:pt-6">
                 <input
                   type="checkbox"
                   id="remember"
                   className="h-4 w-4 rounded border-gray-300 text-[#00BBF6] focus:ring-blue-400"
                 />
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm sm:text-md text-gray-600"
-                >
+                <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
                   Remember me on this computer
                 </label>
               </div>
+
               <div>
-                {/* signup button */}
                 <button
                   type="submit"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || loading}
                   onClick={handleSubmit}
-                  className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${isFormValid
-                    ? "bg-green-300 text-white hover:opacity-90 cursor-pointer"
-                    : "bg-gray-200 text-gray-800 cursor-not-allowed"
-                    }`}
+                  className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base transition-colors duration-200 ${
+                    isFormValid && !loading
+                      ? "bg-green-300 text-white hover:opacity-90"
+                      : "bg-gray-200 text-gray-800 cursor-not-allowed"
+                  }`}
                 >
-                  Sign Up
+                  {loading ? "Signing up..." : "Sign Up"}
                 </button>
               </div>
+
               <div className="text-center text-sm sm:text-md text-gray-600">
                 Already have an Account?{" "}
-                <a
-                  href="SignIn"
-                  className="text-[#00BBF6] hover:underline font-semibold"
-                >
+                <Link to="/SignIn" className="text-[#00BBF6] hover:underline font-semibold">
                   Sign In
-                </a>
+                </Link>
               </div>
             </div>
           </div>
+
           {/* Right Column - Social Logins */}
           <div className="w-full lg:w-1/2 lg:pl-12 space-y-4 lg:pt-14">
-            <button className="flex items-center sm:justify-between justify-center px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
-              <img
-                src="/googlelogo.png"
-                alt="google logo"
-                className="w-6 h-6"
-              />
-              <span className="hidden sm:inline sm:pr-8">
-                Sign in with Google
-              </span>
+            <button className="flex items-center justify-center sm:justify-between px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
+              <img src="/googlelogo.png" alt="google logo" className="w-6 h-6" />
+              <span className="hidden sm:inline sm:pr-8">Sign in with Google</span>
               <span className="sm:hidden">Google</span>
             </button>
-            <button className="flex items-center sm:justify-between justify-center pl-18 pr-14 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
+            <button className="flex items-center justify-center sm:justify-between pl-18 pr-14 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
               <img src="/fblogo.jpg" alt="fb logo" className="w-6 h-6" />
-              <span className="hidden sm:inline sm:pr-8">
-                Sign in with Facebook
-              </span>
+              <span className="hidden sm:inline sm:pr-8">Sign in with Facebook</span>
               <span className="sm:hidden">Facebook</span>
             </button>
-            <button className="flex items-center sm:justify-between justify-center px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
-              <img
-                src="/applelogo.svg"
-                alt="apple logo"
-                className="w-5 h-6"
-              />
-              <span className="hidden sm:inline sm:pr-8">
-                Sign in with Apple
-              </span>
+            <button className="flex items-center justify-center sm:justify-between px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
+              <img src="/applelogo.svg" alt="apple logo" className="w-5 h-6" />
+              <span className="hidden sm:inline sm:pr-8">Sign in with Apple</span>
               <span className="sm:hidden">Apple</span>
             </button>
           </div>

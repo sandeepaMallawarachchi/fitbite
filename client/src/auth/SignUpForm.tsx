@@ -6,7 +6,8 @@ import { MdInfoOutline, MdError } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useFormContext } from "../context/FormContext"; // adjust path as needed
+import { useFormContext } from "../context/FormContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,7 @@ export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setFormData } = useFormContext();
+  const { login } = useAuth();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -56,7 +58,9 @@ export default function SignUpForm() {
       });
 
       if (res.status === 200 || res.status === 201) {
-        // Save email to context for next steps
+        const userId = res.data.userId;
+        const user = { id: userId, email, role: "user" };
+        login(user, "");
         setFormData({ email });
         navigate("/SignUpStep1");
       }
@@ -118,13 +122,12 @@ export default function SignUpForm() {
                   placeholder="Re-enter Password"
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
-                  className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${
-                    passwordsMatch === false
+                  className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${passwordsMatch === false
                       ? "border-red-500 focus:ring-red-400"
                       : passwordsMatch === true
-                      ? "border-green-500 focus:ring-green-400"
-                      : "border-gray-300 focus:ring-blue-400"
-                  }`}
+                        ? "border-green-500 focus:ring-green-400"
+                        : "border-gray-300 focus:ring-blue-400"
+                    }`}
                 />
                 <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
                   {confirmPasswordTouched && confirmPassword !== "" && (
@@ -167,11 +170,10 @@ export default function SignUpForm() {
                   type="submit"
                   disabled={!isFormValid || loading}
                   onClick={handleSubmit}
-                  className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base transition-colors duration-200 ${
-                    isFormValid && !loading
+                  className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base transition-colors duration-200 ${isFormValid && !loading
                       ? "bg-green-300 text-white hover:opacity-90"
                       : "bg-gray-200 text-gray-800 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   {loading ? "Signing up..." : "Sign Up"}
                 </button>

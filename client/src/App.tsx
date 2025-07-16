@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from
 import Header from './layout/Header';
 import Home from './pages/Home';
 import SignUpStep2 from "./auth/SignUpStep2"
+import SignUpStep3 from "./auth/SignUpForm3"
 import FitnessGoal from './components/FitnessGoal';
 import Background from './components/Background';
 import toast, { Toaster } from 'react-hot-toast';
@@ -39,6 +40,7 @@ function AppContent() {
 
         <Route path="/SignUpStep1" element={<Background />} />
         <Route path="/SignUpStep2" element={<SignUpStep2 />} />
+        <Route path="/SignUpStep3" element={<SignUpStep3 />} />
 
         <Route path="/YourTDEE" element={<Background />} />
         <Route path="/FitnessGoal" element={<FitnessGoal />} />'

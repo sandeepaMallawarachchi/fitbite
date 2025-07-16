@@ -1,22 +1,58 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './layout/Header';
-// import Footer from './layout/Footer';
 import Home from './pages/Home';
-import Sample from './pages/Sample';
+import SignUpStep2 from "./auth/SignUpStep2"
+import FitnessGoal from './components/FitnessGoal';
+import Background from './components/Background';
+import toast, { Toaster } from 'react-hot-toast';
+import ScrollToTop from './components/ScrollToTop';
+import { useEffect } from 'react';
+import { useAuth } from './context/AuthContext';
+
+function AppContent() {
+  const location = useLocation();
+  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2";
+
+  const { shouldRedirect, clearRedirect } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      toast("You’ve been logged out due to inactivity.", {
+        duration: 4000,
+      });
+      navigate("/");
+      clearRedirect();
+    }
+  }, [shouldRedirect]);
+
+  return (
+    <>
+      {!hideHeaderFooter && <Header />}
+      <Toaster position="top-center" />
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/SignIn" element={<Background />} />
+        <Route path="/SignUp" element={<Background />} />
+
+        <Route path="/SignUpStep1" element={<Background />} />
+        <Route path="/SignUpStep2" element={<SignUpStep2 />} />
+
+        <Route path="/YourTDEE" element={<Background />} />
+        <Route path="/FitnessGoal" element={<FitnessGoal />} />'
+
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sample" element={<Sample />} />
-        </Routes>
-        {/* <Footer /> */}
-      </Router>
-    </div>
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

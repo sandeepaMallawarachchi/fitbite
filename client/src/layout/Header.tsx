@@ -23,7 +23,7 @@ const Header: React.FC = () => {
             className="h-10 w-auto cursor-pointer"
           />
         </Link>
-
+        
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-1 justify-center space-x-10 lg:space-x-20 font-bold text-md">
           <a href="/Features">Features</a>

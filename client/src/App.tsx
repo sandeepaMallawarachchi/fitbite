@@ -34,8 +34,11 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/SignIn" element={<Background />} />
         <Route path="/SignUp" element={<Background />} />
+
         <Route path="/SignUpStep1" element={<Background />} />
         <Route path="/SignUpStep2" element={<Background />} />
+        <Route path="/SignUpStep3" element={<Background />} />
+
         <Route path="/YourTDEE" element={<Background />} />
       </Routes>
     </>

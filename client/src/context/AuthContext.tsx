@@ -19,13 +19,14 @@ interface AuthContextType {
   token: string | null;
   login: (user: User, token: string) => void;
   logout: () => void;
-  shouldRedirect: boolean;            
-  clearRedirect: () => void;         
+  shouldRedirect: boolean;
+  clearRedirect: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const INACTIVITY_LIMIT_MS = 60 * 1000;
+// const INACTIVITY_LIMIT_MS = 60 * 1000;
+const INACTIVITY_LIMIT_MS = 24 * 60 * 60 * 1000;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setToken(null);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setShouldRedirect(true); // trigger redirect after logout
+    setShouldRedirect(true);
   }, []);
 
   const clearRedirect = () => setShouldRedirect(false);

@@ -27,7 +27,7 @@ function HealthAndMedical() {
     });
 
     // Final step: maybe submit data or go to dashboard
-    navigate("/SignUpComplete");
+    navigate("/SignUpStep6");
   };
 
   return (

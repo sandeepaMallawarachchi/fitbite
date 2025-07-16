@@ -85,7 +85,7 @@ const FitnessGoal = () => {
                         value={goal}
                         onChange={handleChange}
                         checked={selectedGoal === goal}
-                        className="accent-green-300 scale-150"
+                        className="accent-black scale-150"
                       />
                       <span>{goal}</span>
                     </label>
@@ -147,7 +147,7 @@ const FitnessGoal = () => {
                             value={`${rate}`}
                             onChange={(e) => setProgressRate(e.target.value)}
                             checked={progressRate === `${rate}`}
-                            className="accent-green-300 scale-150"
+                            className="accent-black scale-150"
                           />
                           <span>
                             {selectedGoal === "Fat Loss"

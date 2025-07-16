@@ -6,42 +6,44 @@ import BackButton from "./BackButton";
 function DietaryDetails() {
   const navigate = useNavigate();
 
-  const [dailyMeals, setDailyMeals] = useState("");
-  const [cookAtHome, setCookAtHome] = useState("");
-  const [canMealPrep, setCanMealPrep] = useState("");
-  const [budget, setBudget] = useState("");
-  const [schedule, setSchedule] = useState({
-    breakfast: "",
-    lunch: "",
-    dinner: "",
-  });
+  const [mealPreference, setMealPreference] = useState("");
+  const [foodsToAvoid, setFoodsToAvoid] = useState("");
+  const [religiousRestrictions, setReligiousRestrictions] = useState("");
+  const [allergies, setAllergies] = useState<string[]>([]);
+  const [performanceMeals, setPerformanceMeals] = useState<string[]>([]);
 
-  const isFormValid =
-    dailyMeals &&
-    cookAtHome &&
-    canMealPrep &&
-    budget &&
-    schedule.breakfast &&
-    schedule.lunch &&
-    schedule.dinner;
+  const isFormValid = mealPreference && foodsToAvoid && religiousRestrictions;
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setSchedule((prev) => ({ ...prev, [name]: value }));
+  const handleAllergyChange = (value: string) => {
+    setAllergies((prev) =>
+      prev.includes(value)
+        ? prev.filter((a) => a !== value)
+        : [...prev, value]
+    );
+  };
+
+  const handlePerformanceMealChange = (value: string) => {
+    setPerformanceMeals((prev) =>
+      prev.includes(value)
+        ? prev.filter((m) => m !== value)
+        : [...prev, value]
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return;
-    console.log({ dailyMeals, cookAtHome, canMealPrep, budget, schedule });
-    navigate("/SignUpStep4");
-  };
 
-  const timeOptions = Array.from({ length: 12 }, (_, i) => i + 1)
-    .map((hour) =>
-      ["am", "pm"].map((period) => `${hour < 10 ? "0" : ""}${hour} ${period}`)
-    )
-    .flat();
+    console.log({
+      mealPreference,
+      foodsToAvoid,
+      religiousRestrictions,
+      allergies,
+      performanceMeals,
+    });
+
+    navigate("/SignUpStep5");
+  };
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">
@@ -51,7 +53,7 @@ function DietaryDetails() {
           <h1 className="text-3xl md:text-4xl font-bold text-black">
             Dietary Details
           </h1>
-          <span className="text-blue-500 font-medium">Step 3 of 6</span>
+          <span className="text-blue-500 font-medium">Step 4 of 6</span>
         </div>
 
         {/* Description */}
@@ -65,15 +67,136 @@ function DietaryDetails() {
         {/* Form */}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
-            {/* Left Column */}
-            <div className="space-y-12">
-             
-             
+            {/* LEFT COLUMN */}
+            <div className="space-y-8">
+              {/* Meal Preference */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Meal Preference<span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  {["Omnivore", "Vegan", "Vegetarian"].map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-gray-600"
+                    >
+                      <input
+                        type="radio"
+                        name="mealPreference"
+                        value={opt}
+                        checked={mealPreference === opt}
+                        onChange={() => setMealPreference(opt)}
+                        className="w-5 h-5 accent-black "
+                      />
+                      <span className="text-sm">{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Foods to Avoid */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Foods to Avoid<span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-x-8">
+                  {["No", "Yes"].map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-gray-600"
+                    >
+                      <input
+                        type="radio"
+                        name="foodsToAvoid"
+                        value={opt}
+                        checked={foodsToAvoid === opt}
+                        onChange={() => setFoodsToAvoid(opt)}
+                        className="w-5 h-5 accent-black "
+                      />
+                      <span className="text-sm">{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cultural or Religious Restrictions */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Cultural or Religious Restrictions
+                  <span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-x-8">
+                  {["No", "Yes"].map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-gray-600"
+                    >
+                      <input
+                        type="radio"
+                        name="religiousRestrictions"
+                        value={opt}
+                        checked={religiousRestrictions === opt}
+                        onChange={() => setReligiousRestrictions(opt)}
+                        className="w-5 h-5 accent-black "
+                      />
+                      <span className="text-sm">{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Right Column */}
-            <div className="space-y-7">
-              
+            {/* RIGHT COLUMN */}
+            <div className="space-y-8">
+              {/* Allergies or Intolerances */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Allergies or Intolerances
+                </label>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  {["Dairy", "Nuts", "Shellfish", "Gluten", "Other"].map(
+                    (opt) => (
+                      <label
+                        key={opt}
+                        className="flex items-center gap-2 text-gray-600"
+                      >
+                        <input
+                          type="checkbox"
+                          value={opt}
+                          checked={allergies.includes(opt)}
+                          onChange={() => handleAllergyChange(opt)}
+                          className="w-5 h-5 accent-black "
+                        />
+                        <span className="text-sm">{opt}</span>
+                      </label>
+                    )
+                  )}
+                </div>
+              </div>
+
+              {/* Performance Meals */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Performance Meals
+                </label>
+                <div className="space-y-4">
+                  {["Pre-workout Meal", "Post-workout Meal"].map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-gray-600"
+                    >
+                      <input
+                        type="checkbox"
+                        value={opt}
+                        checked={performanceMeals.includes(opt)}
+                        onChange={() => handlePerformanceMealChange(opt)}
+                        className="w-5 h-5 accent-black "
+                      />
+                      <span className="text-sm">{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               {/* Next Button */}
               <div className="pt-8">

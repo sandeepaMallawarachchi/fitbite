@@ -84,7 +84,7 @@ function MealHabit() {
                         value={opt}
                         checked={dailyMeals === opt}
                         onChange={() => setDailyMeals(opt)}
-                        className="w-5 h-5 accent-green-300"
+                        className="w-5 h-5 accent-black "
                       />
                       <span className="text-md">{opt}</span>
                     </label>
@@ -180,7 +180,7 @@ function MealHabit() {
                         value={opt}
                         checked={cookAtHome === opt}
                         onChange={() => setCookAtHome(opt)}
-                        className="w-5 h-5 accent-green-300"
+                        className="w-5 h-5 accent-black "
                       />
                       <span className="text-md">{opt}</span>
                     </label>
@@ -204,7 +204,7 @@ function MealHabit() {
                         value={opt}
                         checked={canMealPrep === opt}
                         onChange={() => setCanMealPrep(opt)}
-                        className="w-5 h-5 accent-green-300"
+                        className="w-5 h-5 accent-black "
                       />
                       {opt}
                     </label>
@@ -229,7 +229,7 @@ function MealHabit() {
                         value={opt}
                         checked={budget === opt}
                         onChange={() => setBudget(opt)}
-                        className="w-5 h-5 accent-green-300"
+                        className="w-5 h-5 accent-black "
                       />
                       <span className="text-md">{opt}</span>
                     </label>

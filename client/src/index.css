@@ -27,13 +27,20 @@ html, body {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+body {
+  margin: 0;
+}
 
 button {
   border-radius: 8px;
-
+  cursor: pointer;
   transition:
     border-color 0.25s,
     transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.10); 
 }
 
 

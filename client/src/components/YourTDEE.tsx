@@ -1,15 +1,28 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HowtoCalcTDEE from "./HowtoCalcTDEE";
 import { ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { useFormContext } from "../context/FormContext";
 
 const YourTDEE = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { weight, height, birthday, activityLevel } = state || {};
   const [showCalc, setShowCalc] = useState(false);
+  const { setFormData } = useFormContext();
+
+  useEffect(() => {
+    if (weight && height && birthday && activityLevel) {
+      setFormData({
+        weight,
+        height,
+        birthday,
+        activityLevel,
+      });
+    }
+  }, [weight, height, birthday, activityLevel, setFormData]);
 
 
   // Calculate age from birthday
@@ -40,7 +53,7 @@ const YourTDEE = () => {
   const TDEE = Math.round(BMR * multiplier);
 
   return (
-    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full mt-10 sm:mt-0 lg:px-18 px-4 md:px-6 py-6 space-y-6">
+    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full min-h-[90vh] mt-10 sm:mt-0 lg:px-18 px-4 md:px-6 py-6 space-y-6">
       <div className="max-w-2xl mx-auto space-y-10">
         <h1 className="text-4xl font-bold text-center">Your Total Daily Energy Expenditure</h1>
         <p className="text-gray-700 text-center">
@@ -76,7 +89,7 @@ const YourTDEE = () => {
         )}
         <div className="flex justify-center">
           <button
-            onClick={() => navigate("/SignUpStep2")}
+            onClick={() => navigate("/SignUpStep2", { state })}
             className="font-medium py-3 px-8 rounded-lg w-1/2 transition-colors duration-200 bg-green-300 text-black hover:bg-green-400 cursor-pointer"
           >
             Continue

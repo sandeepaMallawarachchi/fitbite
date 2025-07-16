@@ -1,15 +1,18 @@
 "use client";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "./BackButton";
 
-function FitnessGoal() {
+const FitnessGoal = () => {
+  const navigate = useNavigate();
+  const { state: prevState } = useLocation();
+  const prefilledWeight = prevState?.weight || "";
+
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");
-  const [currentWeight, setCurrentWeight] = useState("");
   const [goalWeight, setGoalWeight] = useState("");
+  const [currentWeight] = useState(prefilledWeight);
 
-  const navigate = useNavigate();
 
   const goalDescriptions: Record<string, string> = {
     Maintain: "You will maintain the current weight.",
@@ -29,11 +32,15 @@ function FitnessGoal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log("Selected Goal:", selectedGoal);
-      console.log("Current Weight:", currentWeight);
-      console.log("Goal Weight:", goalWeight);
-      console.log("Progress Rate:", progressRate);
-      navigate("/next-step"); // replace with your actual route
+      navigate("/next-step", {
+        state: {
+          ...prevState,
+          selectedGoal,
+          progressRate,
+          goalWeight,
+          currentWeight,
+        },
+      });
     }
   };
 
@@ -99,7 +106,6 @@ function FitnessGoal() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
                         placeholder="70 kg"
                         value={currentWeight}
-                        onChange={(e) => setCurrentWeight(e.target.value)}
                         required
                       />
                     </div>
@@ -167,7 +173,7 @@ function FitnessGoal() {
           <div
             className={`w-full max-w-xs mx-auto ${selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
               ? "pt-0"
-              : "pt-10"
+              : "pt-40"
               }`}
           >
             <button

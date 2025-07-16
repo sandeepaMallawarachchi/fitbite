@@ -40,7 +40,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full mt-10 sm:mt-0 lg:px-18 px-4 md:px-6  py-6 space-y-6">
+    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full min-h-[90vh] mt-10 sm:mt-0 lg:px-18 px-4 md:px-6  py-6 space-y-6">
       {/* Sign In Header */}
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-[#268FD0] mb-4 sm:mb-6 lg:mb-8 text-center">
         Sign In

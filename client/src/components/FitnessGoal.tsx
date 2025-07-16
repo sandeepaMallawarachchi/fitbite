@@ -38,8 +38,8 @@ function FitnessGoal() {
   };
 
   return (
-    <div className="w-full bg-white px-6 md:px-10 flex flex-col justify-center">
-      <div className="max-w-6xl mx-auto w-full">
+    <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
+      <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
           <h1 className="text-2xl md:text-4xl font-bold text-black">
@@ -58,11 +58,10 @@ function FitnessGoal() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="pt-10 ">
           <div
-            className={`${
-              selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
-                ? "grid grid-cols-1 md:grid-cols-2 gap-12"
-                : "flex flex-col items-center"
-            }`}
+            className={`${selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
+              ? "grid grid-cols-1 md:grid-cols-2 gap-12"
+              : "flex flex-col items-center"
+              }`}
           >
             {/* Left: Primary Goal + weights */}
             <div>
@@ -90,71 +89,71 @@ function FitnessGoal() {
               {/* Conditional weight inputs */}
               {(selectedGoal === "Fat Loss" ||
                 selectedGoal === "Muscle Gain") && (
-                <>
-                  <div className="mt-8">
-                    <label className="block text-sm font-medium text-black mb-2">
-                      Current Weight<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
-                      placeholder="70 kg"
-                      value={currentWeight}
-                      onChange={(e) => setCurrentWeight(e.target.value)}
-                      required
-                    />
-                  </div>
+                  <>
+                    <div className="mt-8">
+                      <label className="block text-sm font-medium text-black mb-2">
+                        Current Weight<span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
+                        placeholder="70 kg"
+                        value={currentWeight}
+                        onChange={(e) => setCurrentWeight(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-black mb-2">
-                      Goal Weight<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
-                      placeholder="0 kg"
-                      value={goalWeight}
-                      onChange={(e) => setGoalWeight(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <p className="mt-2 text-blue-500 text-sm cursor-pointer">
-                    Switch to US units (lb)
-                  </p>
-                </>
-              )}
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-black mb-2">
+                        Goal Weight<span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
+                        placeholder="0 kg"
+                        value={goalWeight}
+                        onChange={(e) => setGoalWeight(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <p className="mt-2 text-blue-500 text-sm cursor-pointer">
+                      Switch to US units (lb)
+                    </p>
+                  </>
+                )}
             </div>
 
             {/* Right: Progress rate */}
             {(selectedGoal === "Fat Loss" ||
               selectedGoal === "Muscle Gain") && (
-              <div>
-                <fieldset>
-                  <legend className="text-sm font-semibold text-gray-700 mb-4">
-                    Your Desired Progress<span className="text-red-500">*</span>
-                  </legend>
-                  <div className="flex flex-col space-y-4">
-                    {[0.5, 1.0, 1.5].map((rate) => (
-                      <label key={rate} className="flex items-center space-x-3">
-                        <input
-                          type="radio"
-                          name="progressRate"
-                          value={`${rate}`}
-                          onChange={(e) => setProgressRate(e.target.value)}
-                          checked={progressRate === `${rate}`}
-                          className="accent-green-300 scale-150"
-                        />
-                        <span>
-                          {selectedGoal === "Fat Loss"
-                            ? `Lose ${rate} kg/week`
-                            : `Gain ${rate} kg/week`}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-              </div>
-            )}
+                <div>
+                  <fieldset>
+                    <legend className="text-sm font-semibold text-gray-700 mb-4">
+                      Your Desired Progress<span className="text-red-500">*</span>
+                    </legend>
+                    <div className="flex flex-col space-y-4">
+                      {[0.5, 1.0, 1.5].map((rate) => (
+                        <label key={rate} className="flex items-center space-x-3">
+                          <input
+                            type="radio"
+                            name="progressRate"
+                            value={`${rate}`}
+                            onChange={(e) => setProgressRate(e.target.value)}
+                            checked={progressRate === `${rate}`}
+                            className="accent-green-300 scale-150"
+                          />
+                          <span>
+                            {selectedGoal === "Fat Loss"
+                              ? `Lose ${rate} kg/week`
+                              : `Gain ${rate} kg/week`}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
+              )}
           </div>
 
           {/* If Maintain: show message */}
@@ -166,20 +165,18 @@ function FitnessGoal() {
 
           {/* Next Button */}
           <div
-            className={`w-full max-w-xs mx-auto ${
-              selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
-                ? "pt-0"
-                : "pt-10"
-            }`}
+            className={`w-full max-w-xs mx-auto ${selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
+              ? "pt-0"
+              : "pt-10"
+              }`}
           >
             <button
               type="submit"
               disabled={!isFormValid}
-              className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
-                isFormValid
-                  ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+                ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
             >
               Next
             </button>

@@ -34,7 +34,7 @@ function MealHabit() {
     e.preventDefault();
     if (!isFormValid) return;
     console.log({ dailyMeals, cookAtHome, canMealPrep, budget, schedule });
-    navigate("/next-step");
+    navigate("/SignUpStep4");
   };
 
   const timeOptions = Array.from({ length: 12 }, (_, i) => i + 1)

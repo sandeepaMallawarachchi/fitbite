@@ -32,7 +32,7 @@ const FitnessGoal = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      navigate("/next-step", {
+      navigate("/SignUpStep3", {
         state: {
           ...prevState,
           selectedGoal,

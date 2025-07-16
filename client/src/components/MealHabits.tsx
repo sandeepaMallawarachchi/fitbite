@@ -66,7 +66,7 @@ function MealHabit() {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
             {/* Left Column */}
-            <div className="space-y-12">
+            <div className="space-y-12 mb-4">
               {/* Daily Meals */}
               <div>
                 <label className="block text-md font-semibold text-gray-800 mb-3">

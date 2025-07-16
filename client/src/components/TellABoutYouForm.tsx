@@ -354,7 +354,7 @@ const TellABoutYouForm = () => {
               </div>
             </div>
             {/* Next Button */}
-            <div className="pt-32 mb-10">
+            <div className="md:pt-32 mb-10">
               <button
                 onClick={handleSubmit}
                 disabled={!isFormValid}

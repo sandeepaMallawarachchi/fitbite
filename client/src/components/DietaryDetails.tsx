@@ -68,7 +68,7 @@ function DietaryDetails() {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
             {/* LEFT COLUMN */}
-            <div className="space-y-8">
+            <div className="space-y-8 mb-4">
               {/* Meal Preference */}
               <div>
                 <label className="block text-sm font-semibold text-gray-800 mb-2">

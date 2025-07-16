@@ -6,6 +6,7 @@ import SignUpStep1 from "../auth/SignUpStep1";
 import SignUpForm from "../auth/SignUpForm";
 import SignUpStep2 from "../auth/SignUpStep2";
 import SignIn from "../auth/SignIn";
+import YourTDEE from "./YourTDEE";
 
 const Background = () => {
 
@@ -16,6 +17,8 @@ const Background = () => {
         if (location.pathname === "/SignUpStep1") return <SignUpStep1 />;
         if (location.pathname === "/SignUpStep2") return <SignUpStep2 />;
         if (location.pathname === "/SignIn") return <SignIn />;
+        if (location.pathname === "/YourTDEE") return <YourTDEE />;
+
         return <p className="text-red-500 text-xl">Invalid step</p>;
     };
 

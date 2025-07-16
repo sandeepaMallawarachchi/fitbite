@@ -2,46 +2,70 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import toast from "react-hot-toast";
 
-function TellABoutYouForm() {
+const TellABoutYouForm = () => {
   const navigate = useNavigate();
+  const storedUser = localStorage.getItem("user");
+  const storedToken = localStorage.getItem("token");
+
+  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
   const [formData, setFormData] = useState({
     name: "",
     weight: "",
     height: "",
-    email: "",
-    mobileNumber: "",
+    email: parsedUser?.email || "",
+    phone: "",
     birthday: "",
     gender: "",
     activityLevel: "",
-    password: "",
-    confirmPassword: "",
   });
 
- const isFormValid =
-  formData.name.trim() !== "" &&
-  formData.email.trim() !== "" &&
-  formData.mobileNumber.trim() !== "" &&
-  formData.birthday.trim() !== "" &&
-  formData.gender !== "" &&
-  formData.weight.trim() !== "" &&
-  formData.height.trim() !== "" &&
-  formData.activityLevel !== "";
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.phone.trim() !== "" &&
+    formData.birthday.trim() !== "" &&
+    formData.gender !== "" &&
+    formData.weight.trim() !== "" &&
+    formData.height.trim() !== "" &&
+    formData.activityLevel !== "";
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      console.log("Form submitted:", formData);
-      navigate("/YourTDEE");
+    if (!isFormValid || !storedToken) return;
+
+    try {
+      const res = await fetch("http://localhost:5000/user/updateUser", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Update failed");
+
+      console.log("User updated:", data.user);
+      navigate("/YourTDEE", { state: formData });
+    } catch (err: any) {
+      console.error("Error updating user:", err.message);
+      toast.error("Error updating user")
     }
   };
 
@@ -99,24 +123,24 @@ function TellABoutYouForm() {
                 placeholder="abc@gmail.com"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
                 value={formData.email}
-                onChange={handleChange}
+                readOnly
               />
             </div>
             {/* Mobile Number */}
             <div>
               <label
-                htmlFor="mobileNumber"
+                htmlFor="phone"
                 className="block text-sm font-medium text-black mb-2"
               >
                 Mobile Number<span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                id="mobileNumber"
-                name="mobileNumber"
+                id="phone"
+                name="phone"
                 placeholder="+94 XX XXX XXXX"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-600"
-                value={formData.mobileNumber}
+                value={formData.phone}
                 onChange={handleChange}
                 required
               />
@@ -334,11 +358,10 @@ function TellABoutYouForm() {
               <button
                 onClick={handleSubmit}
                 disabled={!isFormValid}
-                className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
-                  isFormValid
-                    ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+                  ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
               >
                 Next
               </button>

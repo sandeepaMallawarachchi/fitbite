@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import axios from "axios";
 import { useFormContext } from "../context/FormContext";
@@ -10,7 +10,7 @@ const FitnessGoal = () => {
   const navigate = useNavigate();
   const { formData, setFormData } = useFormContext();
   const currentWeight = formData?.weight || "";
-  
+
   const storedUser = localStorage.getItem("user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const userId = parsedUser?.id;

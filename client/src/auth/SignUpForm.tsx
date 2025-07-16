@@ -77,7 +77,7 @@ export default function SignUpForm() {
         {/* Notification Box */}
         <div className="bg-[#f9f7f2] rounded-lg p-4 sm:p-5 md:py-6 mb-5 flex items-center justify-center gap-3 sm:gap-4 mx-auto max-w-4xl">
           <MdInfoOutline className="text-xl sm:text-2xl text-gray-700 mt-1 flex-shrink-0" />
-          <p className="text-gray-800 text-xs sm:text-sm">
+          <p className="text-gray-800 text-xs sm:text-sm text-center">
             Sign up by entering a valid username and strong password to create
             your account
           </p>

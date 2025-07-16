@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './layout/Header';
 import Home from './pages/Home';
 import YourTDEE from './components/YourTDEE';
@@ -7,12 +7,27 @@ import SignUpStep2 from "./auth/SignUpStep2"
 import HowtoCalcTDEE from './components/HowtoCalcTDEE';
 import FitnessGoal from './components/FitnessGoal';
 import Background from './components/Background';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
+import { useEffect } from 'react';
+import { useAuth } from './context/AuthContext';
 
 function AppContent() {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2";
+
+  const { shouldRedirect, clearRedirect } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      toast("You’ve been logged out due to inactivity.", {
+        duration: 4000,
+      });
+      navigate("/");
+      clearRedirect();
+    }
+  }, [shouldRedirect]);
 
   return (
     <>

@@ -74,13 +74,13 @@ const TellABoutYouForm = () => {
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
-          <h1 className="text-2xl md:text-4xl font-bold text-black">
+          <h1 className="text-2xl md:text-4xl font-bold text-black text-center md:text-left">
             Tell About Yourself
           </h1>
           <span className="text-blue-500 font-medium">Step 1 of 6</span>
         </div>
         {/* Description */}
-        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl">
+        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl text-justify md:text-left">
           Enter your basic information to create a personalized meal plan. These
           details will help calculate your TDEE and nutritional needs, ensuring
           an accurate and effective plan tailored to your fitness goal.

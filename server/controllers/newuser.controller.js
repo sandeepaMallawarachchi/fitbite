@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.UpdateUserDetails = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.body.userId;
 
         const { name, email, phone, birthday, gender, weight, height, activityLevel } = req.body;
 

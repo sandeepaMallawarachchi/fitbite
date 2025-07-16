@@ -1,6 +1,7 @@
-import { useLocation, useNavigate } from "react-router-dom";
+"use client";
+import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HowtoCalcTDEE from "./HowtoCalcTDEE";
 import { ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
@@ -8,38 +9,23 @@ import { useFormContext } from "../context/FormContext";
 
 const YourTDEE = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { weight, height, birthday, activityLevel } = state || {};
   const [showCalc, setShowCalc] = useState(false);
-  const { setFormData } = useFormContext();
+  const { formData } = useFormContext();
 
-  useEffect(() => {
-    if (weight && height && birthday && activityLevel) {
-      setFormData({
-        weight,
-        height,
-        birthday,
-        activityLevel,
-      });
-    }
-  }, [weight, height, birthday, activityLevel, setFormData]);
+  const { weight, height, birthday, activityLevel } = formData;
 
+  // Fallback defaults
+  const safeWeight = parseFloat(weight?.toString().replace(/[^\d.]/g, "") || "0");
+  const safeHeight = parseFloat(height?.toString().replace(/[^\d.]/g, "") || "0");
+  const age = birthday ? calculateAge(birthday) : 0;
 
-  // Calculate age from birthday
-  const calculateAge = (dob: string) => {
+  function calculateAge(dob: string) {
     const birthDate = new Date(dob);
     const ageDifMs = Date.now() - birthDate.getTime();
     return new Date(ageDifMs).getUTCFullYear() - 1970;
-  };
+  }
 
-  const age = birthday ? calculateAge(birthday) : 25;
-
-  // Parse weight and height
-  const w = parseFloat(weight);
-  const h = parseFloat(height);
-
-  // Mifflin-St Jeor formula for males
-  const BMR = 10 * w + 6.25 * h - 5 * age + 5;
+  const BMR = 10 * safeWeight + 6.25 * safeHeight - 5 * age + 5;
 
   const multipliers: Record<string, number> = {
     "Sedentary": 1.2,
@@ -49,7 +35,7 @@ const YourTDEE = () => {
     "Super Active": 1.9,
   };
 
-  const multiplier = multipliers[activityLevel] || 1.55;
+  const multiplier = multipliers[activityLevel || "Moderate Active"];
   const TDEE = Math.round(BMR * multiplier);
 
   return (
@@ -85,11 +71,11 @@ const YourTDEE = () => {
             </div>
           </motion.div>
         ) : (
-          <HowtoCalcTDEE weight={w} height={h} age={age} activityLevel={activityLevel} />
+          <HowtoCalcTDEE />
         )}
         <div className="flex justify-center">
           <button
-            onClick={() => navigate("/SignUpStep2", { state })}
+            onClick={() => navigate("/SignUpStep2")}
             className="font-medium py-3 px-8 rounded-lg w-1/2 transition-colors duration-200 bg-green-300 text-black hover:bg-green-400 cursor-pointer"
           >
             Continue
@@ -112,6 +98,6 @@ const YourTDEE = () => {
       </div>
     </section>
   );
-}
+};
 
-export default YourTDEE
+export default YourTDEE;

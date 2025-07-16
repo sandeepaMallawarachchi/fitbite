@@ -1,17 +1,22 @@
 "use client";
 import { motion } from "framer-motion";
+import { useFormContext } from "../context/FormContext";
 
-const HowtoCalcTDEE = ({
-  weight,
-  height,
-  age,
-  activityLevel,
-}: {
-  weight: number;
-  height: number;
-  age: number;
-  activityLevel: string;
-}) => {
+const HowtoCalcTDEE = () => {
+  const { formData } = useFormContext();
+
+  const weight = parseFloat(formData.weight || "0");
+  const height = parseFloat(formData.height || "0");
+  const age = formData.birthday
+    ? calculateAge(formData.birthday)
+    : 0;
+
+  function calculateAge(dob: string) {
+    const birthDate = new Date(dob);
+    const ageDifMs = Date.now() - birthDate.getTime();
+    return new Date(ageDifMs).getUTCFullYear() - 1970;
+  }
+
   const BMR = 10 * weight + 6.25 * height - 5 * age + 5;
 
   const multipliers: Record<string, number> = {
@@ -22,6 +27,7 @@ const HowtoCalcTDEE = ({
     "Super Active": 1.9,
   };
 
+  const activityLevel = formData.activityLevel || "";
   const multiplier = multipliers[activityLevel];
   const TDEE = BMR * multiplier;
 
@@ -30,7 +36,8 @@ const HowtoCalcTDEE = ({
       initial={{ y: 30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="overflow-y-auto h-[300px]">
+      className="overflow-y-auto h-[300px]"
+    >
       <div className="max-w-2xl mx-auto space-y-10">
         <div className="text-center sm:text-left space-y-6">
           <h2 className="text-lg font-semibold text-gray-500">
@@ -69,11 +76,9 @@ const HowtoCalcTDEE = ({
             </p>
             <p className="text-sm text-gray-800 font-medium">
               "{activityLevel}" means moderate exercise or sports 3–5 days a week.
-              The corresponding activity multiplier is {multiplier}".
+              The corresponding activity multiplier is {multiplier}.
             </p>
-            <p className="text-sm text-gray-800 font-medium">
-              So:
-            </p>
+            <p className="text-sm text-gray-800 font-medium">So:</p>
             <p className="text-center font-semibold text-md sm:text-xl">
               TDEE = BMR × {multiplier}
             </p>
@@ -85,7 +90,10 @@ const HowtoCalcTDEE = ({
             </p>
 
             <p className="text-sm text-gray-600">
-              Final TDEE: <span className="font-bold text-black">~{Math.round(TDEE)} calories/day</span>
+              Final TDEE:{" "}
+              <span className="font-bold text-black">
+                ~{Math.round(TDEE)} calories/day
+              </span>
             </p>
             <p className="text-sm text-gray-800 font-medium sm:pr-10">
               Small rounding differences are normal.

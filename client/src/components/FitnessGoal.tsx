@@ -82,14 +82,14 @@ const FitnessGoal = () => {
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
-          <h1 className="text-2xl md:text-4xl font-bold text-black">
+          <h1 className="text-2xl md:text-4xl font-bold text-black text-center md:text-left">
             Fitness Goal
           </h1>
           <span className="text-blue-500 font-medium">Step 2 of 6</span>
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl">
+        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl text-justify md:text-left">
           Define your fitness objectives to create a tailored nutrition plan.
           Understanding your goals will help in designing a plan that aligns
           with your desired outcomes.

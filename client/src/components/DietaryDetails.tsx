@@ -50,14 +50,14 @@ function DietaryDetails() {
       <div className="max-w-12xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-black">
+          <h1 className="text-3xl md:text-4xl font-bold text-black text-center md:text-left">
             Dietary Details
           </h1>
           <span className="text-blue-500 font-medium">Step 4 of 6</span>
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 mb-10 leading-relaxed max-w-12xl">
+        <p className="text-gray-700 mb-10 leading-relaxed max-w-12xl text-justify md:text-left">
           Provide your dietary preferences and restrictions to create a meal
           plan that suits your lifestyle. These details ensure the plan aligns
           with their nutritional needs, food choices, and any allergies or

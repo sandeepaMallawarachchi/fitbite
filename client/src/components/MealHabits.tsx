@@ -42,14 +42,14 @@ function MealHabit() {
       <div className="max-w-12xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-black">
+          <h1 className="text-3xl md:text-4xl font-bold text-black text-center md:text-left">
             Meal Habits & Prep Details
           </h1>
           <span className="text-blue-500 font-medium">Step 3 of 6</span>
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 mb-10 leading-relaxed max-w-12xl">
+        <p className="text-gray-700 mb-10 leading-relaxed max-w-12xl text-justify md:text-left">
           Share your meal preparation preferences, cooking habits, and available
           resources. Understanding your cooking style, time availability, and
           kitchen setup will help in designing a meal plan that is practical,

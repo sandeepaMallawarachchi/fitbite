@@ -10,7 +10,7 @@ import { useAuth } from './context/AuthContext';
 
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2" || location.pathname === "/SignUpStep3";
+  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2" || location.pathname === "/SignUpStep3" || location.pathname === "/SignUpStep4" || location.pathname === "/SignUpStep5";
 
   const { shouldRedirect, clearRedirect } = useAuth();
   const navigate = useNavigate();
@@ -38,6 +38,8 @@ function AppContent() {
         <Route path="/SignUpStep1" element={<Background />} />
         <Route path="/SignUpStep2" element={<Background />} />
         <Route path="/SignUpStep3" element={<Background />} />
+        <Route path="/SignUpStep4" element={<Background />} />
+        <Route path="/SignUpStep5" element={<Background />} />
 
         <Route path="/YourTDEE" element={<Background />} />
       </Routes>

@@ -33,15 +33,15 @@ body {
 
 button {
   border-radius: 8px;
-  cursor: pointer;
+  /* cursor: pointer; */
   transition:
     border-color 0.25s,
     transform 0.2s ease;
 }
 
-button:hover {
+/* button:hover {
   transform: scale(1.10); 
-}
+} */
 
 
 

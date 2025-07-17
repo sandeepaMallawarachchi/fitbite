@@ -57,12 +57,12 @@ const fitnessSchema = new Schema({
             enum: ['Yes', 'No'],
         },
         allergies: {
-            type: String,
-            required: true,
+            type: [String],
             enum: ['Dairy', 'Nuts', 'Shellfish', 'Gluten', 'Other'],
+            default: null
         },
         performanceMeals: {
-            type: String,
+            type: [String],
             required: true,
             enum: ['preWorkout', 'postWorkout'],
         },

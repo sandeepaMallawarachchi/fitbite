@@ -38,8 +38,8 @@ export type FormData = {
     preference?: "Omnivore" | "Vegan" | "Vegitarian";
     avoid?: "Yes" | "No";
     restrictions?: "Yes" | "No";
-    allergies?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
-    performanceMeals?: "preWorkout" | "postWorkout";
+    allergies?: ("Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other")[];
+    performanceMeals?: ("preWorkout" | "postWorkout")[];
   };
 
   // medicalDetails

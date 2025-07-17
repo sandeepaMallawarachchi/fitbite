@@ -4,6 +4,7 @@ const userController = require('../controllers/newuser.controller');
 const { verifyToken, authorizeRoles } = require('../middlewares/auth.middleware');
 
 // Public
-router.patch('/updateUser', verifyToken, userController.UpdateUserDetails);
+router.patch('/updateUser', userController.UpdateUserDetails);
+router.patch('/updateFitness', userController.updateFitnessDetails);
 
 module.exports = router;

@@ -2,8 +2,6 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './layout/Header';
 import Home from './pages/Home';
-import SignUpStep2 from "./auth/SignUpStep2"
-import FitnessGoal from './components/FitnessGoal';
 import Background from './components/Background';
 import toast, { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
@@ -12,7 +10,7 @@ import { useAuth } from './context/AuthContext';
 
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2";
+  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2" || location.pathname === "/SignUpStep3" || location.pathname === "/SignUpStep4" || location.pathname === "/SignUpStep5" || location.pathname === "/SignUpStep6";
 
   const { shouldRedirect, clearRedirect } = useAuth();
   const navigate = useNavigate();
@@ -38,11 +36,13 @@ function AppContent() {
         <Route path="/SignUp" element={<Background />} />
 
         <Route path="/SignUpStep1" element={<Background />} />
-        <Route path="/SignUpStep2" element={<SignUpStep2 />} />
+        <Route path="/SignUpStep2" element={<Background />} />
+        <Route path="/SignUpStep3" element={<Background />} />
+        <Route path="/SignUpStep4" element={<Background />} />
+        <Route path="/SignUpStep5" element={<Background />} />
+        <Route path="/SignUpStep6" element={<Background />} />
 
         <Route path="/YourTDEE" element={<Background />} />
-        <Route path="/FitnessGoal" element={<FitnessGoal />} />'
-
       </Routes>
     </>
   );

@@ -1,10 +1,10 @@
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const Fitness = require('../models/FitnessDetails');
+
 
 exports.UpdateUserDetails = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.body.userId;
 
         const { name, email, phone, birthday, gender, weight, height, activityLevel } = req.body;
 
@@ -31,4 +31,27 @@ exports.UpdateUserDetails = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Failed to update details', error: err.message });
     }
+};
+
+exports.updateFitnessDetails = async (req, res) => {
+  try {
+    const { userId, updateData } = req.body;
+
+    if (!userId || !updateData) {
+      return res.status(400).json({ message: 'userId and updateData are required' });
+    }
+
+    const updatedFitness = await Fitness.findOneAndUpdate(
+      { userId },
+      { $set: updateData },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({
+      message: 'Fitness details updated successfully',
+      fitness: updatedFitness,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update fitness details', error: error.message });
+  }
 };

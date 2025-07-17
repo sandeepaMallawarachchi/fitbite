@@ -1,15 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import axios from "axios";
+import { useFormContext } from "../context/FormContext";
+import toast from "react-hot-toast";
 
-function FitnessGoal() {
+const FitnessGoal = () => {
+  const navigate = useNavigate();
+  const { formData, setFormData } = useFormContext();
+  const currentWeight = formData?.weight || "";
+
+  const storedUser = localStorage.getItem("user");
+  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+  const userId = parsedUser?.id;
+
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");
-  const [currentWeight, setCurrentWeight] = useState("");
   const [goalWeight, setGoalWeight] = useState("");
 
-  const navigate = useNavigate();
 
   const goalDescriptions: Record<string, string> = {
     Maintain: "You will maintain the current weight.",
@@ -26,30 +35,69 @@ function FitnessGoal() {
     setGoalWeight("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      console.log("Selected Goal:", selectedGoal);
-      console.log("Current Weight:", currentWeight);
-      console.log("Goal Weight:", goalWeight);
-      console.log("Progress Rate:", progressRate);
-      navigate("/next-step"); // replace with your actual route
+
+    if (!isFormValid) return;
+
+    try {
+      const updateData = {
+        fitnessGoal: {
+          primaryGoal: selectedGoal,
+          goalWeight: selectedGoal === "Maintain" ? "" : goalWeight,
+          progress: selectedGoal === "Maintain" ? "" : progressRate,
+        },
+      };
+
+      if (!userId) {
+        toast.error("User ID is missing.");
+        return;
+      }
+
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData,
+      });
+
+      setFormData({
+        selectedGoal,
+        goalWeight,
+        progressRate,
+        fitnessGoal: {
+          primaryGoal: selectedGoal as "Maintain" | "FatLoss" | "MuscleGain",
+          goalWeight,
+          progress: progressRate,
+        },
+      });
+
+      navigate("/SignUpStep3");
+    } catch (err) {
+      console.error("Failed to update fitness goal", err);
+      toast.error("Failed to update fitness goal")
     }
   };
+
+  useEffect(() => {
+    if (formData?.fitnessGoal) {
+      setSelectedGoal(formData.fitnessGoal.primaryGoal || "");
+      setGoalWeight(formData.fitnessGoal.goalWeight || "");
+      setProgressRate(formData.fitnessGoal.progress || "");
+    }
+  }, [formData]);
 
   return (
     <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
-          <h1 className="text-2xl md:text-4xl font-bold text-black">
+          <h1 className="text-2xl md:text-4xl font-bold text-black text-center md:text-left">
             Fitness Goal
           </h1>
           <span className="text-blue-500 font-medium">Step 2 of 6</span>
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl">
+        <p className="text-gray-700 mb-10 leading-relaxed max-w-4xl text-justify md:text-left">
           Define your fitness objectives to create a tailored nutrition plan.
           Understanding your goals will help in designing a plan that aligns
           with your desired outcomes.
@@ -78,7 +126,7 @@ function FitnessGoal() {
                         value={goal}
                         onChange={handleChange}
                         checked={selectedGoal === goal}
-                        className="accent-green-300 scale-150"
+                        className="accent-black scale-150"
                       />
                       <span>{goal}</span>
                     </label>
@@ -99,7 +147,6 @@ function FitnessGoal() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-600"
                         placeholder="70 kg"
                         value={currentWeight}
-                        onChange={(e) => setCurrentWeight(e.target.value)}
                         required
                       />
                     </div>
@@ -141,7 +188,7 @@ function FitnessGoal() {
                             value={`${rate}`}
                             onChange={(e) => setProgressRate(e.target.value)}
                             checked={progressRate === `${rate}`}
-                            className="accent-green-300 scale-150"
+                            className="accent-black scale-150"
                           />
                           <span>
                             {selectedGoal === "Fat Loss"
@@ -167,13 +214,13 @@ function FitnessGoal() {
           <div
             className={`w-full max-w-xs mx-auto ${selectedGoal === "Fat Loss" || selectedGoal === "Muscle Gain"
               ? "pt-0"
-              : "pt-10"
+              : "pt-40"
               }`}
           >
             <button
               type="submit"
               disabled={!isFormValid}
-              className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+              className={`font-medium mt-4 py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
                 ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}

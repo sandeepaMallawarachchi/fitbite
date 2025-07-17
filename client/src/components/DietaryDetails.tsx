@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useFormContext } from "../context/FormContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-function DietaryDetails() {
+const DietaryDetails = () => {
   const navigate = useNavigate();
   const { formData, setFormData } = useFormContext();
   const [mealPreference, setMealPreference] = useState("");
@@ -70,6 +70,28 @@ function DietaryDetails() {
       toast.error("Failed to update dietary details");
     }
   };
+
+  useEffect(() => {
+    if (formData?.dietaryDetails) {
+      const {
+        preference,
+        avoid,
+        restrictions,
+        allergies: savedAllergies,
+        performanceMeals: savedPerformance,
+      } = formData.dietaryDetails;
+
+      setMealPreference(preference || "");
+      setFoodsToAvoid(avoid || "");
+      setReligiousRestrictions(restrictions || "");
+      setAllergies(savedAllergies || []);
+      setPerformanceMeals(
+        (savedPerformance || []).map((meal) =>
+          meal === "preWorkout" ? "Pre-workout Meal" : "Post-workout Meal"
+        )
+      );
+    }
+  }, [formData]);
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">

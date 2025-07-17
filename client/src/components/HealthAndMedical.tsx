@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useFormContext } from "../context/FormContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-function HealthAndMedical() {
+const HealthAndMedical = () => {
   const navigate = useNavigate();
   const { formData, setFormData } = useFormContext();
   const [medicalConditions, setMedicalConditions] = useState("");
@@ -52,6 +52,24 @@ function HealthAndMedical() {
       toast.error("Failed to update health details");
     }
   };
+
+  useEffect(() => {
+    if (formData?.medicalDetails) {
+      const {
+        medicalConditions,
+        medicationsAffect,
+        supplements,
+        openToSupplements,
+        notes,
+      } = formData.medicalDetails;
+
+      setMedicalConditions(medicalConditions || "");
+      setMedicationsAffectDiet(medicationsAffect || "");
+      setTakeSupplements(supplements || "");
+      setOpenToSupplements(openToSupplements || "");
+      setAdditionalNotes(notes || "");
+    }
+  }, [formData]);
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">

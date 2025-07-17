@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useFormContext } from "../context/FormContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-function MealHabit() {
+const MealHabit = () => {
   const navigate = useNavigate();
   const { formData, setFormData } = useFormContext();
   const [dailyMeals, setDailyMeals] = useState("");
@@ -78,6 +78,21 @@ function MealHabit() {
       toast.error("Failed to update meal habits");
     }
   };
+
+  useEffect(() => {
+    if (formData?.mealHabits) {
+      setDailyMeals(formData.mealHabits.dailyMeals || "");
+      setCookAtHome(formData.mealHabits.cookAtHome || "");
+      setCanMealPrep(formData.mealHabits.ability || "");
+      setBudget(formData.mealHabits.grosaryBudget || "");
+      setSchedule({
+        breakfast: formData.mealHabits.mealsSchedule?.breakfast || "",
+        lunch: formData.mealHabits.mealsSchedule?.lunch || "",
+        dinner: formData.mealHabits.mealsSchedule?.dinner || "",
+      });
+    }
+  }, [formData]);
+
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">

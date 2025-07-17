@@ -26,14 +26,14 @@ const fitnessSchema = new Schema({
         cookAtHome: {
             type: String,
             required: true,
-            enum: ['Daily', 'Rarely', 'Few'],
+            enum: ['Daily', 'Rarely', 'Few times/week'],
         },
         ability: {
             type: String,
             required: true,
             enum: ['Yes', 'No'],
         },
-        grosatyBudget: {
+        grosaryBudget: {
             type: String,
             required: true,
             enum: ['Friendly', 'Moderate', 'Flexible'],

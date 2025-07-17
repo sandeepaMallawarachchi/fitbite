@@ -28,9 +28,9 @@ export type FormData = {
       lunch?: string;
       dinner?: string;
     };
-    cookAtHome?: "Daily" | "Rarely" | "Few";
+    cookAtHome?: "Daily" | "Rarely" | "Few times/week";
     ability?: "Yes" | "No";
-    grosatyBudget?: "Friendly" | "Moderate" | "Flexible";
+    grosaryBudget?: "Friendly" | "Moderate" | "Flexible";
   };
 
   // dietaryDetails

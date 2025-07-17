@@ -171,7 +171,7 @@ export default function SignUpForm() {
                   disabled={!isFormValid || loading}
                   onClick={handleSubmit}
                   className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base transition-colors duration-200 ${isFormValid && !loading
-                      ? "bg-green-300 text-white hover:opacity-90"
+                      ? "bg-green-300 text-white hover:bg-green-400 cursor-pointer"
                       : "bg-gray-200 text-gray-800 cursor-not-allowed"
                     }`}
                 >

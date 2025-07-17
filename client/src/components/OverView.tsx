@@ -204,7 +204,7 @@ function OverView() {
                 type="submit"
                 disabled={!confirmChecked}
                 className={`font-medium py-3 px-8 rounded-lg w-full md:w-full transition-colors duration-200 ${confirmChecked
-                  ? "bg-green-400 text-black hover:bg-green-500 cursor-pointer"
+                  ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
               >

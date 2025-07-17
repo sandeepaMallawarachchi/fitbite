@@ -63,8 +63,8 @@ const fitnessSchema = new Schema({
         },
         performanceMeals: {
             type: [String],
-            required: true,
             enum: ['preWorkout', 'postWorkout'],
+            default: null
         },
     },
 
@@ -81,15 +81,15 @@ const fitnessSchema = new Schema({
         },
         supplements: {
             type: String,
-            required: true,
-            enum: ['Dairy', 'Nuts', 'Shellfish', 'Gluten', 'Other'],
+            default: 'No',
+            enum: ['Yes', 'No'],
         },
         openToSupplements: {
             type: String,
-            required: true,
-            enum: ['preWorkout', 'postWorkout'],
+            default: 'No',
+            enum: ['Yes', 'No'],
         },
-        notes: { type: String, required: true, },
+        notes: { type: String, },
     },
 
 }, { timestamps: true });

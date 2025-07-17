@@ -66,8 +66,8 @@ function DietaryDetails() {
 
       navigate("/SignUpStep5");
     } catch (err) {
-      console.error("Failed to update meal habits", err);
-      toast.error("Failed to update meal habits");
+      console.error("Failed to update dietary details", err);
+      toast.error("Failed to update dietary details");
     }
   };
 

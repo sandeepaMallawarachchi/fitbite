@@ -46,8 +46,8 @@ export type FormData = {
   medicalDetails?: {
     medicalConditions?: "Yes" | "No";
     medicationsAffect?: "Yes" | "No";
-    supplements?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
-    openToSupplements?: "preWorkout" | "postWorkout";
+    supplements?: "Yes" | "No";
+    openToSupplements?: "Yes" | "No";
     notes?: string;
   };
 };

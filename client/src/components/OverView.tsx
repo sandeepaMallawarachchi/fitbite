@@ -1,40 +1,19 @@
 "use client";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormContext } from "../context/FormContext";
 
 function OverView() {
   const navigate = useNavigate();
-
+  const { formData } = useFormContext();
   const [confirmChecked, setConfirmChecked] = useState(false);
-
-  // Simulated gathered data (replace with context/state later)
-  const userData = {
-    name: "Nipuna Udara",
-    email: "m.n.u.i.gunasinghe@gmail.com",
-    phone: "+94 71 088 8793",
-    dob: "29/10/2000",
-    gender: "Male",
-    weight: "70 kg",
-    height: "173 cm",
-    activityLevel: "Moderate Active",
-    fitnessGoal: "Maintain",
-    mealPreference: "Omnivore",
-    allergies: "No",
-    restrictions: "No",
-    intolerances: "No",
-    foodsToAvoid: "No",
-    performanceMeals: "Pre & Post",
-    medicalConditions: "No",
-    currentMedications: "No",
-    supplements: "Yes",
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!confirmChecked) return;
 
     console.log("User confirmed all details.");
-    navigate("/dashboard"); // or submission endpoint
+    navigate("/dashboard");
   };
 
   const Section = ({
@@ -73,7 +52,7 @@ function OverView() {
             className="flex justify-between border-b border-gray-200"
           >
             <span>{item.label}</span>
-            <span className="text-black font-medium">- {item.value}</span>
+            <span className="text-black font-medium">{item.value}</span>
           </li>
         ))}
       </ul>
@@ -113,11 +92,11 @@ function OverView() {
               title="Personal Details"
               editStep="/SignUpStep1"
               items={[
-                { label: "Name", value: userData.name },
-                { label: "Email", value: userData.email },
-                { label: "Phone", value: userData.phone },
-                { label: "DOB", value: userData.dob },
-                { label: "Gender", value: userData.gender },
+                { label: "Name", value: formData?.name || "-" },
+                { label: "Email", value: formData?.email || "-" },
+                { label: "Phone", value: formData?.phone || "-" },
+                { label: "DOB", value: formData?.birthday || "-" },
+                { label: "Gender", value: formData?.gender || "-" },
               ]}
             />
             <Section
@@ -131,9 +110,9 @@ function OverView() {
               title="Body Measurements"
               editStep="/SignUpStep1"
               items={[
-                { label: "Weight", value: userData.weight },
-                { label: "Height", value: userData.height },
-                { label: "Activity Level", value: userData.activityLevel },
+                { label: "Weight", value: formData?.weight || "-" },
+                { label: "Height", value: formData?.height || "-" },
+                { label: "Activity Level", value: formData?.activityLevel || "-" },
               ]}
             />
             <Section
@@ -146,8 +125,11 @@ function OverView() {
               }
               title="Fitness Goal"
               editStep="/SignUpStep2"
-              items={[{ label: "", value: userData.fitnessGoal }]}
-            />
+              items={[
+                { label: "Goal", value: formData?.fitnessGoal?.primaryGoal || "-" },
+                { label: "Goal Weight", value: formData?.fitnessGoal?.goalWeight || "-" },
+                { label: "Progress Rate", value: formData?.fitnessGoal?.progress || "-" },
+              ]} />
           </div>
 
           <div className="space-y-0">
@@ -162,14 +144,13 @@ function OverView() {
               title="Dietary Details"
               editStep="/SignUpStep4"
               items={[
-                { label: "Meal Preference", value: userData.mealPreference },
-                { label: "Allergies", value: userData.allergies },
-                { label: "Restrictions", value: userData.restrictions },
-                { label: "Intolerances", value: userData.intolerances },
-                { label: "Foods to Avoid", value: userData.foodsToAvoid },
+                { label: "Meal Preference", value: formData?.dietaryDetails?.preference || "-" },
+                { label: "Allergies", value: (formData?.dietaryDetails?.allergies || []).join(", ") || "None" },
+                { label: "Restrictions", value: formData?.dietaryDetails?.restrictions || "-" },
+                { label: "Foods to Avoid", value: formData?.dietaryDetails?.avoid || "-" },
                 {
                   label: "Performance Meals",
-                  value: userData.performanceMeals,
+                  value: (formData?.dietaryDetails?.performanceMeals || []).join(" & ") || "None",
                 },
               ]}
             />
@@ -186,13 +167,24 @@ function OverView() {
               items={[
                 {
                   label: "Medical Conditions",
-                  value: userData.medicalConditions,
+                  value: formData?.medicalDetails?.medicalConditions || "No",
                 },
                 {
                   label: "Current Medications",
-                  value: userData.currentMedications,
+                  value: formData?.medicalDetails?.medicationsAffect || "No",
                 },
-                { label: "Supplements", value: userData.supplements },
+                {
+                  label: "Supplements",
+                  value: formData?.medicalDetails?.supplements || "No",
+                },
+                {
+                  label: "Open to Supplements",
+                  value: formData?.medicalDetails?.openToSupplements || "No",
+                },
+                {
+                  label: "Notes or Requests",
+                  value: formData?.medicalDetails?.notes || "-",
+                },
               ]}
             />
 
@@ -211,11 +203,10 @@ function OverView() {
               <button
                 type="submit"
                 disabled={!confirmChecked}
-                className={`font-medium py-3 px-8 rounded-lg w-full md:w-full transition-colors duration-200 ${
-                  confirmChecked
-                    ? "bg-green-400 text-black hover:bg-green-500 cursor-pointer"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`font-medium py-3 px-8 rounded-lg w-full md:w-full transition-colors duration-200 ${confirmChecked
+                  ? "bg-green-400 text-black hover:bg-green-500 cursor-pointer"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
               >
                 Proceed
               </button>

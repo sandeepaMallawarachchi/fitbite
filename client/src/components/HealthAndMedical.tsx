@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import { useFormContext } from "../context/FormContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-function HealthAndMedical() {
+const HealthAndMedical = () => {
   const navigate = useNavigate();
-
+  const { formData, setFormData } = useFormContext();
   const [medicalConditions, setMedicalConditions] = useState("");
   const [medicationsAffectDiet, setMedicationsAffectDiet] = useState("");
   const [takeSupplements, setTakeSupplements] = useState("");
@@ -14,21 +17,59 @@ function HealthAndMedical() {
 
   const isFormValid = medicalConditions && medicationsAffectDiet;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return;
 
-    console.log({
-      medicalConditions,
-      medicationsAffectDiet,
-      takeSupplements,
-      openToSupplements,
-      additionalNotes,
-    });
+    try {
+      const storedUser = localStorage.getItem("user");
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+      const userId = parsedUser?.id;
 
-    // Final step: maybe submit data or go to dashboard
-    navigate("/SignUpStep6");
+      const updateData = {
+        medicalDetails: {
+          medicalConditions: medicalConditions as "Yes" | "No",
+          medicationsAffect: medicationsAffectDiet as "Yes" | "No",
+          supplements: takeSupplements as "Yes" | "No",
+          openToSupplements: openToSupplements as "Yes" | "No",
+          notes: additionalNotes
+        },
+      };
+
+      setFormData({
+        ...formData,
+        medicalDetails: updateData.medicalDetails,
+      });
+
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData,
+      });
+
+      navigate("/SignUpStep6");
+    } catch (err) {
+      console.error("Failed to update health details", err);
+      toast.error("Failed to update health details");
+    }
   };
+
+  useEffect(() => {
+    if (formData?.medicalDetails) {
+      const {
+        medicalConditions,
+        medicationsAffect,
+        supplements,
+        openToSupplements,
+        notes,
+      } = formData.medicalDetails;
+
+      setMedicalConditions(medicalConditions || "");
+      setMedicationsAffectDiet(medicationsAffect || "");
+      setTakeSupplements(supplements || "");
+      setOpenToSupplements(openToSupplements || "");
+      setAdditionalNotes(notes || "");
+    }
+  }, [formData]);
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">
@@ -178,11 +219,10 @@ function HealthAndMedical() {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
-                    isFormValid
-                      ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+                    ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                 >
                   Done
                 </button>

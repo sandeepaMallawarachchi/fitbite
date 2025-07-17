@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import axios from "axios";
@@ -76,6 +76,14 @@ const FitnessGoal = () => {
       toast.error("Failed to update fitness goal")
     }
   };
+
+  useEffect(() => {
+    if (formData?.fitnessGoal) {
+      setSelectedGoal(formData.fitnessGoal.primaryGoal || "");
+      setGoalWeight(formData.fitnessGoal.goalWeight || "");
+      setProgressRate(formData.fitnessGoal.progress || "");
+    }
+  }, [formData]);
 
   return (
     <div className="w-full max-h-80% bg-white px-6 md:px-10 ">

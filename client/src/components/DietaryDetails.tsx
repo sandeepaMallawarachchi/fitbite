@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import { useFormContext } from "../context/FormContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-function DietaryDetails() {
+const DietaryDetails = () => {
   const navigate = useNavigate();
-
+  const { formData, setFormData } = useFormContext();
   const [mealPreference, setMealPreference] = useState("");
   const [foodsToAvoid, setFoodsToAvoid] = useState("");
   const [religiousRestrictions, setReligiousRestrictions] = useState("");
@@ -30,20 +33,65 @@ function DietaryDetails() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return;
 
-    console.log({
-      mealPreference,
-      foodsToAvoid,
-      religiousRestrictions,
-      allergies,
-      performanceMeals,
-    });
+    try {
+      const storedUser = localStorage.getItem("user");
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+      const userId = parsedUser?.id;
 
-    navigate("/SignUpStep5");
+      const updateData = {
+        dietaryDetails: {
+          preference: mealPreference as "Omnivore" | "Vegan" | "Vegitarian",
+          avoid: foodsToAvoid as "Yes" | "No",
+          restrictions: religiousRestrictions as "Yes" | "No",
+          allergies: allergies as ("Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other")[],
+          performanceMeals: performanceMeals.map((meal) =>
+            meal === "Pre-workout Meal" ? "preWorkout" : "postWorkout"
+          ) as ("preWorkout" | "postWorkout")[],
+        },
+      };
+
+      setFormData({
+        ...formData,
+        dietaryDetails: updateData.dietaryDetails,
+      });
+
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData,
+      });
+
+      navigate("/SignUpStep5");
+    } catch (err) {
+      console.error("Failed to update dietary details", err);
+      toast.error("Failed to update dietary details");
+    }
   };
+
+  useEffect(() => {
+    if (formData?.dietaryDetails) {
+      const {
+        preference,
+        avoid,
+        restrictions,
+        allergies: savedAllergies,
+        performanceMeals: savedPerformance,
+      } = formData.dietaryDetails;
+
+      setMealPreference(preference || "");
+      setFoodsToAvoid(avoid || "");
+      setReligiousRestrictions(restrictions || "");
+      setAllergies(savedAllergies || []);
+      setPerformanceMeals(
+        (savedPerformance || []).map((meal) =>
+          meal === "preWorkout" ? "Pre-workout Meal" : "Post-workout Meal"
+        )
+      );
+    }
+  }, [formData]);
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">
@@ -203,11 +251,10 @@ function DietaryDetails() {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${
-                    isFormValid
-                      ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+                    ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                 >
                   Next
                 </button>

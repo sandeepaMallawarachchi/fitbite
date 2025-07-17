@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import { useFormContext } from "../context/FormContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-function MealHabit() {
+const MealHabit = () => {
   const navigate = useNavigate();
-
+  const { formData, setFormData } = useFormContext();
   const [dailyMeals, setDailyMeals] = useState("");
   const [cookAtHome, setCookAtHome] = useState("");
   const [canMealPrep, setCanMealPrep] = useState("");
@@ -25,17 +28,71 @@ function MealHabit() {
     schedule.lunch &&
     schedule.dinner;
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSchedule((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return;
-    console.log({ dailyMeals, cookAtHome, canMealPrep, budget, schedule });
-    navigate("/SignUpStep4");
+
+    try {
+      const storedUser = localStorage.getItem("user");
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+      const userId = parsedUser?.id;
+
+      const updateData = {
+        mealHabits: {
+          dailyMeals,
+          cookAtHome,
+          ability: canMealPrep,
+          grosaryBudget: budget,
+          mealsSchedule: {
+            breakfast: schedule.breakfast,
+            lunch: schedule.lunch,
+            dinner: schedule.dinner,
+          },
+        },
+      };
+
+      setFormData({
+        ...formData,
+        mealHabits: {
+          dailyMeals: updateData.mealHabits.dailyMeals,
+          mealsSchedule: updateData.mealHabits.mealsSchedule,
+          cookAtHome: updateData.mealHabits.cookAtHome as "Daily" | "Rarely" | "Few times/week",
+          ability: updateData.mealHabits.ability as "Yes" | "No",
+          grosaryBudget: updateData.mealHabits.grosaryBudget as "Friendly" | "Moderate" | "Flexible",
+        },
+      });
+
+      await axios.patch("http://localhost:5000/user/updateFitness", {
+        userId,
+        updateData,
+      });
+
+      navigate("/SignUpStep4");
+    } catch (err) {
+      console.error("Failed to update meal habits", err);
+      toast.error("Failed to update meal habits");
+    }
   };
+
+  useEffect(() => {
+    if (formData?.mealHabits) {
+      setDailyMeals(formData.mealHabits.dailyMeals || "");
+      setCookAtHome(formData.mealHabits.cookAtHome || "");
+      setCanMealPrep(formData.mealHabits.ability || "");
+      setBudget(formData.mealHabits.grosaryBudget || "");
+      setSchedule({
+        breakfast: formData.mealHabits.mealsSchedule?.breakfast || "",
+        lunch: formData.mealHabits.mealsSchedule?.lunch || "",
+        dinner: formData.mealHabits.mealsSchedule?.dinner || "",
+      });
+    }
+  }, [formData]);
+
 
   return (
     <div className="w-full bg-white px-6 md:px-10 pt-8">
@@ -67,7 +124,7 @@ function MealHabit() {
                   Daily Meals
                 </label>
                 <div className="grid grid-cols-2 gap-y-4 gap-x-0">
-                  {["3 Meals", "4 Meals", "5+ Meals"].map((opt, index) => (
+                  {["3 Meals", "4 Meals", "5+ Meals"].map((opt) => (
                     <label
                       key={opt}
                       className="flex items-center gap-2 text-gray-600"
@@ -112,7 +169,7 @@ function MealHabit() {
                       Lunch
                     </label>
                     <input
-                      name="breakfast"
+                      name="lunch"
                       value={schedule.lunch}
                       type="time"
                       onChange={handleTimeChange}
@@ -126,7 +183,7 @@ function MealHabit() {
                       Dinner
                     </label>
                     <input
-                      name="breakfast"
+                      name="dinner"
                       value={schedule.dinner}
                       type="time"
                       onChange={handleTimeChange}
@@ -145,7 +202,7 @@ function MealHabit() {
                   Cook at Home
                 </label>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                  {["Daily", "Few times/week", "Rarely"].map((opt, idx) => (
+                  {["Daily", "Few times/week", "Rarely"].map((opt) => (
                     <label
                       key={opt}
                       className="flex items-center gap-2 text-gray-600"
@@ -219,8 +276,8 @@ function MealHabit() {
                   type="submit"
                   disabled={!isFormValid}
                   className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
-                      ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    ? "bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                 >
                   Next

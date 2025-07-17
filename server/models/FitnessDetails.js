@@ -26,14 +26,14 @@ const fitnessSchema = new Schema({
         cookAtHome: {
             type: String,
             required: true,
-            enum: ['Daily', 'Rarely', 'Few'],
+            enum: ['Daily', 'Rarely', 'Few times/week'],
         },
         ability: {
             type: String,
             required: true,
             enum: ['Yes', 'No'],
         },
-        grosatyBudget: {
+        grosaryBudget: {
             type: String,
             required: true,
             enum: ['Friendly', 'Moderate', 'Flexible'],
@@ -57,14 +57,14 @@ const fitnessSchema = new Schema({
             enum: ['Yes', 'No'],
         },
         allergies: {
-            type: String,
-            required: true,
+            type: [String],
             enum: ['Dairy', 'Nuts', 'Shellfish', 'Gluten', 'Other'],
+            default: null
         },
         performanceMeals: {
-            type: String,
-            required: true,
+            type: [String],
             enum: ['preWorkout', 'postWorkout'],
+            default: null
         },
     },
 
@@ -81,15 +81,15 @@ const fitnessSchema = new Schema({
         },
         supplements: {
             type: String,
-            required: true,
-            enum: ['Dairy', 'Nuts', 'Shellfish', 'Gluten', 'Other'],
+            default: 'No',
+            enum: ['Yes', 'No'],
         },
         openToSupplements: {
             type: String,
-            required: true,
-            enum: ['preWorkout', 'postWorkout'],
+            default: 'No',
+            enum: ['Yes', 'No'],
         },
-        notes: { type: String, required: true, },
+        notes: { type: String, },
     },
 
 }, { timestamps: true });

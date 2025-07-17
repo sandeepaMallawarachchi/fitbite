@@ -28,9 +28,9 @@ export type FormData = {
       lunch?: string;
       dinner?: string;
     };
-    cookAtHome?: "Daily" | "Rarely" | "Few";
+    cookAtHome?: "Daily" | "Rarely" | "Few times/week";
     ability?: "Yes" | "No";
-    grosatyBudget?: "Friendly" | "Moderate" | "Flexible";
+    grosaryBudget?: "Friendly" | "Moderate" | "Flexible";
   };
 
   // dietaryDetails
@@ -38,16 +38,16 @@ export type FormData = {
     preference?: "Omnivore" | "Vegan" | "Vegitarian";
     avoid?: "Yes" | "No";
     restrictions?: "Yes" | "No";
-    allergies?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
-    performanceMeals?: "preWorkout" | "postWorkout";
+    allergies?: ("Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other")[];
+    performanceMeals?: ("preWorkout" | "postWorkout")[];
   };
 
   // medicalDetails
   medicalDetails?: {
     medicalConditions?: "Yes" | "No";
     medicationsAffect?: "Yes" | "No";
-    supplements?: "Dairy" | "Nuts" | "Shellfish" | "Gluten" | "Other";
-    openToSupplements?: "preWorkout" | "postWorkout";
+    supplements?: "Yes" | "No";
+    openToSupplements?: "Yes" | "No";
     notes?: string;
   };
 };

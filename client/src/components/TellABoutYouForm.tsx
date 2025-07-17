@@ -7,7 +7,6 @@ import axios from "axios";
 
 const TellABoutYouForm = () => {
   const navigate = useNavigate();
-  const storedToken = localStorage.getItem("token");
 
   const { formData, setFormData } = useFormContext();
 
@@ -48,7 +47,6 @@ const TellABoutYouForm = () => {
         userId,
       });
 
-      toast.success("User updated successfully");
       navigate("/YourTDEE");
     } catch (err: any) {
       console.error("Error updating user:", err.message);

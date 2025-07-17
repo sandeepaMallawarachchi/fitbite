@@ -9,17 +9,30 @@ import { useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
 import DashboardLayout from "./layout/DashboardLayout"
 import DashboardHome from "./pages/dashboard/DashboardHome"
+import ProtectedRoute from "./auth/ProtectedRoute";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/SignIn" || location.pathname === "/SignUp" || location.pathname === "/YourTDEE" || location.pathname === "/SignUpStep1" || location.pathname === "/HowtoCalcTDEE" || location.pathname === "/SignUpStep2" || location.pathname === "/SignUpStep3" || location.pathname === "/SignUpStep4" || location.pathname === "/SignUpStep5" || location.pathname === "/SignUpStep6" || location.pathname === "/dashboard";
+  const hideHeaderFooter =
+    location.pathname === "/SignIn" ||
+    location.pathname === "/SignUp" ||
+    location.pathname === "/YourTDEE" ||
+    location.pathname === "/SignUpStep1" ||
+    location.pathname === "/HowtoCalcTDEE" ||
+    location.pathname === "/SignUpStep2" ||
+    location.pathname === "/SignUpStep3" ||
+    location.pathname === "/SignUpStep4" ||
+    location.pathname === "/SignUpStep5" ||
+    location.pathname === "/SignUpStep6" ||
+    location.pathname.startsWith("/dashboard");
 
   const { shouldRedirect, clearRedirect } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (shouldRedirect) {
-      toast("You’ve been logged out due to inactivity.", {
+      toast.error("You’ve been logged out", {
         duration: 4000,
       });
       navigate("/");
@@ -44,14 +57,17 @@ function AppContent() {
         <Route path="/SignUpStep6" element={<Background />} />
         <Route path="/YourTDEE" element={<Background />} />
 
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<DashboardHome />} />
-          {/* <Route path="meal-plan" element={<MealPlan />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<DashboardHome />} />
+            {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} /> */}
+          </Route>
         </Route>
 
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

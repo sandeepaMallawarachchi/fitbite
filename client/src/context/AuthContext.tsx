@@ -36,8 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.clear();
     setUser(null);
     setToken(null);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);

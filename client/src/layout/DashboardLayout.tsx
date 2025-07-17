@@ -8,9 +8,9 @@ import {
     User,
     Settings,
     Search,
-    ChevronDown,
 } from "lucide-react";
 import axios from "axios";
+import UserDropdown from "../components/UserDropdown";
 
 interface NavItem {
     label: string;
@@ -46,29 +46,19 @@ const DashboardLayout = () => {
 
     return (
         <div className="flex flex-col h-screen bg-white">
-            <header className="flex items-center justify-between px-12 py-5 bg-white">
+            <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
                 <Link to="/dashboard">
-                    <img src="/logo1.png" alt="Logo" className="w-10 md:w-36" />
+                    <img src="/logo1.png" alt="Logo" className="w-36" />
                 </Link>
                 <div className="relative w-full max-w-md mx-6">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Search..."
-                        className="w-full py-2 pl-10 pr-4 rounded-full text-sm shadow-sm border border-gray-200 focus:outline-none bg-[#f7f8fa]"
+                        className="w-full py-2 pl-10 pr-4 rounded-full text-sm border border-gray-200 focus:outline-none"
                     />
                 </div>
-                <div className="flex items-center gap-3">
-                    <img
-                        src="/avatar.jpg"
-                        alt="User"
-                        className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <span className="text-sm font-medium text-gray-800 hidden md:block">
-                        {user?.name || "Loading..."}
-                    </span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                </div>
+                <UserDropdown name={user?.name} />
             </header>
 
             <div className="flex flex-1">

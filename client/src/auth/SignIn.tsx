@@ -5,14 +5,15 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate()
+  
   const isFormValid =
     email.trim() !== "" &&
     password !== "";
@@ -28,8 +29,7 @@ const SignIn = () => {
 
       const { token, user } = res.data;
       login(user, token);
-      toast.success("Login success");
-      // navigate("/dashboard");
+      navigate("/dashboard");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Login failed");

@@ -21,6 +21,7 @@ interface AuthContextType {
   logout: () => void;
   shouldRedirect: boolean;
   clearRedirect: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const logout = useCallback(() => {
     localStorage.clear();
@@ -70,6 +72,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(savedToken);
       resetInactivityTimer();
     }
+
+    setIsLoading(false);
   }, [resetInactivityTimer]);
 
   useEffect(() => {
@@ -92,7 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, shouldRedirect, clearRedirect }}
+      value={{ user, token, login, logout, shouldRedirect, clearRedirect, isLoading, }}
     >
       {children}
     </AuthContext.Provider>

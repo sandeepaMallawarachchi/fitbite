@@ -4,8 +4,8 @@ const userController = require('../controllers/user.controller');
 const { verifyToken, authorizeRoles } = require('../middlewares/auth.middleware');
 
 // Public
-router.patch('/updateUser', userController.UpdateUserDetails);
-router.patch('/updateFitness', userController.updateFitnessDetails);
-router.get('/getUserById/:userId', userController.getUserById);
+router.patch('/updateUser', verifyToken, userController.UpdateUserDetails);
+router.patch('/updateFitness', verifyToken, userController.updateFitnessDetails);
+router.get('/getUserById/:userId', verifyToken, userController.getUserById);
 
 module.exports = router;

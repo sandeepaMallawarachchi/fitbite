@@ -32,6 +32,7 @@ const TellABoutYouForm = () => {
     e.preventDefault();
     if (!isFormValid) return;
 
+    const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : null;
     const userId = parsedUser?.id;
@@ -45,6 +46,10 @@ const TellABoutYouForm = () => {
       await axios.patch("http://localhost:5000/user/updateUser", {
         ...formData,
         userId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       navigate("/YourTDEE");

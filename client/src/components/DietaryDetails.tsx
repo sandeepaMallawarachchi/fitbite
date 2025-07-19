@@ -38,6 +38,7 @@ const DietaryDetails = () => {
     if (!isFormValid) return;
 
     try {
+      const token = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
       const parsedUser = storedUser ? JSON.parse(storedUser) : null;
       const userId = parsedUser?.id;
@@ -62,7 +63,11 @@ const DietaryDetails = () => {
       await axios.patch("http://localhost:5000/user/updateFitness", {
         userId,
         updateData,
-      });
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       navigate("/SignUpStep5");
     } catch (err) {

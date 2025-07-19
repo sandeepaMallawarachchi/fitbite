@@ -1,18 +1,22 @@
 "use client";
-import { useState } from "react";
-import { Mic, Image, Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Mic, Image, Send, } from "lucide-react";
 import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
 
 const DashboardHome = () => {
     const [message, setMessage] = useState("");
     const [response, setResponse] = useState("");
     const [loading, setLoading] = useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!message.trim()) return;
 
         setLoading(true);
+        setResponse("");
+
         try {
             const res = await axios.post(
                 "https://api.openai.com/v1/chat/completions",
@@ -40,33 +44,62 @@ const DashboardHome = () => {
             );
 
             const reply = res.data.choices[0].message.content;
-            setResponse(reply);
+            setMessage("");
+
+            let index = 0;
+            const typingInterval = setInterval(() => {
+                setResponse(prev => prev + reply.charAt(index));
+                index++;
+                if (index >= reply.length) {
+                    clearInterval(typingInterval);
+                    setLoading(false);
+                }
+            }, 10);
         } catch (err) {
-            setResponse("⚠️ Failed to generate summary.");
+            setResponse("Failed to generate summary.");
             console.error(err);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
-    return (
-        <section className="flex flex-col justify-between h-full max-h-[calc(95vh-100px)] w-full max-w-4xl mx-auto px-4 py-6">
-            <div className="flex-1 overflow-y-auto mb-5">
-                <h1 className="text-2xl font-semibold mb-6 text-black text-center">
-                    Let's start tracking...
-                </h1>
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [response]);
 
-                {loading ? (
-                    <div className="text-sm text-gray-500">Analyzing...</div>
-                ) : response ? (
-                    <div className="p-4 rounded-lg text-sm whitespace-pre-wrap text-gray-700">
-                        {response}
-                    </div>
-                ) : (
-                    <div className="text-sm text-gray-400 text-center mt-4">
-                        No data yet. Enter your meal below 👇
-                    </div>
+    return (
+        <section
+            className={`flex flex-col w-full max-w-4xl mx-auto px-4 py-6 h-[calc(95vh-100px)] transition-all duration-300 ${response || loading ? "justify-between" : "justify-center"
+                }`}
+        >
+            <h1 className="md:text-2xl text-lg font-semibold mb-6 text-black text-center">
+                Let's start tracking...
+            </h1>
+
+            <AnimatePresence mode="wait">
+                {(loading || response) && (
+                    <motion.div
+                        key="response"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        ref={scrollRef}
+                        className="flex-1 overflow-y-auto mb-5"
+                    >
+                        {loading && (
+                            <div className="text-sm text-gray-500 text-center">Analyzing...</div>
+                        )}
+
+                        {response && (
+                            <div className="p-4 rounded-lg text-sm whitespace-pre-wrap text-gray-700">
+                                {response}
+                            </div>
+                        )}
+                    </motion.div>
                 )}
-            </div>
+            </AnimatePresence>
 
             <form
                 onSubmit={handleSend}

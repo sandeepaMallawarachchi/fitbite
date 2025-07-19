@@ -224,7 +224,7 @@ const TellABoutYouForm = () => {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  className={`font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
+                  className={`cursor-pointer font-medium py-3 px-8 rounded-lg w-full transition-colors duration-200 ${isFormValid
                     ? "bg-green-300 text-black hover:bg-green-400"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}

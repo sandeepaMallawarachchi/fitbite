@@ -8,7 +8,8 @@ const DashboardHome = () => {
     const [response, setResponse] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSend = async () => {
+    const handleSend = async (e: React.FormEvent) => {
+        e.preventDefault();
         if (!message.trim()) return;
 
         setLoading(true);
@@ -48,13 +49,29 @@ const DashboardHome = () => {
     };
 
     return (
-        <section className="flex flex-col items-center justify-center flex-1 px-4 py-10">
-            <h1 className="text-2xl font-semibold mb-8 text-black text-center">
-                Let's start tracking...
-            </h1>
+        <section className="flex flex-col justify-between h-full max-h-[calc(95vh-100px)] w-full max-w-4xl mx-auto px-4 py-6">
+            <div className="flex-1 overflow-y-auto mb-5">
+                <h1 className="text-2xl font-semibold mb-6 text-black text-center">
+                    Let's start tracking...
+                </h1>
 
-            <div className="w-full max-w-2xl bg-white p-4 rounded-xl shadow-md flex flex-col gap-5">
-                {/* Input */}
+                {loading ? (
+                    <div className="text-sm text-gray-500">Analyzing...</div>
+                ) : response ? (
+                    <div className="p-4 rounded-lg text-sm whitespace-pre-wrap text-gray-700">
+                        {response}
+                    </div>
+                ) : (
+                    <div className="text-sm text-gray-400 text-center mt-4">
+                        No data yet. Enter your meal below 👇
+                    </div>
+                )}
+            </div>
+
+            <form
+                onSubmit={handleSend}
+                className="w-full bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4 sticky bottom-0"
+            >
                 <input
                     type="text"
                     value={message}
@@ -63,33 +80,23 @@ const DashboardHome = () => {
                     className="w-full outline-none placeholder-gray-400 text-gray-800 text-sm"
                 />
 
-                {/* Bottom icons and send */}
                 <div className="flex flex-row justify-between items-center">
                     <div className="flex gap-2">
-                        <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
+                        <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
                             <Mic className="w-5 h-5" />
                         </button>
-                        <button className="p-2 rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
+                        <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
                             <Image className="w-5 h-5" />
                         </button>
                     </div>
                     <button
-                        onClick={handleSend}
-                        className="p-2 rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500"
+                        type="submit"
+                        className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500"
                     >
                         <Send className="w-5 h-5" />
                     </button>
                 </div>
-            </div>
-
-            {/* Response Section */}
-            {loading ? (
-                <div className="mt-6 text-sm text-gray-500">Analyzing...</div>
-            ) : response ? (
-                <div className="mt-6 w-full max-w-2xl bg-gray-100 p-4 rounded-lg text-sm whitespace-pre-wrap text-gray-700">
-                    {response}
-                </div>
-            ) : null}
+            </form>
         </section>
     );
 };

@@ -92,7 +92,7 @@ const DashboardLayout = () => {
                     </nav>
                 </aside>
 
-                <main className="flex-1 bg-[#F5F6FA] overflow-y-auto p-6 rounded-tl-[40px]">
+                <main className="flex-1 bg-[#F5F6FA] overflow-y-auto p-6 rounded-tl-[40px] flex items-center justify-center">
                     <Outlet />
                 </main>
             </div>

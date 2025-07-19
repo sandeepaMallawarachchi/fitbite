@@ -29,6 +29,7 @@ const navItems: NavItem[] = [
 const DashboardLayout = () => {
     const [active, setActive] = useState("Home");
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     const userId = parsedUser?.id;
@@ -37,7 +38,11 @@ const DashboardLayout = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await axios.get(`http://localhost:5000/user/getUserById/${userId}`);
+            const res = await axios.get(`http://localhost:5000/user/getUserById/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setUser(res.data?.userDetails || {});
         }
 

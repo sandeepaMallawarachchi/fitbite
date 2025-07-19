@@ -23,7 +23,7 @@ const UserDropdown = ({ name }: { name?: string }) => {
           className="w-12 h-12 rounded-full object-cover"
         />
         <span className="text-sm font-medium text-gray-800 hidden md:block">
-          {name || "Loading..."}
+          {name || "Error Fetching Name..."}
         </span>
         <ChevronDown className="w-4 h-4 text-gray-500" />
       </button>

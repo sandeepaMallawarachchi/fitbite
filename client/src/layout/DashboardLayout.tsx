@@ -11,7 +11,7 @@ import {
     LogOut,
 } from "lucide-react";
 import axios from "axios";
-import UserDropdown from "../components/UserDropdown";
+import { useAuth } from "../context/AuthContext";
 
 interface NavItem {
     label: string;
@@ -25,12 +25,12 @@ const navItems: NavItem[] = [
     { label: "Progress", icon: <File className="w-5 h-5" />, path: "/dashboard/progress" },
     { label: "Profile", icon: <User className="w-5 h-5" />, path: "/dashboard/profile" },
     { label: "Settings", icon: <Settings className="w-5 h-5" />, path: "/dashboard/settings" },
-    { label: "Sign Out", icon: <LogOut className="w-5 h-5" />, path: "/logout" },
 ];
 
 const DashboardLayout = () => {
     const [active, setActive] = useState("Home");
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
@@ -65,7 +65,16 @@ const DashboardLayout = () => {
                         className="w-full py-2 pl-10 pr-4 rounded-full text-sm border border-gray-200 focus:outline-none"
                     />
                 </div>
-                <UserDropdown name={user?.name} />
+                <div className="flex items-center gap-3 cursor-pointer">
+                    <img
+                        src="/avatar.jpg"
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <span className="text-sm font-medium text-gray-800 hidden md:block">
+                        {user?.name || "Error Fetching Name..."}
+                    </span>
+                </div>
             </header>
 
             <div className="flex flex-1">
@@ -91,6 +100,17 @@ const DashboardLayout = () => {
                                 <span className="hidden md:inline text-black">{item.label}</span>
                             </button>
                         ))}
+                        <button
+                            onClick={logout}
+                            className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
+                        >
+                            <div
+                                className='p-3 rounded-xl bg-[#F0F1F8] text-black hover:bg-red-300'
+                            >
+                                <LogOut className="w-5 h-5" />
+                            </div>
+                            <span className="hidden md:inline text-black">Sign Out</span>
+                        </button>
                     </nav>
                 </aside>
 

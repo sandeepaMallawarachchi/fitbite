@@ -55,7 +55,7 @@ const DashboardLayout = () => {
         <div className="flex flex-col h-screen bg-white">
             <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
                 <Link to="/dashboard">
-                    <img src="/logo1.png" alt="Logo" className="w-36" />
+                    <img src="/logo1.png" alt="Logo" className="h-10 w-auto" />
                 </Link>
                 <div className="relative w-full max-w-md mx-6">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />

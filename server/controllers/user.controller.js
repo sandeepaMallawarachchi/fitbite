@@ -78,3 +78,26 @@ exports.getUserById = async (req, res) => {
     });
   }
 };
+
+exports.getFitnessById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const fitnessDetails = await Fitness.findOne({userId});
+
+    if (!fitnessDetails || fitnessDetails.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ fitnessDetails });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Failed to find fitness details.',
+      error: error.message,
+    });
+  }
+};

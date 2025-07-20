@@ -33,7 +33,7 @@ function AppContent() {
   useEffect(() => {
     if (shouldRedirect) {
       toast.error("You’ve been logged out", {
-        duration: 4000,
+        duration: 3000,
       });
       navigate("/");
       clearRedirect();

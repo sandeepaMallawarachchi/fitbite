@@ -11,9 +11,11 @@ app.use(cookieParser());
 
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const chatRoutes = require("./routes/chat.routes");
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/chat", chatRoutes);
 
 // Connect to DB
 connectDB();

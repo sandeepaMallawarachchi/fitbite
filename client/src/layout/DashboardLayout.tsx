@@ -8,6 +8,7 @@ import {
     User,
     Settings,
     Search,
+    LogOut,
 } from "lucide-react";
 import axios from "axios";
 import UserDropdown from "../components/UserDropdown";
@@ -24,6 +25,7 @@ const navItems: NavItem[] = [
     { label: "Progress", icon: <File className="w-5 h-5" />, path: "/dashboard/progress" },
     { label: "Profile", icon: <User className="w-5 h-5" />, path: "/dashboard/profile" },
     { label: "Settings", icon: <Settings className="w-5 h-5" />, path: "/dashboard/settings" },
+    { label: "Sign Out", icon: <LogOut className="w-5 h-5" />, path: "/logout" },
 ];
 
 const DashboardLayout = () => {

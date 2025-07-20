@@ -47,7 +47,8 @@ export default function SignUpForm() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); 
     if (!isFormValid) return;
     setLoading(true);
 
@@ -58,10 +59,9 @@ export default function SignUpForm() {
       });
 
       if (res.status === 200 || res.status === 201) {
-        const userId = res.data.userId;
-        const user = { id: userId, email, role: "user" };
-        login(user, "");
-        setFormData({ email });
+        const { token, user } = res.data;
+        login(user, token);
+        setFormData({ email: user.email });
         navigate("/SignUpStep1");
       }
     } catch (err) {
@@ -91,7 +91,7 @@ export default function SignUpForm() {
 
         <div className="flex flex-col lg:flex-row p-6 sm:pb-8 lg:pb-10">
           <div className="w-full lg:w-1/2 lg:pr-12 lg:border-r-2 border-gray-300 mb-8 lg:mb-0">
-            <div className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
               <input
                 type="email"
                 placeholder="Email"
@@ -123,10 +123,10 @@ export default function SignUpForm() {
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   className={`w-full border rounded-lg p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-1 ${passwordsMatch === false
-                      ? "border-red-500 focus:ring-red-400"
-                      : passwordsMatch === true
-                        ? "border-green-500 focus:ring-green-400"
-                        : "border-gray-300 focus:ring-blue-400"
+                    ? "border-red-500 focus:ring-red-400"
+                    : passwordsMatch === true
+                      ? "border-green-500 focus:ring-green-400"
+                      : "border-gray-300 focus:ring-blue-400"
                     }`}
                 />
                 <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
@@ -169,10 +169,9 @@ export default function SignUpForm() {
                 <button
                   type="submit"
                   disabled={!isFormValid || loading}
-                  onClick={handleSubmit}
                   className={`w-full font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base transition-colors duration-200 ${isFormValid && !loading
-                      ? "bg-green-300 text-white hover:opacity-90"
-                      : "bg-gray-200 text-gray-800 cursor-not-allowed"
+                    ? "bg-green-300 text-white hover:bg-green-400 cursor-pointer"
+                    : "bg-gray-200 text-gray-800 cursor-not-allowed"
                     }`}
                 >
                   {loading ? "Signing up..." : "Sign Up"}
@@ -185,7 +184,7 @@ export default function SignUpForm() {
                   Sign In
                 </Link>
               </div>
-            </div>
+            </form>
           </div>
 
           {/* Right Column - Social Logins */}

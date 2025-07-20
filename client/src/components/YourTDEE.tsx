@@ -13,6 +13,7 @@ const YourTDEE = () => {
   const navigate = useNavigate();
   const [showCalc, setShowCalc] = useState(false);
   const { formData, setFormData } = useFormContext();
+  const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
 
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
@@ -49,6 +50,10 @@ const YourTDEE = () => {
         userId,
         updateData: {
           TDEE: TDEE.toString(),
+        },
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
 

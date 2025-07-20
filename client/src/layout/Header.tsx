@@ -35,13 +35,13 @@ const Header: React.FC = () => {
         <div className="hidden md:flex gap-x-4 lg:gap-x-8">
           <button
             onClick={() => navigate("/SignUp")}
-            className="text-black px-8 py-2 rounded-md text-md font-semibold bg-[var(--green1)]"
+            className="text-black px-8 py-2 rounded-md text-md font-semibold bg-green-300 hover:bg-green-400 cursor-pointer"
           >
             Sign up
           </button>
           <button
             onClick={() => navigate("/SignIn")}
-            className="text-black px-8 py-2 border rounded-md text-md font-semibold"
+            className="text-black px-8 py-2 border rounded-md text-md font-semibold cursor-pointer hover:bg-gray-100"
           >
             Sign in
           </button>
@@ -93,7 +93,7 @@ const Header: React.FC = () => {
           <div className=" flex gap-4 justify-center pt-6">
             <button
               onClick={() => navigate("/SignUp")}
-              className="text-black px-8 py-2 rounded-md text-md font-semibold bg-[var(--green1)]"
+              className="text-black px-8 py-2 rounded-md text-md font-semibold bg-green-300"
             >
               Sign up
             </button>

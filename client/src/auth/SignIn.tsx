@@ -5,19 +5,22 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
   const isFormValid =
     email.trim() !== "" &&
     password !== "";
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!isFormValid) return;
 
     try {
@@ -28,8 +31,7 @@ const SignIn = () => {
 
       const { token, user } = res.data;
       login(user, token);
-      toast.success("Login success");
-      // navigate("/dashboard");
+      navigate("/dashboard");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Login failed");
@@ -58,7 +60,7 @@ const SignIn = () => {
         <div className="flex flex-col lg:flex-row p-6  sm:pb-8 lg:pb-10">
           {/* Left Column - Form */}
           <div className="w-full lg:w-1/2 lg:pr-12 lg:border-r-2 border-gray-300 mb-8 lg:mb-0 ">
-            <div className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 pb-4 lg:pb-0 border-b lg:border-0">
               <input
                 type="email"
                 placeholder="Email"
@@ -97,9 +99,8 @@ const SignIn = () => {
                 <button
                   type="submit"
                   disabled={!isFormValid}
-                  onClick={handleSubmit}
                   className={`sm:w-1/2 font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${isFormValid
-                    ? "bg-green-300 text-white hover:opacity-90 cursor-pointer"
+                    ? "bg-green-300 text-white hover:bg-green-400 cursor-pointer"
                     : "bg-gray-200 text-gray-800 cursor-not-allowed"
                     }`}
                 >
@@ -121,7 +122,7 @@ const SignIn = () => {
                   Sign Up
                 </a>
               </div>
-            </div>
+            </form>
           </div>
           {/* Right Column - Social Logins */}
           <div className="w-full lg:w-1/2 lg:pl-12 space-y-4 lg:pt-14">

@@ -9,6 +9,8 @@ import {
     Settings,
     Search,
     LogOut,
+    Users,
+    PlusSquare
 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
@@ -18,14 +20,6 @@ interface NavItem {
     icon: React.ReactNode;
     path: string;
 }
-
-const navItems: NavItem[] = [
-    { label: "Home", icon: <Home className="w-5 h-5" />, path: "/dashboard" },
-    { label: "Meal Plan", icon: <ChartPie className="w-5 h-5" />, path: "/dashboard/meal-plan" },
-    { label: "Progress", icon: <File className="w-5 h-5" />, path: "/dashboard/progress" },
-    { label: "Profile", icon: <User className="w-5 h-5" />, path: "/dashboard/profile" },
-    { label: "Settings", icon: <Settings className="w-5 h-5" />, path: "/dashboard/settings" },
-];
 
 const DashboardLayout = () => {
     const [active, setActive] = useState("Home");
@@ -37,6 +31,53 @@ const DashboardLayout = () => {
     const userId = parsedUser?.id;
 
     const [user, setUser] = useState<{ name?: string } | null>(null);
+    const userRole = parsedUser?.role || ""
+
+    const navItems: NavItem[] = userRole === "Coach"
+        ? [
+            {
+                label: "Home",
+                icon: <Home className="w-5 h-5" />,
+                path: "/dashboard",
+            },
+            {
+                label: "Clients",
+                icon: <Users className="w-5 h-5" />,
+                path: "/dashboard/clients",
+            },
+            {
+                label: "Settings",
+                icon: <Settings className="w-5 h-5" />,
+                path: "/dashboard/settings",
+            },
+        ]
+        : [
+            {
+                label: "Home",
+                icon: <Home className="w-5 h-5" />,
+                path: "/dashboard",
+            },
+            {
+                label: "Meal Plan",
+                icon: <ChartPie className="w-5 h-5" />,
+                path: "/dashboard/meal-plan",
+            },
+            {
+                label: "Progress",
+                icon: <File className="w-5 h-5" />,
+                path: "/dashboard/progress",
+            },
+            {
+                label: "Profile",
+                icon: <User className="w-5 h-5" />,
+                path: "/dashboard/profile",
+            },
+            {
+                label: "Settings",
+                icon: <Settings className="w-5 h-5" />,
+                path: "/dashboard/settings",
+            },
+        ];
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -79,38 +120,57 @@ const DashboardLayout = () => {
 
             <div className="flex flex-1">
                 <aside className="w-20 md:w-36 bg-white py-6 px-4 flex flex-col items-center md:items-start">
-                    <nav className="flex flex-col gap-3 w-full">
-                        {navItems.map((item) => (
+                    <nav className="flex flex-col gap-3 w-full justify-between  h-full">
+                        <div>
+                            {navItems.map((item) => (
+                                <button
+                                    key={item.label}
+                                    onClick={() => {
+                                        setActive(item.label);
+                                        navigate(item.path);
+                                    }}
+                                    className="flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
+                                >
+                                    <div
+                                        className={`p-3 rounded-xl ${active === item.label
+                                            ? "bg-[#8FE289] text-white"
+                                            : "bg-[#F0F1F8] text-gray-500 hover:bg-gray-300"
+                                            }`}
+                                    >
+                                        {item.icon}
+                                    </div>
+                                    <span className="hidden md:inline text-black mb-2">{item.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <div>
+                            {userRole === "Coach" && (
+                                <button
+                                    onClick={logout}
+                                    className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
+                                >
+                                    <div
+                                        className={`p-3 rounded-xl ${active === 'Add Client'
+                                            ? "bg-[#8FE289] text-green-500"
+                                            : "bg-[#F0F1F8] text-[#8FE289] hover:bg-gray-300"
+                                            }`}                            >
+                                        <PlusSquare className="w-5 h-5" />
+                                    </div>
+                                    <span className="hidden md:inline text-black mb-2">Add Client</span>
+                                </button>
+                            )}
                             <button
-                                key={item.label}
-                                onClick={() => {
-                                    setActive(item.label);
-                                    navigate(item.path);
-                                }}
-                                className="flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
+                                onClick={logout}
+                                className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
                             >
                                 <div
-                                    className={`p-3 rounded-xl ${active === item.label
-                                        ? "bg-[#8FE289] text-white"
-                                        : "bg-[#F0F1F8] text-gray-500 hover:bg-gray-300"
-                                        }`}
+                                    className='p-3 rounded-xl bg-[#F0F1F8] text-black hover:bg-red-300'
                                 >
-                                    {item.icon}
+                                    <LogOut className="w-5 h-5" />
                                 </div>
-                                <span className="hidden md:inline text-black">{item.label}</span>
+                                <span className="hidden md:inline text-black">Sign Out</span>
                             </button>
-                        ))}
-                        <button
-                            onClick={logout}
-                            className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
-                        >
-                            <div
-                                className='p-3 rounded-xl bg-[#F0F1F8] text-black hover:bg-red-300'
-                            >
-                                <LogOut className="w-5 h-5" />
-                            </div>
-                            <span className="hidden md:inline text-black">Sign Out</span>
-                        </button>
+                        </div>
                     </nav>
                 </aside>
 

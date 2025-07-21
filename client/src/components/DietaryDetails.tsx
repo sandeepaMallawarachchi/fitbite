@@ -42,6 +42,7 @@ const DietaryDetails = () => {
       const storedUser = localStorage.getItem("user");
       const parsedUser = storedUser ? JSON.parse(storedUser) : null;
       const userId = parsedUser?.id;
+      const role = parsedUser?.role;
 
       const updateData = {
         dietaryDetails: {
@@ -69,7 +70,11 @@ const DietaryDetails = () => {
         },
       })
 
-      navigate("/SignUpStep5");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step6");
+      } else {
+        navigate("/SignUpStep5");
+      }
     } catch (err) {
       console.error("Failed to update dietary details", err);
       toast.error("Failed to update dietary details");

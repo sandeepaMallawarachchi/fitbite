@@ -42,6 +42,7 @@ const MealHabit = () => {
       const storedUser = localStorage.getItem("user");
       const parsedUser = storedUser ? JSON.parse(storedUser) : null;
       const userId = parsedUser?.id;
+      const role = parsedUser?.role;
 
       const updateData = {
         mealHabits: {
@@ -76,8 +77,12 @@ const MealHabit = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      navigate("/SignUpStep4");
+      
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step5");
+      } else {
+        navigate("/SignUpStep4");
+      }
     } catch (err) {
       console.error("Failed to update meal habits", err);
       toast.error("Failed to update meal habits");

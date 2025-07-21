@@ -15,6 +15,7 @@ const FitnessGoal = () => {
   const storedUser = localStorage.getItem("user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const userId = parsedUser?.id;
+  const role = parsedUser?.role;
 
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");
@@ -75,7 +76,11 @@ const FitnessGoal = () => {
         },
       });
 
-      navigate("/SignUpStep3");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step4");
+      } else {
+        navigate("/SignUpStep3");
+      }
     } catch (err) {
       console.error("Failed to update fitness goal", err);
       toast.error("Failed to update fitness goal")

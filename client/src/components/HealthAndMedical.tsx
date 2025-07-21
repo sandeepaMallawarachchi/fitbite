@@ -26,6 +26,7 @@ const HealthAndMedical = () => {
       const storedUser = localStorage.getItem("user");
       const parsedUser = storedUser ? JSON.parse(storedUser) : null;
       const userId = parsedUser?.id;
+      const role = parsedUser?.role;
 
       const updateData = {
         medicalDetails: {
@@ -51,7 +52,11 @@ const HealthAndMedical = () => {
         },
       });
 
-      navigate("/SignUpStep6");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step7");
+      } else {
+        navigate("/SignUpStep6");
+      }
     } catch (err) {
       console.error("Failed to update health details", err);
       toast.error("Failed to update health details");

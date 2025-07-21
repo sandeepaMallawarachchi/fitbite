@@ -13,6 +13,11 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import AddClientStep1 from './components/addClientSteps/AddClientStep1';
 import AddClientStep2 from './components/addClientSteps/AddClientStep2';
+import AddClientStep3 from './components/addClientSteps/AddClientStep3';
+import AddClientStep4 from './components/addClientSteps/AddClientStep4';
+import AddClientStep5 from './components/addClientSteps/AddClientStep5';
+import AddClientStep6 from './components/addClientSteps/AddClientStep6';
+import AddClientStep7 from './components/addClientSteps/AddClientStep7';
 
 function AppContent() {
   const location = useLocation();
@@ -64,6 +69,11 @@ function AppContent() {
             <Route index element={<DashboardHome />} />
             <Route path="add-client-step1" element={<AddClientStep1 />} />
             <Route path="add-client-step2" element={<AddClientStep2 />} />
+            <Route path="add-client-step3" element={<AddClientStep3 />} />
+            <Route path="add-client-step4" element={<AddClientStep4 />} />
+            <Route path="add-client-step5" element={<AddClientStep5 />} />
+            <Route path="add-client-step6" element={<AddClientStep6 />} />
+            <Route path="add-client-step7" element={<AddClientStep7 />} />
             {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />

@@ -7,6 +7,11 @@ import axios from "axios";
 
 const TellABoutYouForm = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const userId = parsedUser?.id;
+  const role = parsedUser?.role;
 
   const { formData, setFormData } = useFormContext();
 
@@ -32,11 +37,6 @@ const TellABoutYouForm = () => {
     e.preventDefault();
     if (!isFormValid) return;
 
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const parsedUser = user ? JSON.parse(user) : null;
-    const userId = parsedUser?.id;
-
     if (!userId) {
       toast.error("User ID not found. Please login again.");
       return;
@@ -51,8 +51,11 @@ const TellABoutYouForm = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      navigate("/YourTDEE");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step2");
+      } else {
+        navigate("/YourTDEE");
+      }
     } catch (err: any) {
       console.error("Error updating user:", err.message);
       toast.error(err.response?.data?.message || "Error updating user");
@@ -60,7 +63,7 @@ const TellABoutYouForm = () => {
   };
 
   return (
-    <div className="w-full max-h-80% bg-white px-6 md:px-10">
+    <div className="w-full max-h-80% px-6 md:px-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
@@ -104,7 +107,7 @@ const TellABoutYouForm = () => {
                   name="email"
                   placeholder="abc@gmail.com"
                   value={formData.email || ""}
-                  readOnly
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-600"
                 />
               </div>

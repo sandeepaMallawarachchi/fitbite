@@ -60,7 +60,7 @@ function OverView() {
   );
 
   return (
-    <div className="w-full bg-white px-6 md:px-10 pt-4 pb-0">
+    <div className="w-full px-6 md:px-10 pt-4 pb-0">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">

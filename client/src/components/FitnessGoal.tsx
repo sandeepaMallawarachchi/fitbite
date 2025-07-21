@@ -91,7 +91,7 @@ const FitnessGoal = () => {
   }, [formData]);
 
   return (
-    <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
+    <div className="w-full max-h-80% px-6 md:px-10 ">
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">

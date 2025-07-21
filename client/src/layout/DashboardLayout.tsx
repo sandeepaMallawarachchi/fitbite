@@ -108,9 +108,9 @@ const DashboardLayout = () => {
                 </div>
                 <div className="flex items-center gap-3 cursor-pointer">
                     <img
-                        src="/avatar.jpg"
+                        src="/avatar.png"
                         alt="User"
-                        className="w-12 h-12 rounded-full object-cover"
+                        className="w-10 h-10 rounded-full object-cover"
                     />
                     <span className="text-sm font-medium text-gray-800 hidden md:block">
                         {user?.name || "Error Fetching Name..."}
@@ -145,8 +145,8 @@ const DashboardLayout = () => {
                         </div>
                         <div>
                             {userRole === "Coach" && (
-                                <button
-                                    onClick={logout}
+                                <Link
+                                    to={'/dashboard/add-client-step1'}
                                     className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
                                 >
                                     <div
@@ -157,7 +157,7 @@ const DashboardLayout = () => {
                                         <PlusSquare className="w-5 h-5" />
                                     </div>
                                     <span className="hidden md:inline text-black mb-2">Add Client</span>
-                                </button>
+                                </Link>
                             )}
                             <button
                                 onClick={logout}

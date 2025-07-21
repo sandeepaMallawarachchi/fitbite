@@ -11,6 +11,8 @@ import DashboardLayout from "./layout/DashboardLayout"
 import DashboardHome from "./pages/dashboard/DashboardHome"
 import ProtectedRoute from "./auth/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
+import AddClientStep1 from './components/addClientSteps/AddClientStep1';
+import AddClientStep2 from './components/addClientSteps/AddClientStep2';
 
 function AppContent() {
   const location = useLocation();
@@ -60,6 +62,8 @@ function AppContent() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardHome />} />
+            <Route path="add-client-step1" element={<AddClientStep1 />} />
+            <Route path="add-client-step2" element={<AddClientStep2 />} />
             {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />

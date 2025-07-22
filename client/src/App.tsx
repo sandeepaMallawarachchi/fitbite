@@ -18,6 +18,7 @@ import AddClientStep4 from './components/addClientSteps/AddClientStep4';
 import AddClientStep5 from './components/addClientSteps/AddClientStep5';
 import AddClientStep6 from './components/addClientSteps/AddClientStep6';
 import AddClientStep7 from './components/addClientSteps/AddClientStep7';
+import CLientSignUp from './components/addClientSteps/ClientSignUp';
 
 function AppContent() {
   const location = useLocation();
@@ -74,6 +75,7 @@ function AppContent() {
             <Route path="add-client-step5" element={<AddClientStep5 />} />
             <Route path="add-client-step6" element={<AddClientStep6 />} />
             <Route path="add-client-step7" element={<AddClientStep7 />} />
+            <Route path="client-signup" element={<CLientSignUp />} />
             {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import SignUpStep1 from "../auth/SignUpStep1";
-import SignUpForm from "../auth/SignUpForm";
+import SignUpStep from "../auth/SignUpStep";
 import SignUpStep2 from "../auth/SignUpStep2";
 import SignUpStep3 from "../auth/SignUpStep3";
 import SignUpStep4 from "../auth/SignUpStep4";
@@ -17,7 +17,7 @@ const Background = () => {
     const location = useLocation();
 
     const renderComponent = () => {
-        if (location.pathname === "/SignUp") return <SignUpForm />;
+        if (location.pathname === "/SignUp") return <SignUpStep />;
         if (location.pathname === "/SignUpStep1") return <SignUpStep1 />;
         if (location.pathname === "/SignUpStep2") return <SignUpStep2 />;
         if (location.pathname === "/SignUpStep3") return <SignUpStep3 />;

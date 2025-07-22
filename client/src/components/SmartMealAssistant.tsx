@@ -14,8 +14,6 @@ const SmartMealAssistant = () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const token = localStorage.getItem("token");
 
-    console.log(formData)
-
     useEffect(() => {
         const fetchChatHistory = async () => {
             try {

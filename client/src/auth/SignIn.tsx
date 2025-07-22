@@ -30,6 +30,13 @@ const SignIn = () => {
       });
 
       const { token, user } = res.data;
+
+      if (user.role === "Coach") {
+        localStorage.setItem("coachId", user.id);
+      } else {
+        localStorage.removeItem("coachId");
+      }
+
       login(user, token);
       navigate("/dashboard");
     } catch (err) {

@@ -33,6 +33,8 @@ const DashboardLayout = () => {
     const [user, setUser] = useState<{ name?: string } | null>(null);
     const userRole = parsedUser?.role || ""
 
+    const coachId = localStorage.getItem("coachId");
+
     const navItems: NavItem[] = userRole === "Coach"
         ? [
             {
@@ -81,16 +83,23 @@ const DashboardLayout = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await axios.get(`http://localhost:5000/user/getUserById/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setUser(res.data?.userDetails || {});
-        }
+            const effectiveUserId = userRole === "Coach" ? coachId : userId;
+            if (!effectiveUserId) return;
+
+            try {
+                const res = await axios.get(`http://localhost:5000/user/getUserById/${effectiveUserId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUser(res.data?.userDetails || {});
+            } catch (error) {
+                console.error("Failed to fetch user:", error);
+            }
+        };
 
         fetchUser();
-    }, [userId]);
+    }, [userRole, coachId, userId, token]);
 
     return (
         <div className="flex flex-col h-screen bg-white">
@@ -146,7 +155,7 @@ const DashboardLayout = () => {
                         <div>
                             {userRole === "Coach" && (
                                 <Link
-                                    to={'/dashboard/add-client-step1'}
+                                    to={'/dashboard/client-signup'}
                                     className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
                                 >
                                     <div

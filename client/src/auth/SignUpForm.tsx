@@ -62,7 +62,7 @@ const SignUpForm = () => {
 
       if (res.status === 200 || res.status === 201) {
         const { token, user } = res.data;
-        setFormData({ email: user.email });
+        setFormData({ email: user.email, userId: user.id });
 
         if (role == 'Coach') {
           navigate("/dashboard/add-client-step1");

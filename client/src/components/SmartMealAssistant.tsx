@@ -11,13 +11,12 @@ const SmartMealAssistant = () => {
     const [loading, setLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const formData = JSON.parse(localStorage.getItem("formData") || "{}");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const token = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchChatHistory = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/chat/getMessages/${user.id}`, {
+                const res = await axios.get(`http://localhost:5000/chat/getMessages/${formData.userId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setChatHistory(res.data);
@@ -39,7 +38,7 @@ const SmartMealAssistant = () => {
 
         try {
             await axios.post("http://localhost:5000/chat/saveMessage", {
-                userId: user.id,
+                userId: formData.userId,
                 role: "user",
                 content: message
             }, {
@@ -138,7 +137,7 @@ const SmartMealAssistant = () => {
                 } else {
                     setLoading(false);
                     axios.post("http://localhost:5000/chat/saveMessage", {
-                        userId: user.id,
+                        userId: formData.userId,
                         role: "assistant",
                         content: fullText
                     }, {

@@ -8,9 +8,9 @@ import axios from "axios";
 const TellABoutYouForm = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("formData");
   const parsedUser = user ? JSON.parse(user) : null;
-  const userId = parsedUser?.id;
+  const userId = parsedUser?.userId;
   const role = localStorage.getItem("coachRole")
 
 

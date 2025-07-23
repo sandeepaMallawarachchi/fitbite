@@ -26,9 +26,9 @@ const DashboardLayout = () => {
     const navigate = useNavigate();
     const { logout } = useAuth();
     const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-    const userId = parsedUser?.id;
+    const userDetails = localStorage.getItem("formData");
+    const parsedUser = userDetails ? JSON.parse(userDetails) : null;
+    const userId = parsedUser?.userId;
 
     const [user, setUser] = useState<{ name?: string } | null>(null);
     const userRole = parsedUser?.role || localStorage.getItem("coachRole");

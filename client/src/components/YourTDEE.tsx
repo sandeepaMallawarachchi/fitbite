@@ -14,10 +14,9 @@ const YourTDEE = () => {
   const [showCalc, setShowCalc] = useState(false);
   const { formData, setFormData } = useFormContext();
   const token = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
-
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-  const userId = parsedUser?.id;
+  const user = localStorage.getItem("formData");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const userId = parsedUser?.userId;
   const role = localStorage.getItem("coachRole")
 
 

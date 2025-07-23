@@ -18,7 +18,8 @@ const YourTDEE = () => {
 
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const userId = parsedUser?.id;
-  const role = parsedUser?.role;
+  const role = localStorage.getItem("coachRole")
+
 
   const { weight, height, birthday, activityLevel } = formData;
 

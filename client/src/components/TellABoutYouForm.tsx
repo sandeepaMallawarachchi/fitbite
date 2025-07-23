@@ -11,7 +11,8 @@ const TellABoutYouForm = () => {
   const user = localStorage.getItem("user");
   const parsedUser = user ? JSON.parse(user) : null;
   const userId = parsedUser?.id;
-  const role = parsedUser?.role;
+  const role = localStorage.getItem("coachRole")
+
 
   const { formData, setFormData } = useFormContext();
 

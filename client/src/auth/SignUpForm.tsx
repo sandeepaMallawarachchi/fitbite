@@ -17,9 +17,7 @@ export default function SignUpForm() {
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
   const [email, setEmail] = useState("");
 
-  const user = localStorage.getItem("user");
-  const parsedUser = user ? JSON.parse(user) : null;
-  const role = parsedUser?.role;
+  const role = localStorage.getItem("coachRole")
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -68,7 +66,7 @@ export default function SignUpForm() {
         setFormData({ email: user.email });
 
         if (role == 'Coach') {
-          navigate("/add-client-step1");
+          navigate("/dashboard/add-client-step1");
         } else {
           navigate("/SignUpStep1");
         }
@@ -187,13 +185,14 @@ export default function SignUpForm() {
                     {loading ? "Signing up..." : "Sign Up"}
                   </button>
                 </div>
-
-                <div className="text-center text-sm sm:text-md text-gray-600">
-                  Already have an Account?{" "}
-                  <Link to="/SignIn" className="text-[#00BBF6] hover:underline font-semibold">
-                    Sign In
-                  </Link>
-                </div>
+                {role !== 'Coach' && (
+                  <div className="text-center text-sm sm:text-md text-gray-600">
+                    Already have an Account?{" "}
+                    <Link to="/SignIn" className="text-[#00BBF6] hover:underline font-semibold">
+                      Sign In
+                    </Link>
+                  </div>
+                )}
               </form>
             </div>
 

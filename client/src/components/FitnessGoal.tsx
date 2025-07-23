@@ -15,7 +15,8 @@ const FitnessGoal = () => {
   const storedUser = localStorage.getItem("user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const userId = parsedUser?.id;
-  const role = parsedUser?.role;
+  const role = localStorage.getItem("coachRole")
+
 
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");

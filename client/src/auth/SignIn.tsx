@@ -33,6 +33,7 @@ const SignIn = () => {
 
       if (user.role === "Coach") {
         localStorage.setItem("coachId", user.id);
+        localStorage.setItem("coachRole", user.role);
       } else {
         localStorage.removeItem("coachId");
       }

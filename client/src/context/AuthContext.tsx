@@ -70,12 +70,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [logout]);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
 
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
+    if (savedToken) {
       setToken(savedToken);
+    }
+
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+      } catch (err) {
+        console.warn("Invalid user in localStorage");
+      }
+    }
+
+    if (savedToken) {
       resetInactivityTimer();
     }
 

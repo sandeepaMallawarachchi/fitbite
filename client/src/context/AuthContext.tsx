@@ -48,7 +48,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const clearRedirect = () => setShouldRedirect(false);
 
   const login = (user: User, token: string) => {
-    localStorage.setItem("user", JSON.stringify(user));
+    if (user.role !== "Coach") {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+      localStorage.removeItem("formData");
+    }
+
     localStorage.setItem("token", token);
     setUser(user);
     setToken(token);

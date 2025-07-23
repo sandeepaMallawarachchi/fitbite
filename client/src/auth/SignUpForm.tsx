@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useFormContext } from "../context/FormContext";
 import { useAuth } from "../context/AuthContext";
 
-export default function SignUpForm() {
+const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -62,12 +62,12 @@ export default function SignUpForm() {
 
       if (res.status === 200 || res.status === 201) {
         const { token, user } = res.data;
-        login(user, token);
         setFormData({ email: user.email });
 
         if (role == 'Coach') {
           navigate("/dashboard/add-client-step1");
         } else {
+          login(user, token);
           navigate("/SignUpStep1");
         }
       }
@@ -220,3 +220,5 @@ export default function SignUpForm() {
     </div>
   );
 }
+
+export default SignUpForm;

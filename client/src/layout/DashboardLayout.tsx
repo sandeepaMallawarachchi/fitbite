@@ -31,7 +31,7 @@ const DashboardLayout = () => {
     const userId = parsedUser?.id;
 
     const [user, setUser] = useState<{ name?: string } | null>(null);
-    const userRole = parsedUser?.role || ""
+    const userRole = parsedUser?.role || localStorage.getItem("coachRole");
 
     const coachId = localStorage.getItem("coachId");
 

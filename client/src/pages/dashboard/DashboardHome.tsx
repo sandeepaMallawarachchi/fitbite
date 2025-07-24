@@ -7,9 +7,9 @@ import SmartMealAssistant from "../../components/SmartMealAssistant";
 const DashboardHome = () => {
   const { setFormData } = useFormContext();
   const token = localStorage.getItem("token");
-  const user = localStorage.getItem("formData");
+  const user = localStorage.getItem("user");
   const parsedUser = user ? JSON.parse(user) : null;
-  const userId = parsedUser?.userId;
+  const userId = parsedUser?.id;
 
   useEffect(() => {
     const fetchAllUserData = async () => {

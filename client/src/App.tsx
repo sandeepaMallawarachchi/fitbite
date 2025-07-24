@@ -19,6 +19,7 @@ import AddClientStep5 from './components/addClientSteps/AddClientStep5';
 import AddClientStep6 from './components/addClientSteps/AddClientStep6';
 import AddClientStep7 from './components/addClientSteps/AddClientStep7';
 import ClientSignUp from './components/addClientSteps/ClientSignUp';
+import CoachDashboard from './pages/dashboard/CoachDashboard';
 
 function AppContent() {
   const location = useLocation();
@@ -35,7 +36,7 @@ function AppContent() {
     location.pathname === "/SignUpStep6" ||
     location.pathname.startsWith("/dashboard");
 
-  const { shouldRedirect, clearRedirect } = useAuth();
+  const { shouldRedirect, clearRedirect, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,7 +68,10 @@ function AppContent() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardHome />} />
+            <Route
+              index
+              element={user?.role === "Coach" ? <CoachDashboard /> : <DashboardHome />}
+            />
             <Route path="add-client-step1" element={<AddClientStep1 />} />
             <Route path="add-client-step2" element={<AddClientStep2 />} />
             <Route path="add-client-step3" element={<AddClientStep3 />} />
@@ -76,6 +80,7 @@ function AppContent() {
             <Route path="add-client-step6" element={<AddClientStep6 />} />
             <Route path="add-client-step7" element={<AddClientStep7 />} />
             <Route path="client-signup" element={<ClientSignUp />} />
+            <Route path="coach-dashboard" element={<CoachDashboard />} />
             {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />

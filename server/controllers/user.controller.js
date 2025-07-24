@@ -56,6 +56,24 @@ exports.updateFitnessDetails = async (req, res) => {
   }
 };
 
+exports.getAllUsers = async (req, res) => {
+  try {
+
+    const userDetails = await User.find();
+
+    if (!userDetails || userDetails.length === 0) {
+      return res.status(404).json({ message: 'No users found.' });
+    }
+
+    res.status(200).json({ userDetails });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Failed to find users.',
+      error: error.message,
+    });
+  }
+};
+
 exports.getUserById = async (req, res) => {
   try {
     const { userId } = req.params;

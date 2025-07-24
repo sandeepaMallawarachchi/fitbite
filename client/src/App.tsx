@@ -36,8 +36,9 @@ function AppContent() {
     location.pathname === "/SignUpStep6" ||
     location.pathname.startsWith("/dashboard");
 
-  const { shouldRedirect, clearRedirect, user } = useAuth();
+  const { shouldRedirect, clearRedirect } = useAuth();
   const navigate = useNavigate();
+  const role = localStorage.getItem("coachRole");
 
   useEffect(() => {
     if (shouldRedirect) {
@@ -48,6 +49,7 @@ function AppContent() {
       clearRedirect();
     }
   }, [shouldRedirect]);
+
 
   return (
     <>
@@ -70,7 +72,7 @@ function AppContent() {
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route
               index
-              element={user?.role === "Coach" ? <CoachDashboard /> : <DashboardHome />}
+              element={role === "Coach" ? <CoachDashboard /> : <DashboardHome />}
             />
             <Route path="add-client-step1" element={<AddClientStep1 />} />
             <Route path="add-client-step2" element={<AddClientStep2 />} />

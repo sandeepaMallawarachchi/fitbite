@@ -1,10 +1,15 @@
-// types/User.ts
 export interface Client {
-  id: string;
+  _id: string;
   name: string;
-  avatar: string;
-  message: string;
-  time: string;
-  unreadCount: number;
-  status: 'active' | 'inactive';
+  email: string;
+  phone: string;
+  status: string;
+  role: string;
+  createdAt: string;
+
+  // Optional UI display enhancements
+  avatar?: string;
+  message?: string;
+  time?: string;
+  unreadCount?: number;
 }

@@ -29,11 +29,11 @@ const stats = [
 
 export default function ClientStatsSidebar() {
   return (
-    <div className="w-full max-w-[220px] space-y-6">
+    <div className="w-full md:max-w-[220px] space-y-6">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white rounded-xl px-5 py-5 shadow flex flex-col gap-5 items-start justify-start"
+          className="bg-white rounded-xl px-5 py-5 shadow flex flex-col gap-5 md:items-start md:justify-start items-center"
         >
           <div className="flex flex-row gap-10 items-center">
             <div

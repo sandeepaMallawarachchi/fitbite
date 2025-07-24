@@ -107,7 +107,7 @@ const DashboardLayout = () => {
                 <Link to="/dashboard">
                     <img src="/logo1.png" alt="Logo" className="h-10 w-auto" />
                 </Link>
-                <div className="relative w-full max-w-md mx-6">
+                <div className="hidden md:relative w-full max-w-md mx-6">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <input
                         type="text"
@@ -127,7 +127,7 @@ const DashboardLayout = () => {
                 </div>
             </header>
 
-            <div className="flex flex-1">
+            <div className="flex flex-1 overflow-hidden">
                 <aside className="w-20 md:w-36 bg-white py-6 px-4 flex flex-col items-center md:items-start">
                     <nav className="flex flex-col gap-3 w-full justify-between  h-full">
                         <div>
@@ -183,7 +183,7 @@ const DashboardLayout = () => {
                     </nav>
                 </aside>
 
-                <main className="flex-1 bg-[#F5F6FA] overflow-y-auto p-6 rounded-tl-[40px] flex items-center justify-center">
+                <main className="flex-1 bg-[#F5F6FA] overflow-y-auto md:p-6 rounded-tl-[40px]">
                     <Outlet />
                 </main>
             </div>

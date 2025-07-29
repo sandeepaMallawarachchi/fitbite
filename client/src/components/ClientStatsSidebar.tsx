@@ -1,36 +1,65 @@
+import axios from "axios";
 import { User, Users, PieChart } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Client } from "../types/User";
 
-const stats = [
-  {
-    label: "Active Clients",
-    value: 73,
-    icon: <User className="w-6 h-6 text-white" />,
-    iconBg: "bg-[#8FE289]",
-  },
-  {
-    label: "Total Clients",
-    value: 85,
-    icon: <Users className="w-6 h-6 text-white" />,
-    iconBg: "bg-[#89B0E2]",
-  },
-  {
-    label: "Inactive Clients",
-    value: 12,
-    icon: <Users className="w-6 h-6 text-white" />,
-    iconBg: "bg-[#E4E5E6]",
-  },
-  {
-    label: "Client Engagement Rate",
-    value: "86%",
-    icon: <PieChart className="w-6 h-6 text-white" />,
-    iconBg: "bg-[#B789E2]",
-  },
-];
+const ClientStatsSidebar = () => {
 
-export default function ClientStatsSidebar() {
+  const [clients, setClients] = useState<Client[]>([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/user/getAllUsers", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setClients(res.data.userDetails);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      }
+    };
+
+    fetchClients();
+  }, []);
+
+  const getStats = () => {
+    const total = clients.length;
+    const active = clients.filter((c) => c.status === "Active").length;
+    const inactive = clients.filter((c) => c.status === "Inactive").length;
+
+    return [
+      {
+        label: "Active Clients",
+        value: active,
+        icon: <User className="w-6 h-6 text-white" />,
+        iconBg: "bg-[#8FE289]",
+      },
+      {
+        label: "Total Clients",
+        value: total,
+        icon: <Users className="w-6 h-6 text-white" />,
+        iconBg: "bg-[#89B0E2]",
+      },
+      {
+        label: "Inactive Clients",
+        value: inactive,
+        icon: <Users className="w-6 h-6 text-white" />,
+        iconBg: "bg-[#E4E5E6]",
+      },
+      {
+        label: "Client Engagement Rate",
+        value: "86%",
+        icon: <PieChart className="w-6 h-6 text-white" />,
+        iconBg: "bg-[#B789E2]",
+      },
+    ];
+  };
+
   return (
     <div className="w-full md:max-w-[220px] space-y-6">
-      {stats.map((stat) => (
+      {getStats().map((stat) => (
         <div
           key={stat.label}
           className="bg-white rounded-xl px-5 py-5 shadow flex flex-col gap-5 md:items-start md:justify-start items-center"
@@ -51,3 +80,5 @@ export default function ClientStatsSidebar() {
     </div>
   );
 }
+
+export default ClientStatsSidebar;

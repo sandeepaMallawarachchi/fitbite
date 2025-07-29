@@ -42,9 +42,7 @@ exports.login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
-    const now = new Date();
-    const offsetDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    user.lastSignedIn = offsetDate;
+    user.lastSignedIn = new Date();
 
     user.status = 'Active';
 

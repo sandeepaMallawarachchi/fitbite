@@ -4,7 +4,7 @@ const User = require("../models/User");
 cron.schedule("* * * * *", async () => {
   try {
     const users = await User.find();
-    const now = new Date(); // ✅ FIXED
+    const now = new Date();
 
     for (const user of users) {
       if (user.lastSignedIn) {
@@ -19,21 +19,21 @@ cron.schedule("* * * * *", async () => {
         if (minutesDiff > 1 && user.status !== "Inactive") {
           user.status = "Inactive";
           await user.save();
-          console.log(`🟥 Changed status to Inactive`);
+          console.log(`Changed status to Inactive`);
         } else if (minutesDiff <= 1 && user.status !== "Active") {
           user.status = "Active";
           await user.save();
-          console.log(`🟩 Changed status to Active`);
+          console.log(`Changed status to Active`);
         } else {
-          console.log("ℹ️ No status change needed");
+          console.log("No status change needed");
         }
       } else {
-        console.log(`⚠️ No lastSignedIn value for ${user.email}`);
+        console.log(`No lastSignedIn value for ${user.email}`);
       }
     }
 
-    console.log("✅ Cron finished");
+    console.log("Cron finished");
   } catch (err) {
-    console.error("❌ Cron job failed:", err);
+    console.error("Cron job failed:", err);
   }
 });

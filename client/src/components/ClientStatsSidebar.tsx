@@ -29,6 +29,8 @@ const ClientStatsSidebar = () => {
     const active = clients.filter((c) => c.status === "Active").length;
     const inactive = clients.filter((c) => c.status === "Inactive").length;
 
+    const engagementRate = total > 0 ? `${Math.round((active / total) * 100)}%` : "0%";
+
     return [
       {
         label: "Active Clients",
@@ -50,7 +52,7 @@ const ClientStatsSidebar = () => {
       },
       {
         label: "Client Engagement Rate",
-        value: "86%",
+        value: engagementRate,
         icon: <PieChart className="w-6 h-6 text-white" />,
         iconBg: "bg-[#B789E2]",
       },

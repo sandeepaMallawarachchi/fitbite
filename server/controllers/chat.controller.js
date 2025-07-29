@@ -29,3 +29,31 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.reactMessage = async (req, res) => {
+    const { userId, messageIndex } = req.params;
+    const { coachId, reaction } = req.body;
+
+    try {
+        const chat = await ChatHistory.findOne({ userId });
+        if (!chat) return res.status(404).json({ error: "Chat not found" });
+
+        const msg = chat.messages[messageIndex];
+        if (!msg) return res.status(404).json({ error: "Message not found" });
+
+        if (!["like", "dislike", null].includes(reaction)) {
+            return res.status(400).json({ error: "Invalid reaction" });
+        }
+
+        if (reaction) {
+            msg.reactions.set(coachId, reaction);
+        } else {
+            msg.reactions.delete(coachId);
+        }
+
+        await chat.save();
+        res.json({ success: true, reactions: msg.reactions });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

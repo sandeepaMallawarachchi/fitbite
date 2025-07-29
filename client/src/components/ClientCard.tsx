@@ -2,11 +2,14 @@ import type { Client } from "../types/User";
 
 interface Props {
     client: Client;
+    onClick: (client: Client) => void;
 }
 
-const ClientCard: React.FC<Props> = ({ client }) => {
+const ClientCard: React.FC<Props> = ({ client, onClick }) => {
     return (
-        <div className="relative flex md:flex-row flex-col items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition border-b border-gray-100">
+        <div
+            onClick={() => onClick(client)}
+            className="relative cursor-pointer flex md:flex-row flex-col items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition border-b border-gray-100">
             <div className="flex md:flex-row flex-col items-center space-x-3">
                 <img
                     src={client.avatar}

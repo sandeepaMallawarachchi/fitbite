@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useFormContext } from "../context/FormContext";
 
 const SignIn = () => {
   const { login } = useAuth();
@@ -13,6 +14,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
+  const { setFormData } = useFormContext();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -36,6 +38,22 @@ const SignIn = () => {
         localStorage.setItem("coachRole", user.role);
       } else {
         localStorage.removeItem("coachId");
+
+        setFormData({
+          userId: user.id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          gender: user.gender,
+          height: user.height,
+          weight: user.weight,
+          birthday: user.birthday,
+          TDEE: user.TDEE,
+          fitnessGoal: user.fitnessGoal,
+          mealHabits: user.mealHabits,
+          dietaryDetails: user.dietaryDetails,
+          medicalDetails: user.medicalDetails,
+        });
       }
 
       login(user, token);

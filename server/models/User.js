@@ -26,6 +26,7 @@ const userSchema = new Schema({
     },
     picture: { type: String },
     token: { type: String },
+    lastSignedIn: { type: Date, default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

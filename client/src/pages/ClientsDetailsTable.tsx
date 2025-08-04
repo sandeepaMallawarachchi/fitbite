@@ -4,7 +4,6 @@ import axios from "axios";
 import { EllipsisVertical, Filter, X } from "lucide-react";
 import { AnimatePresence, motion, Reorder } from "framer-motion";
 import type { Client } from "../types/User";
-import type { FormData } from "../types/FormData";
 
 interface ExtendedClient extends Client {
     clientId?: number;
@@ -28,23 +27,17 @@ const ClientsDetailsTable = () => {
     useEffect(() => {
         const fetchClients = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/user/getAllUsers", {
+                const res = await axios.get(`http://localhost:5000/user/full-details`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                const users = res.data.userDetails.filter((u: any) => u.role === "User");
+                const allUsers = res.data.userDetails || [];
 
-                const enrichedClients = await Promise.all(
-                    users.map(async (user: any, index: number) => {
-                        let formData: FormData | null = null;
-                        try {
-                            const formRes = await axios.get(`http://localhost:5000/form/${user._id}`, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            });
-                            formData = formRes.data;
-                        } catch (err) {
-                            console.warn("Form not found for user:", user._id);
-                        }
+                const enrichedClients = allUsers
+                    .filter((entry: any) => entry.userDetails?.role === "User")
+                    .map((entry: any, index: number) => {
+                        const user = entry.userDetails || {};
+                        const fitness = entry.fitnessDetails || {};
 
                         return {
                             _id: user._id,
@@ -56,33 +49,30 @@ const ClientsDetailsTable = () => {
                             createdAt: user.createdAt,
                             avatar: "/avatar.png",
                             clientId: index + 1,
-                            age: formData?.birthday
+                            age: user.birthday
                                 ? `${Math.floor(
-                                    (Date.now() - new Date(formData.birthday).getTime()) /
+                                    (Date.now() - new Date(user.birthday).getTime()) /
                                     (1000 * 60 * 60 * 24 * 365.25)
                                 )}`
                                 : "--",
-                            tdee: formData?.TDEE || "--",
-                            gender: formData?.gender || "--",
-                            weight: formData?.weight || "--",
-                            height: formData?.height || "--",
-                            activityLevel: formData?.activityLevel || "--",
-                            goal: formData?.fitnessGoal?.primaryGoal || "--",
+                            tdee: fitness.TDEE || "--",
+                            gender: user.gender || "--",
+                            weight: user.weight || "--",
+                            height: user.height || "--",
+                            activityLevel: user.activityLevel || "--",
+                            goal: fitness.fitnessGoal?.primaryGoal || "--",
                         };
-                    })
-                );
+                    });
 
                 setClients(enrichedClients);
                 setFilteredClients(enrichedClients);
             } catch (err) {
-                console.error("Error fetching clients", err);
+                console.error("Error fetching unified client details", err);
             }
         };
 
         fetchClients();
     }, []);
-
-    console.log(clients)
 
     const handleFilter = (type: "all" | "active" | "inactive") => {
         if (type === "all") setFilteredClients(clients);
@@ -159,7 +149,7 @@ const ClientsDetailsTable = () => {
                                 <th className="p-3">Goal</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-center">
                             {(filteredClients || []).map((client) => (
                                 <Reorder.Item
                                     key={client._id}
@@ -183,9 +173,9 @@ const ClientsDetailsTable = () => {
                                     <td className="p-3">{client.clientId}</td>
                                     <td className="p-3">
                                         <span
-                                            className={`block w-full text-center py-2 text-sm rounded-lg ${client.status === "Active"
-                                                ? "bg-[#89E2AD] text-black"
-                                                : "bg-[#D9D9D9] text-black"
+                                            className={`block w-full text-center py-2 text-sm rounded-lg text-black ${client.status === "Active"
+                                                ? "bg-[#89E2AD]"
+                                                : "bg-[#D9D9D9]"
                                                 }`}
                                         >
                                             {client.status}

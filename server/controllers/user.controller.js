@@ -119,3 +119,26 @@ exports.getFitnessById = async (req, res) => {
     });
   }
 };
+
+exports.getAllFullUserDetails = async (req, res) => {
+  try {
+    const users = await User.find({ role: "User" });
+
+    const results = await Promise.all(
+      users.map(async (user) => {
+        const fitness = await Fitness.findOne({ userId: user._id });
+        return {
+          userDetails: user,
+          fitnessDetails: fitness || null,
+        };
+      })
+    );
+
+    res.status(200).json({ userDetails: results });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve full user details.",
+      error: error.message,
+    });
+  }
+};

@@ -9,5 +9,6 @@ router.patch('/updateFitness', verifyToken, userController.updateFitnessDetails)
 router.get('/getAllUsers', verifyToken, userController.getAllUsers);
 router.get('/getUserById/:userId', verifyToken, userController.getUserById);
 router.get('/getFitnessById/:userId', verifyToken, userController.getFitnessById);
+router.get("/full-details", verifyToken, userController.getAllFullUserDetails);
 
 module.exports = router;

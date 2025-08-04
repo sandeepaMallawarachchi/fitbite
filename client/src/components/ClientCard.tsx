@@ -6,6 +6,8 @@ interface Props {
 }
 
 const ClientCard: React.FC<Props> = ({ client, onClick }) => {
+
+    console.log(client)
     return (
         <div
             onClick={() => onClick(client)}

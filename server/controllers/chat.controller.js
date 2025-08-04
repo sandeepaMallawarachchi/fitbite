@@ -57,3 +57,23 @@ exports.reactMessage = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.markMessagesRead = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const chat = await ChatHistory.findOne({ userId });
+    if (!chat) return res.status(404).json({ error: "Chat not found" });
+
+    chat.messages.forEach((msg) => {
+      if (msg.role === "user" && !msg.readByCoach) {
+        msg.readByCoach = true;
+      }
+    });
+
+    await chat.save();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

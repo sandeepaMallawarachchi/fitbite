@@ -21,12 +21,20 @@ const ClientsTable = () => {
             .filter((user: any) => user.role === "User")
             .map(async (user: any) => {
               let lastMessage = "No messages yet";
+              let unreadCount = 0;
+
               try {
                 const msgRes = await axios.get(`http://localhost:5000/chat/getMessages/${user._id}`, {
                   headers: { Authorization: `Bearer ${token}` },
                 });
                 const messages = msgRes.data;
                 lastMessage = messages.length > 0 ? messages[messages.length - 1].content : "No messages yet";
+
+                // count unread user messages
+                unreadCount = messages.filter(
+                  (msg: any) => msg.role === "user" && !msg.readByCoach
+                ).length;
+
               } catch (err) {
                 console.error("Error fetching messages for user", user._id, err);
               }
@@ -42,7 +50,7 @@ const ClientsTable = () => {
                 avatar: `/avatar.png`,
                 message: lastMessage,
                 time: new Date(user.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                unreadCount: Math.floor(Math.random() * 3),
+                unreadCount,
               };
             })
         );

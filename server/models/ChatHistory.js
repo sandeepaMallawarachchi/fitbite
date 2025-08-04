@@ -8,7 +8,8 @@ const messageSchema = new mongoose.Schema({
     type: Map,
     of: String,
     default: {}
-  }
+  },
+  readByCoach: { type: Boolean, default: false }
 });
 
 const chatHistorySchema = new mongoose.Schema({

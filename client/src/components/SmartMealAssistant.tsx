@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mic, Image, Send, ArrowDown, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Mic, Image, Send, ArrowDown, ThumbsUp, ThumbsDown, EllipsisVertical } from "lucide-react";
 import { marked } from "marked";
 
 interface SmartMealAssistantProps {
@@ -11,7 +11,7 @@ interface SmartMealAssistantProps {
     readOnly?: boolean;
 }
 
-const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, readOnly = false }) => {
+const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userName, readOnly = false }) => {
     const [message, setMessage] = useState("");
     const [chatHistory, setChatHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -259,11 +259,35 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, readOnl
         );
     };
 
+    useEffect(() => {
+        if (readOnly && userId) {
+            axios.patch(`http://localhost:5000/chat/mark-read/${userId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        }
+    }, [readOnly, userId]);
+
     return (
         <section className={`flex flex-col w-full max-w-4xl mx-auto px-4 py-6 h-[calc(95vh-100px)] transition-all duration-300 ${chatHistory.length || loading ? "justify-between" : "justify-center"}`}>
-            <h1 className="md:text-2xl text-lg font-semibold mb-6 text-black text-center">
-                Let's start tracking...
-            </h1>
+
+            {readOnly ? (
+                <div className="flex  justify-between items-center gap-4 mb-6 px-2 bg-white rounded-full shadow-md py-1">
+                    <div className="flex flex-row justify-center items-center gap-4">
+                        <img
+                            src="/avatar.png"
+                            alt="User Avatar"
+                            className="w-10 h-10 rounded-full border border-gray-300 object-cover"
+                        />
+                        <div className="text-sm font-medium text-gray-800">{userName}</div>
+                    </div>
+                    <EllipsisVertical className="text-[#898989]" />
+                </div>
+            ) : (
+
+                <h1 className="md:text-2xl text-lg font-semibold mb-6 text-black text-center">
+                    Let's start tracking...
+                </h1>
+            )}
 
             <AnimatePresence mode="wait">
                 {(chatHistory.length || loading) && (

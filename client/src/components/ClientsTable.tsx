@@ -3,11 +3,10 @@ import { Filter } from "lucide-react";
 import ClientCard from "./ClientCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import SmartMealAssistant from "./SmartMealAssistant";
+import { useNavigate } from "react-router-dom";
 
 const ClientsTable = () => {
   const [clients, setClients] = useState<Client[]>([]);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -57,11 +56,11 @@ const ClientsTable = () => {
     fetchClients();
   }, []);
 
-  if (selectedClient) {
-    return (
-      <SmartMealAssistant userId={selectedClient._id} userName={selectedClient.name} readOnly={true} />
-    );
-  }
+  const navigate = useNavigate();
+
+  const handleClientClick = (client: Client) => {
+    navigate(`/dashboard/smart-assistant?userId=${client._id}&userName=${encodeURIComponent(client.name)}`);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow p-4 flex-1">
@@ -71,7 +70,7 @@ const ClientsTable = () => {
       </div>
       <div className="space-y-4">
         {clients.map((client) => (
-          <ClientCard key={client._id} client={client} onClick={setSelectedClient} />
+          <ClientCard key={client._id} client={client} onClick={() => handleClientClick(client)} />
         ))}
       </div>
     </div>

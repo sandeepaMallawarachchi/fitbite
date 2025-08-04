@@ -20,6 +20,7 @@ import AddClientStep6 from './components/addClientSteps/AddClientStep6';
 import AddClientStep7 from './components/addClientSteps/AddClientStep7';
 import ClientSignUp from './components/addClientSteps/ClientSignUp';
 import CoachDashboard from './pages/dashboard/CoachDashboard';
+import SmartMealAssistantWrapper from './pages/SmartMealAssistantWrapper';
 
 function AppContent() {
   const location = useLocation();
@@ -83,6 +84,7 @@ function AppContent() {
             <Route path="add-client-step7" element={<AddClientStep7 />} />
             <Route path="client-signup" element={<ClientSignUp />} />
             <Route path="coach-dashboard" element={<CoachDashboard />} />
+            <Route path="smart-assistant" element={<SmartMealAssistantWrapper />} />
             {/* <Route path="meal-plan" element={<MealPlan />} />
           <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<Profile />} />

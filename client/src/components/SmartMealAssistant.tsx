@@ -19,10 +19,10 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, readOnl
     const formData = !readOnly ? JSON.parse(localStorage.getItem("formData") || "{}") : {};
     const token = localStorage.getItem("token");
     const coachId = localStorage.getItem("coachId") ?? "";
+    const resolvedUserId = formData.userId || userId;
 
     useEffect(() => {
         const fetchChatHistory = async () => {
-            const resolvedUserId = formData.userId || userId;
             try {
                 const res = await axios.get(`http://localhost:5000/chat/getMessages/${resolvedUserId}`, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -177,7 +177,9 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, readOnl
 
     const renderMessage = (msg: any, idx: number) => {
         const isUser = msg.role === "user";
-        const userReaction = msg.reactions?.[coachId] || null;
+        const userReaction = coachId
+            ? msg.reactions?.[coachId] || null
+            : Object.values(msg.reactions || {})[0] || null;
 
         const handleReaction = async (reactionType: "like" | "dislike") => {
             const newReaction = userReaction === reactionType ? null : reactionType;
@@ -209,35 +211,49 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, readOnl
             <div key={idx} className={`flex flex-col gap-1 px-2 ${isUser ? "items-end" : "items-start"}`}>
                 <div
                     className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed shadow 
-            ${isUser
+                        ${isUser
                             ? "bg-white text-gray-900 rounded-br-none"
                             : "bg-[#F0F2F5] text-gray-800 rounded-bl-none"}`}
                     dangerouslySetInnerHTML={{ __html: marked.parse(msg.content) }}
                 />
 
                 <div className="flex gap-3 mt-1">
-                    <button
-                        title="Helpful"
-                        className='text-sm cursor-pointer transition hover:scale-110 text-[#8FE289]'
-                        onClick={() => readOnly && handleReaction("like")}
-                        disabled={!readOnly}
-                    >
-                        <ThumbsUp
-                            size={20}
-                            fill={userReaction === "like" ? "#8FE289" : "none"}
-                        />
-                    </button>
-                    <button
-                        title="Unhelpful"
-                        className='text-sm cursor-pointer transition hover:scale-110 text-[#F87171]'
-                        onClick={() => readOnly && handleReaction("dislike")}
-                        disabled={!readOnly}
-                    >
-                        <ThumbsDown
-                            size={20}
-                            fill={userReaction === "dislike" ? "#F87171" : "none"}
-                        />
-                    </button>
+                    {readOnly ? (
+                        <>
+                            <button
+                                title="Helpful"
+                                className='text-sm cursor-pointer transition hover:scale-110 text-[#8FE289]'
+                                onClick={() => handleReaction("like")}
+                            >
+                                <ThumbsUp
+                                    size={18}
+                                    fill={userReaction === "like" ? "#8FE289" : "none"}
+                                />
+                            </button>
+                            <button
+                                title="Unhelpful"
+                                className='text-sm cursor-pointer transition hover:scale-110 text-[#F87171]'
+                                onClick={() => handleReaction("dislike")}
+                            >
+                                <ThumbsDown
+                                    size={18}
+                                    fill={userReaction === "dislike" ? "#F87171" : "none"}
+                                />
+                            </button>
+                        </>
+                    ) : (
+                        userReaction === "like" ? (
+                            <div className="flex items-center gap-1 text-[#8FE289] text-sm">
+                                <ThumbsUp size={16} fill="#8FE289" />
+                                <span className="text-xs">Coach marked this helpful</span>
+                            </div>
+                        ) : userReaction === "dislike" ? (
+                            <div className="flex items-center gap-1 text-[#F87171] text-sm">
+                                <ThumbsDown size={16} fill="#F87171" />
+                                <span className="text-xs">Coach marked this unhelpful</span>
+                            </div>
+                        ) : null
+                    )}
                 </div>
             </div>
         );

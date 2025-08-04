@@ -141,10 +141,10 @@ const ClientsDetailsTable = () => {
                                 <th className="p-3">Client ID</th>
                                 <th className="p-3">User Status</th>
                                 <th className="p-3">Age</th>
-                                <th className="p-3">TDEE</th>
+                                <th className="p-3">TDEE (kcal)</th>
                                 <th className="p-3">Gender</th>
-                                <th className="p-3">Weight</th>
-                                <th className="p-3">Height</th>
+                                <th className="p-3">Weight (kg)</th>
+                                <th className="p-3">Height (cm)</th>
                                 <th className="p-3">Activity Level</th>
                                 <th className="p-3">Goal</th>
                             </tr>
@@ -183,7 +183,7 @@ const ClientsDetailsTable = () => {
                                     </td>
                                     <td className="p-3">{client.age}</td>
                                     <td className="p-3 font-semibold">
-                                        {client.tdee !== "--" ? `${client.tdee} kcal` : "--"}
+                                        {client.tdee !== "--" ? `${client.tdee}` : "--"}
                                     </td>
                                     <td className="p-3">{client.gender}</td>
                                     <td className="p-3">{client.weight}</td>

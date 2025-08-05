@@ -27,7 +27,7 @@ const OverView = () => {
     editStep?: string;
     items: { label: string; value: string }[];
   }) => (
-    <div className="bg-white  rounded-md p-4 space-y-2">
+    <div className="rounded-md p-4 space-y-2">
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-md font-semibold flex items-center gap-2 text-gray-500">
           {icon}

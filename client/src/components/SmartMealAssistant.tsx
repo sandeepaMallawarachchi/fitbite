@@ -2,32 +2,53 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mic, Image, Send, ArrowDown } from "lucide-react";
+import { Mic, Image, Send, ArrowDown, ThumbsUp, ThumbsDown, EllipsisVertical } from "lucide-react";
 import { marked } from "marked";
 
-const SmartMealAssistant = () => {
+interface SmartMealAssistantProps {
+    userId: string;
+    userName?: string;
+    readOnly?: boolean;
+}
+
+const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userName, readOnly = false }) => {
     const [message, setMessage] = useState("");
-    const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
+    const [user, setUser] = useState<{ picture?: string } | null>(null);
+    const [chatHistory, setChatHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
-    const formData = JSON.parse(localStorage.getItem("formData") || "{}");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const formData = !readOnly ? JSON.parse(localStorage.getItem("formData") || "{}") : {};
     const token = localStorage.getItem("token");
+    const coachId = localStorage.getItem("coachId") ?? "";
+    const resolvedUserId = formData.userId || userId;
 
-    console.log(formData)
+    const fetchChatHistory = async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/chat/getMessages/${resolvedUserId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setChatHistory(res.data);
+        } catch (error) {
+            console.error("Failed to load chat history", error);
+        }
+    };
+
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/user/getUserById/${resolvedUserId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUser(res.data?.userDetails || {});
+        } catch (error) {
+            console.error("Failed to load user data", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchChatHistory = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5000/chat/getMessages/${user.id}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setChatHistory(res.data);
-            } catch (error) {
-                console.error("Failed to load chat history", error);
-            }
-        };
         fetchChatHistory();
+        fetchUser();
     }, []);
 
     const handleSend = async (e: React.FormEvent) => {
@@ -40,13 +61,17 @@ const SmartMealAssistant = () => {
         setLoading(true);
 
         try {
-            await axios.post("http://localhost:5000/chat/saveMessage", {
-                userId: user.id,
-                role: "user",
-                content: message
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.post(
+                "http://localhost:5000/chat/saveMessage",
+                {
+                    userId: formData.userId,
+                    role: "user",
+                    content: message,
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
             const res = await axios.post(
                 "https://api.openai.com/v1/chat/completions",
@@ -56,63 +81,63 @@ const SmartMealAssistant = () => {
                         {
                             role: "system",
                             content: `
-                            You are a professional smart meal tracking assistant helping a fitness client stay on track with their goals.
+              You are a professional smart meal tracking assistant helping a fitness client stay on track with their goals.
 
-                            Here is the user's full profile (use this for answering if relevant):
-                            - Name: ${formData.name}
-                            - Email: ${formData.email}
-                            - Phone: ${formData.phone}
-                            - Gender: ${formData.gender}
-                            - Height: ${formData.height} cm
-                            - Weight: ${formData.weight} kg
-                            - Birthday: ${formData.birthday}
-                            - TDEE: ${formData.TDEE} kcal
-                            - Primary Goal: ${formData.fitnessGoal?.primaryGoal}
-                            - Goal Weight: ${formData.fitnessGoal?.goalWeight}
-                            - Progress: ${formData.fitnessGoal?.progress || "N/A"}
-                            - Meal Frequency: ${formData.mealHabits?.dailyMeals}
-                            - Dietary Preference: ${formData.dietaryDetails?.preference}
-                            - Medical Conditions: ${formData.medicalDetails?.medicalConditions}
+              Here is the user's full profile (use this for answering if relevant):
+              - Name: ${formData.name}
+              - Email: ${formData.email}
+              - Phone: ${formData.phone}
+              - Gender: ${formData.gender}
+              - Height: ${formData.height} cm
+              - Weight: ${formData.weight} kg
+              - Birthday: ${formData.birthday}
+              - TDEE: ${formData.TDEE} kcal
+              - Primary Goal: ${formData.fitnessGoal?.primaryGoal}
+              - Goal Weight: ${formData.fitnessGoal?.goalWeight}
+              - Progress: ${formData.fitnessGoal?.progress || "N/A"}
+              - Meal Frequency: ${formData.mealHabits?.dailyMeals}
+              - Dietary Preference: ${formData.dietaryDetails?.preference}
+              - Medical Conditions: ${formData.medicalDetails?.medicalConditions}
 
-                            The user will give food items and their portion sizes. You are provided with:
-                            - Pre-processed food names and quantities (in grams).
-                            - A food-to-macros dictionary (per 100g).
-                            - Current daily total of calories, protein, carbs, and fat.
-                            - Target daily macros for calories, protein, carbs, and fat.
+              The user will give food items and their portion sizes. You are provided with:
+              - Pre-processed food names and quantities (in grams).
+              - A food-to-macros dictionary (per 100g).
+              - Current daily total of calories, protein, carbs, and fat.
+              - Target daily macros for calories, protein, carbs, and fat.
 
-                            Your task is to:
-                            1. Calculate total macros for each food item by scaling values based on portion size.
-                            2. Show total for the meal.
-                            3. Update the daily totals.
-                            4. Provide friendly, goal-based suggestions.
-                            5. Respond based on system mode: "meal_breakdown", "daily_update", or "suggestion".
+              Your task is to:
+              1. Calculate total macros for each food item by scaling values based on portion size.
+              2. Show total for the meal.
+              3. Update the daily totals.
+              4. Provide friendly, goal-based suggestions.
+              5. Respond based on system mode: "meal_breakdown", "daily_update", or "suggestion".
 
-                            Always use markdown formatting.
-                            Examples:
-                            **Meal Breakdown**
-                            • White Rice (100g) – 130 kcal (28g carbs, 2.5g protein, 0.3g fat)
-                            ...
-                            **Total for this Meal:**  
-                            Calories: X kcal  
-                            Carbs: Xg  
-                            Protein: Xg  
-                            Fat: Xg
+              Always use markdown formatting.
+              Examples:
+              **Meal Breakdown**
+              • White Rice (100g) – 130 kcal (28g carbs, 2.5g protein, 0.3g fat)
+              ...
+              **Total for this Meal:**  
+              Calories: X kcal  
+              Carbs: Xg  
+              Protein: Xg  
+              Fat: Xg
 
-                            Let me know when you're ready for the daily update.
-                        `
+              Let me know when you're ready for the daily update.
+            `,
                         },
                         {
                             role: "user",
-                            content: message
-                        }
+                            content: message,
+                        },
                     ],
-                    temperature: 0.7
+                    temperature: 0.7,
                 },
                 {
                     headers: {
                         Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                        "Content-Type": "application/json"
-                    }
+                        "Content-Type": "application/json",
+                    },
                 }
             );
 
@@ -139,13 +164,17 @@ const SmartMealAssistant = () => {
                     requestAnimationFrame(typeWriter);
                 } else {
                     setLoading(false);
-                    axios.post("http://localhost:5000/chat/saveMessage", {
-                        userId: user.id,
-                        role: "assistant",
-                        content: fullText
-                    }, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
+                    axios.post(
+                        "http://localhost:5000/chat/saveMessage",
+                        {
+                            userId: formData.userId,
+                            role: "assistant",
+                            content: fullText,
+                        },
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                        }
+                    );
                 }
             };
 
@@ -162,11 +191,119 @@ const SmartMealAssistant = () => {
         }
     }, [chatHistory]);
 
+    const renderMessage = (msg: any, idx: number) => {
+        const isUser = msg.role === "user";
+        const userReaction = coachId
+            ? msg.reactions?.[coachId] || null
+            : Object.values(msg.reactions || {})[0] || null;
+
+        const handleReaction = async (reactionType: "like" | "dislike") => {
+            const newReaction = userReaction === reactionType ? null : reactionType;
+
+            try {
+                await axios.patch(
+                    `http://localhost:5000/chat/reactMessage/${userId}/${idx}`,
+                    { coachId, reaction: newReaction },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                setChatHistory((prev) => {
+                    const updated = [...prev];
+                    const msgToUpdate = updated[idx];
+                    if (!msgToUpdate.reactions) msgToUpdate.reactions = {};
+                    if (newReaction) {
+                        msgToUpdate.reactions[coachId] = newReaction;
+                    } else {
+                        delete msgToUpdate.reactions[coachId];
+                    }
+                    return updated;
+                });
+            } catch (err) {
+                console.error("Reaction failed", err);
+            }
+        };
+
+        return (
+            <div key={idx} className={`flex flex-col gap-1 px-2 ${isUser ? "items-end" : "items-start"}`}>
+                <div
+                    className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed shadow 
+                        ${isUser
+                            ? "bg-white text-gray-900 rounded-br-none"
+                            : "bg-[#F0F2F5] text-gray-800 rounded-bl-none"}`}
+                    dangerouslySetInnerHTML={{ __html: marked.parse(msg.content) }}
+                />
+
+                <div className="flex gap-3 mt-1">
+                    {readOnly ? (
+                        <>
+                            <button
+                                title="Helpful"
+                                className='text-sm cursor-pointer transition hover:scale-110 text-[#8FE289]'
+                                onClick={() => handleReaction("like")}
+                            >
+                                <ThumbsUp
+                                    size={18}
+                                    fill={userReaction === "like" ? "#8FE289" : "none"}
+                                />
+                            </button>
+                            <button
+                                title="Unhelpful"
+                                className='text-sm cursor-pointer transition hover:scale-110 text-[#F87171]'
+                                onClick={() => handleReaction("dislike")}
+                            >
+                                <ThumbsDown
+                                    size={18}
+                                    fill={userReaction === "dislike" ? "#F87171" : "none"}
+                                />
+                            </button>
+                        </>
+                    ) : (
+                        userReaction === "like" ? (
+                            <div className="flex items-center gap-1 text-[#8FE289] text-sm">
+                                <ThumbsUp size={16} fill="#8FE289" />
+                                <span className="text-xs">Coach marked this helpful</span>
+                            </div>
+                        ) : userReaction === "dislike" ? (
+                            <div className="flex items-center gap-1 text-[#F87171] text-sm">
+                                <ThumbsDown size={16} fill="#F87171" />
+                                <span className="text-xs">Coach marked this unhelpful</span>
+                            </div>
+                        ) : null
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        if (readOnly && userId) {
+            axios.patch(`http://localhost:5000/chat/mark-read/${userId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        }
+    }, [readOnly, userId]);
+
     return (
         <section className={`flex flex-col w-full max-w-4xl mx-auto px-4 py-6 h-[calc(95vh-100px)] transition-all duration-300 ${chatHistory.length || loading ? "justify-between" : "justify-center"}`}>
-            <h1 className="md:text-2xl text-lg font-semibold mb-6 text-black text-center">
-                Let's start tracking...
-            </h1>
+
+            {readOnly ? (
+                <div className="flex  justify-between items-center gap-4 mb-6 px-2 bg-white rounded-full shadow-md py-1">
+                    <div className="flex flex-row justify-center items-center gap-4">
+                        <img
+                            src={user?.picture || "/avatar.png"}
+                            alt="User Avatar"
+                            className="w-10 h-10 rounded-full border border-gray-300 object-cover"
+                        />
+                        <div className="text-sm font-medium text-gray-800">{userName}</div>
+                    </div>
+                    <EllipsisVertical className="text-[#898989]" />
+                </div>
+            ) : (
+
+                <h1 className="md:text-2xl text-lg font-semibold mb-6 text-black text-center">
+                    Let's start tracking...
+                </h1>
+            )}
 
             <AnimatePresence mode="wait">
                 {(chatHistory.length || loading) && (
@@ -179,68 +316,57 @@ const SmartMealAssistant = () => {
                         ref={scrollRef}
                         className="flex-1 overflow-y-auto mb-5 space-y-3"
                     >
-                        {chatHistory.map((msg, idx) => (
-                            <div
-                                key={idx}
-                                className={`p-3 rounded-lg text-sm whitespace-pre-wrap ${msg.role === "user" ? "text-black self-end text-right" : "text-gray-700"}`}
-                                dangerouslySetInnerHTML={{ __html: marked.parse(msg.content) }}
-                            />
-                        ))}
-                        {loading && (
-                            <div className="text-sm text-gray-500 text-center">Analyzing...</div>
-                        )}
+                        {chatHistory.map((msg, idx) => renderMessage(msg, idx))}
+                        {loading && <div className="text-sm text-gray-500 text-center">Analyzing...</div>}
                     </motion.div>
                 )}
             </AnimatePresence>
 
             {chatHistory.length > 0 && (
-                <div
-                    className="absolute bottom-44 left-1/2 z-20"
-                    style={{ transform: "translateX(-50%) translateX(50px)" }}
-                >                    <button
-                    onClick={() => {
-                        scrollRef.current?.scrollTo({
-                            top: scrollRef.current.scrollHeight,
-                            behavior: "smooth",
-                        });
-                    }}
-                    className="bg-white shadow-lg cursor-pointer !rounded-full p-2 border border-gray-200 hover:bg-gray-100 transition-all"
-                >
+                <div className="absolute bottom-44 left-1/2 z-20" style={{ transform: "translateX(-50%) translateX(50px)" }}>
+                    <button
+                        onClick={() => {
+                            scrollRef.current?.scrollTo({
+                                top: scrollRef.current.scrollHeight,
+                                behavior: "smooth",
+                            });
+                        }}
+                        className="bg-white shadow-lg cursor-pointer !rounded-full p-2 border border-gray-200 hover:bg-gray-100 transition-all"
+                    >
                         <ArrowDown size={16} />
                     </button>
                 </div>
             )}
 
-            <form
-                onSubmit={handleSend}
-                className="w-full bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4 sticky bottom-0"
-            >
-                <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Log your meals by typing here"
-                    className="w-full outline-none placeholder-gray-400 text-gray-800 text-sm"
-                />
-                <div className="flex flex-row justify-between items-center">
-                    <div className="flex gap-2">
-                        <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
-                            <Mic className="w-5 h-5" />
-                        </button>
-                        <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
-                            <Image className="w-5 h-5" />
-                        </button>
+            {!readOnly && (
+                <form onSubmit={handleSend} className="w-full bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4 sticky bottom-0">
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Log your meals by typing here"
+                        className="w-full outline-none placeholder-gray-400 text-gray-800 text-sm"
+                    />
+                    <div className="flex flex-row justify-between items-center">
+                        <div className="flex gap-2">
+                            <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
+                                <Mic className="w-5 h-5" />
+                            </button>
+                            <button type="button" className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500">
+                                <Image className="w-5 h-5" />
+                            </button>
+                        </div>
+                        {message.trim() && !loading && (
+                            <button
+                                type="submit"
+                                className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500"
+                            >
+                                <Send className="w-5 h-5" />
+                            </button>
+                        )}
                     </div>
-                    {message.trim() && !loading && (
-                        <button
-                            type="submit"
-                            className="w-10 h-10 flex items-center justify-center !rounded-full bg-[#EFEFEF] hover:bg-[#DADBDF] cursor-pointer text-gray-500"
-                        >
-                            <Send className="w-5 h-5" />
-                        </button>
-                    )}
-                </div>
-            </form>
+                </form>
+            )}
         </section>
     );
 };

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../context/FormContext";
 
-function OverView() {
+const OverView = () => {
   const navigate = useNavigate();
   const { formData } = useFormContext();
   const [confirmChecked, setConfirmChecked] = useState(false);
@@ -27,7 +27,7 @@ function OverView() {
     editStep?: string;
     items: { label: string; value: string }[];
   }) => (
-    <div className="bg-white  rounded-md p-4 space-y-2">
+    <div className="rounded-md p-4 space-y-2">
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-md font-semibold flex items-center gap-2 text-gray-500">
           {icon}
@@ -60,7 +60,7 @@ function OverView() {
   );
 
   return (
-    <div className="w-full bg-white px-6 md:px-10 pt-4 pb-0">
+    <div className="w-full px-6 md:px-10 pt-4 pb-0">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">
@@ -95,7 +95,12 @@ function OverView() {
                 { label: "Name", value: formData?.name || "-" },
                 { label: "Email", value: formData?.email || "-" },
                 { label: "Phone", value: formData?.phone || "-" },
-                { label: "DOB", value: formData?.birthday || "-" },
+                {
+                  label: "DOB",
+                  value: formData?.birthday
+                    ? new Date(formData.birthday).toISOString().split("T")[0]
+                    : "-"
+                },
                 { label: "Gender", value: formData?.gender || "-" },
               ]}
             />

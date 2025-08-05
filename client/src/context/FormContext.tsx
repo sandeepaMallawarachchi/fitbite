@@ -12,16 +12,9 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const initialData = localStorage.getItem("formData");
-  const storedUser = localStorage.getItem("user");
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
 
   const [formData, setFormDataState] = useState<FormData>(() => {
-    return initialData
-      ? JSON.parse(initialData)
-      : {
-          email: parsedUser?.email || "",
-          userId: parsedUser?.userId || parsedUser?._id || "",
-        };
+    return initialData ? JSON.parse(initialData) : {};
   });
 
   useEffect(() => {

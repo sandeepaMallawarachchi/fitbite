@@ -20,13 +20,14 @@ exports.register = async (req, res) => {
 
     res.status(201).json({
       message: 'User registered',
-      token, 
+      token,
       user: {
         id: user._id,
         email: user.email,
       },
     });
   } catch (err) {
+    console.error("Registration failed:", err);
     res.status(500).json({ message: 'Registration failed', error: err.message });
   }
 };
@@ -38,11 +39,14 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    if (user.status === 'Inactive')
-      return res.status(403).json({ message: 'Account is inactive' });
-
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+
+    user.lastSignedIn = new Date();
+
+    user.status = 'Active';
+
+    await user.save();
 
     const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
       expiresIn: '7d',

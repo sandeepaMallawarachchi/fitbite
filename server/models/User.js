@@ -5,7 +5,7 @@ const userSchema = new Schema({
     name: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    phone: { type: String, unique: true },
+    phone: { type: String, unique: true, sparse: true },
     birthday: { type: Date },
     gender: { type: String, enum: ['Male', 'Female'] },
     weight: { type: String },
@@ -26,6 +26,7 @@ const userSchema = new Schema({
     },
     picture: { type: String },
     token: { type: String },
+    lastSignedIn: { type: Date, default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

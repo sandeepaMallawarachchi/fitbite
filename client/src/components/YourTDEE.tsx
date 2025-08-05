@@ -14,10 +14,11 @@ const YourTDEE = () => {
   const [showCalc, setShowCalc] = useState(false);
   const { formData, setFormData } = useFormContext();
   const token = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
-
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-  const userId = parsedUser?.id;
+  const user = localStorage.getItem("formData");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const userId = parsedUser?.userId;
+  const role = localStorage.getItem("coachRole")
+  const wasEdited = localStorage.getItem("editedProfile");
 
   const { weight, height, birthday, activityLevel } = formData;
 
@@ -61,7 +62,13 @@ const YourTDEE = () => {
         TDEE: TDEE.toString(),
       });
 
-      navigate("/SignUpStep2");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step3");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
+      } else {
+        navigate("/SignUpStep2");
+      }
     } catch (err) {
       console.error("Failed to update TDEE", err);
       toast.error("Failed to update TDEE")
@@ -69,64 +76,62 @@ const YourTDEE = () => {
   };
 
   return (
-    <section className="z-10 bg-white rounded-xl shadow-xl sm:w-5xl w-full min-h-[90vh] mt-10 sm:mt-0 lg:px-18 px-4 md:px-6 py-6 space-y-6">
-      <div className="max-w-2xl mx-auto space-y-10">
-        <h1 className="text-4xl font-bold text-center">Your Total Daily Energy Expenditure</h1>
-        <p className="text-gray-700 text-center">
-          Using your information, we've calculated your daily energy needs to help personalize your nutrition and
-          ensure your plan aligns perfectly with your fitness goals.
-        </p>
-        {!showCalc ? (
-          <motion.div
-            initial={{ y: 0, opacity: 0 }}
-            animate={{ y: 30, opacity: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <div className="py-6">
-              <p className="text-gray-600 text-center mb-10">
-                This is the number of calories you need each day to maintain your current weight.
-              </p>
-              <p className="text-2xl font-medium text-center">
-                Your TDEE is <span className="font-bold">{TDEE} Calories</span> per day
-              </p>
-            </div>
+    <div className=" mx-auto space-y-10">
+      <h1 className="text-4xl font-bold text-center">Your Total Daily Energy Expenditure</h1>
+      <p className="text-gray-700 text-center">
+        Using your information, we've calculated your daily energy needs to help personalize your nutrition and
+        ensure your plan aligns perfectly with your fitness goals.
+      </p>
+      {!showCalc ? (
+        <motion.div
+          initial={{ y: 0, opacity: 0 }}
+          animate={{ y: 30, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <div className="py-6">
+            <p className="text-gray-600 text-center mb-10">
+              This is the number of calories you need each day to maintain your current weight.
+            </p>
+            <p className="text-2xl font-medium text-center">
+              Your TDEE is <span className="font-bold">{TDEE} Calories</span> per day
+            </p>
+          </div>
 
-            <div className="text-center mb-40">
-              <button
-                onClick={() => setShowCalc(true)}
-                className="text-gray-600 hover:text-black cursor-pointer transition-colors underline"
-              >
-                Want to see how we calculated this?
-              </button>
-            </div>
-          </motion.div>
-        ) : (
-          <HowtoCalcTDEE />
-        )}
-        <div className="flex justify-center">
-          <button
-            onClick={handleContinue}
-            className="font-medium py-3 px-8 rounded-lg w-1/2 transition-colors duration-200 bg-green-300 text-black hover:bg-green-400 cursor-pointer"
-          >
-            Continue
-          </button>
-        </div>
-        {showCalc ? (
-          <div className="absolute bottom-6 right-6 z-10">
+          <div className="text-center mb-40">
             <button
-              onClick={() => setShowCalc(false)}
-              className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200"
+              onClick={() => setShowCalc(true)}
+              className="text-gray-600 hover:text-black cursor-pointer transition-colors underline"
             >
-              <ChevronLeft className="h-5 w-5 text-gray-600" />
+              Want to see how we calculated this?
             </button>
           </div>
-        ) : (
-          <div className="absolute bottom-6 right-6 z-10">
-            <BackButton />
-          </div>
-        )}
+        </motion.div>
+      ) : (
+        <HowtoCalcTDEE />
+      )}
+      <div className="flex justify-center">
+        <button
+          onClick={handleContinue}
+          className="font-medium py-3 px-8 rounded-lg w-1/2 transition-colors duration-200 bg-green-300 text-black hover:bg-green-400 cursor-pointer"
+        >
+          Continue
+        </button>
       </div>
-    </section>
+      {showCalc ? (
+        <div className="absolute bottom-6 right-6 z-10">
+          <button
+            onClick={() => setShowCalc(false)}
+            className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200"
+          >
+            <ChevronLeft className="h-5 w-5 text-gray-600" />
+          </button>
+        </div>
+      ) : (
+        <div className="absolute bottom-6 right-6 z-10">
+          <BackButton />
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -68,3 +68,16 @@ button {
   }
  
 }
+
+.scroll-container::-webkit-scrollbar {
+  height: 7px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}

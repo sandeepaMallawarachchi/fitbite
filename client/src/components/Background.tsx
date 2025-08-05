@@ -3,22 +3,21 @@
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import SignUpStep1 from "../auth/SignUpStep1";
-import SignUpForm from "../auth/SignUpForm";
+import SignUpStep from "../auth/SignUpStep";
 import SignUpStep2 from "../auth/SignUpStep2";
 import SignUpStep3 from "../auth/SignUpStep3";
 import SignUpStep4 from "../auth/SignUpStep4";
 import SignUpStep5 from "../auth/SignUpStep5";
 import SignUpStep6 from "../auth/SignUpStep6";
-
 import SignIn from "../auth/SignIn";
-import YourTDEE from "./YourTDEE";
+import TDEEStep from "../auth/TDEEStep";
 
 const Background = () => {
 
     const location = useLocation();
 
     const renderComponent = () => {
-        if (location.pathname === "/SignUp") return <SignUpForm />;
+        if (location.pathname === "/SignUp") return <SignUpStep />;
         if (location.pathname === "/SignUpStep1") return <SignUpStep1 />;
         if (location.pathname === "/SignUpStep2") return <SignUpStep2 />;
         if (location.pathname === "/SignUpStep3") return <SignUpStep3 />;
@@ -26,7 +25,7 @@ const Background = () => {
         if (location.pathname === "/SignUpStep5") return <SignUpStep5 />;
         if (location.pathname === "/SignUpStep6") return <SignUpStep6 />; 
         if (location.pathname === "/SignIn") return <SignIn />;
-        if (location.pathname === "/YourTDEE") return <YourTDEE />;
+        if (location.pathname === "/YourTDEE") return <TDEEStep />;
 
         return <p className="text-red-500 text-xl">Invalid step</p>;
     };

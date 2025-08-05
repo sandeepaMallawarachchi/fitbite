@@ -39,9 +39,11 @@ const MealHabit = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const storedUser = localStorage.getItem("user");
-      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-      const userId = parsedUser?.id;
+      const user = localStorage.getItem("formData");
+      const parsedUser = user ? JSON.parse(user) : null;
+      const userId = parsedUser?.userId;
+      const role = localStorage.getItem("coachRole")
+      const wasEdited = localStorage.getItem("editedProfile");
 
       const updateData = {
         mealHabits: {
@@ -77,7 +79,13 @@ const MealHabit = () => {
         },
       });
 
-      navigate("/SignUpStep4");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step5");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
+      } else {
+        navigate("/SignUpStep4");
+      }
     } catch (err) {
       console.error("Failed to update meal habits", err);
       toast.error("Failed to update meal habits");
@@ -100,7 +108,7 @@ const MealHabit = () => {
 
 
   return (
-    <div className="w-full bg-white px-6 md:px-10 pt-8">
+    <div className="w-full px-6 md:px-10 pt-8">
       <div className="max-w-12xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">

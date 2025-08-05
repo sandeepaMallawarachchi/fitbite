@@ -10,7 +10,7 @@ const BackButton = () => {
       {" "}
       <button
         onClick={() => navigate(-1)}
-        className="fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200"
+        className="cursor-pointer fixed bottom-6 right-6 bg-gray-300 hover:bg-gray-400 p-4 rounded-lg transition-colors duration-200"
       >
         <ChevronLeft className="h-5 w-5 text-gray-600" />
       </button>

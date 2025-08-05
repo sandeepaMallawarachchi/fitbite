@@ -48,7 +48,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const clearRedirect = () => setShouldRedirect(false);
 
   const login = (user: User, token: string) => {
-    localStorage.setItem("user", JSON.stringify(user));
+    if (user.role !== "Coach") {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+      localStorage.removeItem("formData");
+    }
+
     localStorage.setItem("token", token);
     setUser(user);
     setToken(token);
@@ -64,12 +70,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [logout]);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
 
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
+    if (savedToken) {
       setToken(savedToken);
+    }
+
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+      } catch (err) {
+        console.warn("Invalid user in localStorage");
+      }
+    }
+
+    if (savedToken) {
       resetInactivityTimer();
     }
 

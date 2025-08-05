@@ -12,9 +12,11 @@ const FitnessGoal = () => {
   const currentWeight = formData?.weight || "";
 
   const token = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-  const userId = parsedUser?.id;
+  const user = localStorage.getItem("formData");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const userId = parsedUser?.userId;
+  const role = localStorage.getItem("coachRole")
+  const wasEdited = localStorage.getItem("editedProfile");
 
   const [selectedGoal, setSelectedGoal] = useState("");
   const [progressRate, setProgressRate] = useState("");
@@ -75,7 +77,13 @@ const FitnessGoal = () => {
         },
       });
 
-      navigate("/SignUpStep3");
+      if (role === "Coach") {
+        navigate("/dashboard/add-client-step4");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
+      } else {
+        navigate("/SignUpStep3");
+      }
     } catch (err) {
       console.error("Failed to update fitness goal", err);
       toast.error("Failed to update fitness goal")
@@ -91,7 +99,7 @@ const FitnessGoal = () => {
   }, [formData]);
 
   return (
-    <div className="w-full max-h-80% bg-white px-6 md:px-10 ">
+    <div className="w-full max-h-80% px-6 md:px-10 ">
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-6 gap-2">

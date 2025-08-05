@@ -79,7 +79,7 @@ const Profile = () => {
                 {/* Header Row */}
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Left Profile Card */}
-                    <div className="md:w-1/2 sm:pr-5 flex flex-col items-center border-r">
+                    <div className="md:w-1/2 sm:pr-5 flex flex-col items-center sm:border-r">
                         <div className="relative">
                             <img src="/avatar.png" alt="Avatar" className="w-28 h-28 rounded-full object-cover" />
                             <img src="/edit.svg" className="absolute bottom-1 right-1 w-4 h-4 cursor-pointer" />
@@ -132,7 +132,7 @@ const Profile = () => {
                             />
                         </div>
 
-                        <hr />
+                        <hr className="sm:block hidden"/>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <Section
@@ -173,7 +173,7 @@ const Profile = () => {
                     <div>
                         <p className="mb-5 flex items-center gap-2">
                             <img src="/info-circle.png" alt="Info Icon" />
-                            <span className="text-[#7F7F7F] font-semibold">Warning</span>
+                            <span className="text-[#7F7F7F] font-semibold text-sm">Warning</span>
                         </p>
                         <p className="text-sm font-semibold">
                             Restarting will delete your current personal information. The new information will be used going forward.

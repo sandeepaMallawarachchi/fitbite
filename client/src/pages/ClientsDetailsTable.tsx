@@ -130,7 +130,7 @@ const ClientsDetailsTable = () => {
                 )}
             </AnimatePresence>
 
-            <div className="overflow-x-auto bg-white">
+            <div className="overflow-x-auto bg-white scroll-container">
                 <Reorder.Group axis="y" values={filteredClients || []} onReorder={setFilteredClients}>
                     <table className="min-w-full text-sm text-left">
                         <thead className="bg-[#F4F6FF] text-gray-700">

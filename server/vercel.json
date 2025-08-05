@@ -19,11 +19,5 @@
       "src": "/(.*)",
       "dest": "api/server.js"
     }
-  ],
-  "cron": [
-    {
-      "path": "/api/cron/update-user-status",
-      "schedule": "0 2 * * *" 
-    }
   ]
 }

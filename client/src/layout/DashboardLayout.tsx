@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
     Home,
     ChartPie,
@@ -22,7 +22,7 @@ interface NavItem {
 }
 
 const DashboardLayout = () => {
-    const [active, setActive] = useState("Home");
+
     const navigate = useNavigate();
     const { logout } = useAuth();
     const token = localStorage.getItem("token");
@@ -34,6 +34,7 @@ const DashboardLayout = () => {
     const userRole = parsedUser?.role || localStorage.getItem("coachRole");
 
     const coachId = localStorage.getItem("coachId");
+    const location = useLocation();
 
     const navItems: NavItem[] = userRole === "Coach"
         ? [
@@ -135,13 +136,12 @@ const DashboardLayout = () => {
                                 <button
                                     key={item.label}
                                     onClick={() => {
-                                        setActive(item.label);
                                         navigate(item.path);
                                     }}
                                     className="flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
                                 >
                                     <div
-                                        className={`p-3 rounded-xl ${active === item.label
+                                        className={`p-3 rounded-xl ${location.pathname === item.path
                                             ? "bg-[#8FE289] text-white"
                                             : "bg-[#F0F1F8] text-gray-500 hover:bg-gray-300"
                                             }`}
@@ -159,8 +159,8 @@ const DashboardLayout = () => {
                                     className="bottom-0 flex flex-col items-center gap-2 w-full px-2 py-2 rounded-md text-sm transition cursor-pointer"
                                 >
                                     <div
-                                        className={`p-3 rounded-xl ${active === 'Add Client'
-                                            ? "bg-[#8FE289] text-green-500"
+                                        className={`p-3 rounded-xl text-[#8FE289] ${location.pathname === '/dashboard/client-signup'
+                                            ? "bg-[#8FE289] text-white"
                                             : "bg-[#F0F1F8] text-[#8FE289] hover:bg-gray-300"
                                             }`}                            >
                                         <PlusSquare className="w-5 h-5" />

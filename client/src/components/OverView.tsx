@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../context/FormContext";
 
-function OverView() {
+const OverView = () => {
   const navigate = useNavigate();
   const { formData } = useFormContext();
   const [confirmChecked, setConfirmChecked] = useState(false);
@@ -95,7 +95,12 @@ function OverView() {
                 { label: "Name", value: formData?.name || "-" },
                 { label: "Email", value: formData?.email || "-" },
                 { label: "Phone", value: formData?.phone || "-" },
-                { label: "DOB", value: formData?.birthday || "-" },
+                {
+                  label: "DOB",
+                  value: formData?.birthday
+                    ? new Date(formData.birthday).toISOString().split("T")[0]
+                    : "-"
+                },
                 { label: "Gender", value: formData?.gender || "-" },
               ]}
             />

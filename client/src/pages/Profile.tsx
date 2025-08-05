@@ -25,8 +25,10 @@ const Profile = () => {
                 <button
                     type="button"
                     className="text-gray-500 hover:text-black cursor-pointer"
-                    onClick={() => editStep && navigate(editStep)}
-                >
+                    onClick={() => {
+                        localStorage.setItem("editedProfile", "true");
+                        if (editStep) navigate(editStep);
+                    }}                >
                     <img src="/edit.svg" alt="Edit" className="w-4 h-4" />
                 </button>
             </div>

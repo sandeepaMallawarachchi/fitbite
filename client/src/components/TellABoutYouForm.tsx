@@ -12,7 +12,7 @@ const TellABoutYouForm = () => {
   const parsedUser = user ? JSON.parse(user) : null;
   const userId = parsedUser?.userId;
   const role = localStorage.getItem("coachRole")
-
+  const wasEdited = localStorage.getItem("editedProfile");
 
   const { formData, setFormData } = useFormContext();
 
@@ -54,6 +54,8 @@ const TellABoutYouForm = () => {
       });
       if (role === "Coach") {
         navigate("/dashboard/add-client-step2");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
       } else {
         navigate("/YourTDEE");
       }
@@ -137,7 +139,7 @@ const TellABoutYouForm = () => {
                   type="date"
                   id="birthday"
                   name="birthday"
-                  value={formData.birthday || ""}
+                  value={formData.birthday || formData.birthday ? formData.birthday.slice(0, 10) : ""}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-600"
                   required

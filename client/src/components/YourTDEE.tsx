@@ -47,7 +47,7 @@ const YourTDEE = () => {
 
   const handleContinue = async () => {
     try {
-      await axios.patch("http://localhost:5000/user/updateFitness", {
+      await axios.patch("https://fitbite-roan.vercel.app/user/updateFitness", {
         userId,
         updateData: {
           TDEE: TDEE.toString(),

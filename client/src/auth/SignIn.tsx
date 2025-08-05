@@ -26,7 +26,7 @@ const SignIn = () => {
     if (!isFormValid) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", {
+      const res = await axios.post("https://fitbite-roan.vercel.app/auth/login", {
         email,
         password,
       });

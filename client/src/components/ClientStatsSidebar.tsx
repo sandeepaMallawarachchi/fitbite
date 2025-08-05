@@ -11,7 +11,7 @@ const ClientStatsSidebar = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/user/getAllUsers", {
+        const res = await axios.get("https://fitbite-roan.vercel.app/user/getAllUsers", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

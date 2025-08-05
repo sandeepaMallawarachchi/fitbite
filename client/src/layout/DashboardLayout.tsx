@@ -93,7 +93,7 @@ const DashboardLayout = () => {
             if (!effectiveUserId) return;
 
             try {
-                const res = await axios.get(`http://localhost:5000/user/getUserById/${effectiveUserId}`, {
+                const res = await axios.get(`https://fitbite-roan.vercel.app/user/getUserById/${effectiveUserId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

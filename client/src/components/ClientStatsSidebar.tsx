@@ -15,7 +15,7 @@ const ClientStatsSidebar = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setClients(res.data.userDetails);
+        setClients(res.data.userDetails.filter((user: Client) => user.role === "User"));
       } catch (error) {
         console.error("Error fetching clients:", error);
       }

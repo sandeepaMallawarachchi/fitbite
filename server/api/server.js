@@ -5,7 +5,23 @@ const cookieParser = require('cookie-parser');
 const connectDB = require("../database/dbConnection");
 
 const app = express();
-app.use(cors());
+const allowedOrigins = [
+  "https://fitbite-three.vercel.app",
+  "http://localhost:3000"
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 

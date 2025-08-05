@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Cron API
-        run: curl -s -o /dev/null -w "%{http_code}" https://fitbite.vercel.app/api/cron/update-user-status
+        run: curl -s -o /dev/null -w "%{http_code}" https://fitbite-roan.vercel.app/cron/update-user-status

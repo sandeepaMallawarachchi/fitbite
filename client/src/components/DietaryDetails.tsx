@@ -40,10 +40,10 @@ const DietaryDetails = () => {
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("formData");
-  const parsedUser = user ? JSON.parse(user) : null;
-  const userId = parsedUser?.userId;
+      const parsedUser = user ? JSON.parse(user) : null;
+      const userId = parsedUser?.userId;
       const role = localStorage.getItem("coachRole")
-
+      const wasEdited = localStorage.getItem("editedProfile");
 
       const updateData = {
         dietaryDetails: {
@@ -73,6 +73,8 @@ const DietaryDetails = () => {
 
       if (role === "Coach") {
         navigate("/dashboard/add-client-step6");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
       } else {
         navigate("/SignUpStep5");
       }

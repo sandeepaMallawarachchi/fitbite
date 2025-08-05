@@ -18,7 +18,7 @@ const YourTDEE = () => {
   const parsedUser = user ? JSON.parse(user) : null;
   const userId = parsedUser?.userId;
   const role = localStorage.getItem("coachRole")
-
+  const wasEdited = localStorage.getItem("editedProfile");
 
   const { weight, height, birthday, activityLevel } = formData;
 
@@ -64,6 +64,8 @@ const YourTDEE = () => {
 
       if (role === "Coach") {
         navigate("/dashboard/add-client-step3");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
       } else {
         navigate("/SignUpStep2");
       }

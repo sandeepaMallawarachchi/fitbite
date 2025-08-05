@@ -1,10 +1,40 @@
 "use client";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../context/FormContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Profile = () => {
     const navigate = useNavigate();
     const { formData } = useFormContext();
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("formData");
+    const parsedUser = user ? JSON.parse(user) : null;
+    const userId = parsedUser?.userId;
+    const { logout } = useAuth();
+
+
+    const handleRestart = async () => {
+        const confirmRestart = window.confirm(
+            "Are you sure you want to restart your profile? This will permanently delete all your current data."
+        );
+
+        if (!confirmRestart) return;
+
+        try {
+            await axios.delete(`http://localhost:5000/user/restart/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            logout();
+            navigate("/");
+        } catch (error) {
+            console.log("Error Restarting Account");
+            toast.error("Account restarting failed! Please try again");
+        }
+    };
 
     const Section = ({
         icon,
@@ -152,6 +182,7 @@ const Profile = () => {
 
                     <button
                         type="button"
+                        onClick={handleRestart}
                         className='font-semibold cursor-pointer py-3 px-8 rounded-lg w-full md:w-1/4 transition-colors duration-200 bg-[#89E2AD] text-black hover:bg-green-400'
                     >
                         Restart

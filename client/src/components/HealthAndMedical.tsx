@@ -24,10 +24,10 @@ const HealthAndMedical = () => {
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("formData");
-  const parsedUser = user ? JSON.parse(user) : null;
-  const userId = parsedUser?.userId;
+      const parsedUser = user ? JSON.parse(user) : null;
+      const userId = parsedUser?.userId;
       const role = localStorage.getItem("coachRole")
-
+      const wasEdited = localStorage.getItem("editedProfile");
 
       const updateData = {
         medicalDetails: {
@@ -55,6 +55,8 @@ const HealthAndMedical = () => {
 
       if (role === "Coach") {
         navigate("/dashboard/add-client-step7");
+      } else if (wasEdited) {
+        navigate("/dashboard/profile");
       } else {
         navigate("/SignUpStep6");
       }

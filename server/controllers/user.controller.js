@@ -3,6 +3,9 @@ const Fitness = require('../models/FitnessDetails');
 const ChatHistory = require('../models/ChatHistory');
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+require("dotenv").config();
 
 exports.UpdateUserDetails = async (req, res) => {
   try {
@@ -176,5 +179,39 @@ exports.restartUserProfile = async (req, res) => {
       message: "Failed to delete user data.",
       error: error.message,
     });
+  }
+};
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+exports.uploadProfilePicMiddleware = upload.single("image");
+
+exports.uploadProfilePic = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const result = await cloudinary.uploader.upload_stream(
+      { resource_type: "image", folder: "profile_pics" },
+      async (error, result) => {
+        if (error) return res.status(500).json({ error });
+
+        await User.findByIdAndUpdate(userId, { picture: result.secure_url });
+        res.status(200).json({ imageUrl: result.secure_url });
+      }
+    );
+
+    if (req.file) {
+      result.end(req.file.buffer);
+    } else {
+      res.status(400).json({ error: "No image uploaded" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Upload failed", error: err.message });
   }
 };

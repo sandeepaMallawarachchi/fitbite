@@ -4,6 +4,8 @@ import { useFormContext } from "../context/FormContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import ProfilePictureUploader from "../components/ProfilePictureUploader";
+import { useState } from "react";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -13,7 +15,7 @@ const Profile = () => {
     const parsedUser = user ? JSON.parse(user) : null;
     const userId = parsedUser?.userId;
     const { logout } = useAuth();
-
+    const [showUploader, setShowUploader] = useState(false);
 
     const handleRestart = async () => {
         const confirmRestart = window.confirm(
@@ -80,9 +82,34 @@ const Profile = () => {
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Left Profile Card */}
                     <div className="md:w-1/2 sm:pr-5 flex flex-col items-center sm:border-r">
-                        <div className="relative">
-                            <img src="/avatar.png" alt="Avatar" className="w-28 h-28 rounded-full object-cover" />
-                            <img src="/edit.svg" className="absolute bottom-1 right-1 w-4 h-4 cursor-pointer" />
+                        <div className="relative w-28 h-28">
+                            <img
+                                src={formData?.picture || "/avatar.png"}
+                                alt="Avatar"
+                                onClick={() => setShowUploader(true)}
+                                className="w-28 h-28 rounded-full object-cover cursor-pointer hover:opacity-80"
+                            />
+
+                            {showUploader && (
+                                <ProfilePictureUploader
+                                    currentImage={formData?.picture}
+                                    userId={userId}
+                                    token={token}
+                                    onUploadSuccess={(url) => {
+                                        const updated = { ...formData, picture: url };
+                                        localStorage.setItem("formData", JSON.stringify(updated));
+                                        window.location.reload();
+                                    }}
+                                    onClose={() => setShowUploader(false)}
+                                />
+                            )}
+
+                            <img
+                                src="/edit.svg"
+                                className="absolute bottom-1 right-1 w-4 h-4 cursor-pointer"
+                                onClick={() => setShowUploader(true)}
+                                alt="Edit"
+                            />
                         </div>
                         <h1 className="text-xl font-semibold mt-4">{formData?.name || "-"}</h1>
 
@@ -132,7 +159,7 @@ const Profile = () => {
                             />
                         </div>
 
-                        <hr className="sm:block hidden"/>
+                        <hr className="sm:block hidden" />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <Section

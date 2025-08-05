@@ -12,6 +12,7 @@ export type FormData = {
   selectedGoal?: string;
   goalWeight?: string;
   progressRate?: string;
+  picture?: string;
 
   // fitnessGoal
   fitnessGoal?: {

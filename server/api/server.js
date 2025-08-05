@@ -21,7 +21,7 @@ app.use("/chat", chatRoutes);
 connectDB();
 
 //cron
-require('../cron/updateUserStatus');
+// require('../cron/updateUserStatus');
 
 // Start server
 // const port = process.env.PORT || 5000;

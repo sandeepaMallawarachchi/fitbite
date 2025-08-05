@@ -51,7 +51,7 @@ const DashboardHome = () => {
     }
   }, [userId]);
 
-  return <SmartMealAssistant />;
+  return <SmartMealAssistant userId={userId} />;
 };
 
 export default DashboardHome;

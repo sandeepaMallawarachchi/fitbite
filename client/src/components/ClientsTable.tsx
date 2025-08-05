@@ -53,7 +53,7 @@ const ClientsTable = () => {
                 status: user.status,
                 role: user.role,
                 createdAt: user.createdAt,
-                avatar: `/avatar.png`,
+                avatar: user.picture,
                 message: lastMessage,
                 time: new Date(user.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 unreadCount,

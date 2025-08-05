@@ -13,6 +13,7 @@ interface SmartMealAssistantProps {
 
 const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userName, readOnly = false }) => {
     const [message, setMessage] = useState("");
+    const [user, setUser] = useState<{ picture?: string } | null>(null);
     const [chatHistory, setChatHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -21,18 +22,33 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
     const coachId = localStorage.getItem("coachId") ?? "";
     const resolvedUserId = formData.userId || userId;
 
+    const fetchChatHistory = async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/chat/getMessages/${resolvedUserId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setChatHistory(res.data);
+        } catch (error) {
+            console.error("Failed to load chat history", error);
+        }
+    };
+
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/user/getUserById/${resolvedUserId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUser(res.data?.userDetails || {});
+        } catch (error) {
+            console.error("Failed to load user data", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchChatHistory = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5000/chat/getMessages/${resolvedUserId}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                setChatHistory(res.data);
-            } catch (error) {
-                console.error("Failed to load chat history", error);
-            }
-        };
         fetchChatHistory();
+        fetchUser();
     }, []);
 
     const handleSend = async (e: React.FormEvent) => {
@@ -274,7 +290,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 <div className="flex  justify-between items-center gap-4 mb-6 px-2 bg-white rounded-full shadow-md py-1">
                     <div className="flex flex-row justify-center items-center gap-4">
                         <img
-                            src="/avatar.png"
+                            src={user?.picture || "/avatar.png"}
                             alt="User Avatar"
                             className="w-10 h-10 rounded-full border border-gray-300 object-cover"
                         />

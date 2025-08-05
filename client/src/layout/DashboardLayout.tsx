@@ -21,6 +21,11 @@ interface NavItem {
     path: string;
 }
 
+interface UserData {
+    name?: string;
+    picture?: string;
+}
+
 const DashboardLayout = () => {
 
     const navigate = useNavigate();
@@ -30,7 +35,7 @@ const DashboardLayout = () => {
     const parsedUser = userDetails ? JSON.parse(userDetails) : null;
     const userId = parsedUser?.id;
 
-    const [user, setUser] = useState<{ name?: string } | null>(null);
+    const [user, setUser] = useState<UserData | null>(null);
     const userRole = parsedUser?.role || localStorage.getItem("coachRole");
 
     const coachId = localStorage.getItem("coachId");
@@ -118,7 +123,7 @@ const DashboardLayout = () => {
                 </div>
                 <div className="flex items-center gap-3 cursor-pointer">
                     <img
-                        src="/avatar.png"
+                        src={user?.picture || "/avatar.png"}
                         alt="User"
                         className="w-10 h-10 rounded-full object-cover"
                     />

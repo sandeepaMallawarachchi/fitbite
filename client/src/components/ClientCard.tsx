@@ -14,7 +14,7 @@ const ClientCard: React.FC<Props> = ({ client, onClick }) => {
             className="relative cursor-pointer flex md:flex-row flex-col items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition border-b border-gray-100">
             <div className="flex md:flex-row flex-col items-center space-x-3">
                 <img
-                    src={client.avatar}
+                    src={client.avatar || '/avatar.png'}
                     alt={client.name}
                     className="w-10 h-10 rounded-full"
                 />

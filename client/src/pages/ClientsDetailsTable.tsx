@@ -47,7 +47,7 @@ const ClientsDetailsTable = () => {
                             status: user.status,
                             role: user.role,
                             createdAt: user.createdAt,
-                            avatar: "/avatar.png",
+                            avatar: user.picture,
                             clientId: index + 1,
                             age: user.birthday
                                 ? `${Math.floor(

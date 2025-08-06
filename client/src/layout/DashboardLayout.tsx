@@ -111,6 +111,7 @@ const DashboardLayout = () => {
         fetchUser();
     }, [userRole, coachId, userId, token]);
 
+    //loading skeliton
     if (loading) {
         return (
             <div className="flex flex-col h-screen bg-white">

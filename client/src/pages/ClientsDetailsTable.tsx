@@ -22,10 +22,12 @@ const ClientsDetailsTable = () => {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchClients = async () => {
+
+            setLoading(true)
             try {
                 const res = await axios.get(`https://fitbite-roan.vercel.app/user/full-details`, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -68,6 +70,8 @@ const ClientsDetailsTable = () => {
                 setFilteredClients(enrichedClients);
             } catch (err) {
                 console.error("Error fetching unified client details", err);
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -87,6 +91,51 @@ const ClientsDetailsTable = () => {
     const handleNavigate = (client: ExtendedClient) => {
         navigate(`/dashboard/smart-assistant?userId=${client._id}&userName=${encodeURIComponent(client.name)}`);
     };
+
+    if (loading) {
+        return (
+            <div className="bg-white rounded-xl shadow p-6 flex-1 animate-pulse">
+                <div className="flex justify-between items-center mb-8">
+                    <div className="h-6 bg-gray-200 rounded w-32"></div>
+                    <div className="w-5 h-5 bg-gray-200 rounded-full" />
+                </div>
+
+                <div className="overflow-x-auto bg-white">
+                    <table className="min-w-full text-sm text-left">
+                        <thead className="bg-[#F4F6FF] text-gray-700">
+                            <tr>
+                                {Array.from({ length: 12 }).map((_, i) => (
+                                    <th key={i} className="p-3">
+                                        <div className="h-4 bg-gray-200 rounded w-full" />
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 6 }).map((_, rowIdx) => (
+                                <tr key={rowIdx} className="border-b border-[#E6E8ED]">
+                                    <td className="py-4 text-center">
+                                        <div className="w-4 h-4 mx-auto bg-gray-200 rounded-full" />
+                                    </td>
+                                    <td className="p-3">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-gray-300 rounded-full" />
+                                            <div className="h-4 w-24 bg-gray-200 rounded" />
+                                        </div>
+                                    </td>
+                                    {Array.from({ length: 10 }).map((_, colIdx) => (
+                                        <td key={colIdx} className="p-3">
+                                            <div className="h-4 bg-gray-200 rounded w-full" />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white rounded-xl shadow p-6 flex-1">

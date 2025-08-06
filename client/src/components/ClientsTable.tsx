@@ -12,9 +12,13 @@ const ClientsTable = () => {
   const token = localStorage.getItem("token");
   const [filteredClients, setFilteredClients] = useState<Client[] | null>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
+
+      setLoading(true)
+
       try {
         const res = await axios.get("https://fitbite-roan.vercel.app/user/getAllUsers", {
           headers: { Authorization: `Bearer ${token}` },
@@ -67,6 +71,8 @@ const ClientsTable = () => {
         setFilteredClients(validClients);
       } catch (error) {
         console.error("Error fetching clients:", error);
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -111,6 +117,36 @@ const ClientsTable = () => {
     }
     setShowFilter(false);
   };
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-xl shadow p-4 flex-1 animate-pulse">
+        <div className="flex justify-between items-center mb-4">
+          <div className="h-6 w-32 bg-gray-200 rounded"></div>
+          <div className="w-5 h-5 bg-gray-200 rounded-full" />
+        </div>
+
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 p-4 border border-gray-100 rounded-lg"
+            >
+              <div className="w-12 h-12 rounded-full bg-gray-300" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-1/3" />
+                <div className="h-3 bg-gray-200 rounded w-2/3" />
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                <div className="h-3 w-16 bg-gray-200 rounded" />
+                <div className="h-3 w-10 bg-gray-200 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-xl shadow p-4 flex-1">

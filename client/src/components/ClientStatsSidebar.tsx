@@ -7,9 +7,12 @@ const ClientStatsSidebar = () => {
 
   const [clients, setClients] = useState<Client[]>([]);
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
+
+      setLoading(true)
       try {
         const res = await axios.get("https://fitbite-roan.vercel.app/user/getAllUsers", {
           headers: { Authorization: `Bearer ${token}` },
@@ -18,6 +21,8 @@ const ClientStatsSidebar = () => {
         setClients(res.data.userDetails.filter((user: Client) => user.role === "User"));
       } catch (error) {
         console.error("Error fetching clients:", error);
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -58,6 +63,25 @@ const ClientStatsSidebar = () => {
       },
     ];
   };
+
+  if (loading) {
+    return (
+      <div className="w-full md:max-w-[220px] space-y-6 animate-pulse">
+        {Array.from({ length: 4 }).map((_, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-xl px-5 py-5 shadow flex flex-col gap-5 md:items-start md:justify-start items-center"
+          >
+            <div className="flex flex-row gap-10 items-center">
+              <div className="w-14 h-14 rounded-full bg-gray-200" />
+              <div className="h-6 w-10 bg-gray-200 rounded-md" />
+            </div>
+            <div className="w-28 h-4 bg-gray-200 rounded-md" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full md:max-w-[220px] space-y-6">

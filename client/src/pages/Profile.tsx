@@ -111,7 +111,7 @@ const Profile = () => {
                                 alt="Edit"
                             />
                         </div>
-                        <h1 className="text-xl font-semibold mt-4">{formData?.name || "-"}</h1>
+                        <h1 className="text-xl font-semibold mt-4 sm:text-left text-center">{formData?.name || "-"}</h1>
 
                         <div className="mt-6 w-full">
                             <Section
@@ -136,48 +136,54 @@ const Profile = () => {
 
                     {/* Right Sections */}
                     <div className="md:w-1/2 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <Section
-                                icon={<img src="/star.svg" className="w-4 h-4" />}
-                                title="Body Measurements"
-                                editStep="/SignUpStep1"
-                                items={[
-                                    { label: "Weight", value: formData?.weight || "-" },
-                                    { label: "Height", value: formData?.height || "-" },
-                                    { label: "Activity Level", value: formData?.activityLevel || "-" },
-                                ]}
-                            />
-                            <Section
-                                icon={<img src="/heart.svg" className="w-4 h-4" />}
-                                title="Health & Medical Details"
-                                editStep="/SignUpStep5"
-                                items={[
-                                    { label: "Medical Conditions", value: formData?.medicalDetails?.medicalConditions || "No" },
-                                    { label: "Current Medications", value: formData?.medicalDetails?.medicationsAffect || "No" },
-                                    { label: "Supplements", value: formData?.medicalDetails?.supplements || "No" },
-                                ]}
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-0 gap-10">
+                            <div className="sm:border-r sm:pr-5">
+                                <Section
+                                    icon={<img src="/star.svg" className="w-4 h-4" />}
+                                    title="Body Measurements"
+                                    editStep="/SignUpStep1"
+                                    items={[
+                                        { label: "Weight", value: formData?.weight || "-" },
+                                        { label: "Height", value: formData?.height || "-" },
+                                        { label: "Activity Level", value: formData?.activityLevel || "-" },
+                                    ]}
+                                />
+                            </div>
+                            <div className="sm:pl-5">
+                                <Section
+                                    icon={<img src="/heart.svg" className="w-4 h-4" />}
+                                    title="Health & Medical Details"
+                                    editStep="/SignUpStep5"
+                                    items={[
+                                        { label: "Medical Conditions", value: formData?.medicalDetails?.medicalConditions || "No" },
+                                        { label: "Current Medications", value: formData?.medicalDetails?.medicationsAffect || "No" },
+                                        { label: "Supplements", value: formData?.medicalDetails?.supplements || "No" },
+                                    ]}
+                                />
+                            </div>
                         </div>
 
                         <hr className="sm:block hidden" />
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <Section
-                                icon={<img src="/pie.svg" className="w-4 h-4" />}
-                                title="Dietary Details"
-                                editStep="/SignUpStep4"
-                                items={[
-                                    { label: "Meal Preference", value: formData?.dietaryDetails?.preference || "-" },
-                                    { label: "Allergies", value: (formData?.dietaryDetails?.allergies || []).join(", ") || "No" },
-                                    { label: "Restrictions", value: formData?.dietaryDetails?.restrictions || "No" },
-                                    { label: "Foods to Avoid", value: formData?.dietaryDetails?.avoid || "No" },
-                                    {
-                                        label: "Performance Meals",
-                                        value: (formData?.dietaryDetails?.performanceMeals || []).join(" & ") || "No",
-                                    },
-                                ]}
-                            />
-                            <div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-0 gap-10">
+                            <div className="sm:border-r sm:pr-5">
+                                <Section
+                                    icon={<img src="/pie.svg" className="w-4 h-4" />}
+                                    title="Dietary Details"
+                                    editStep="/SignUpStep4"
+                                    items={[
+                                        { label: "Meal Preference", value: formData?.dietaryDetails?.preference || "-" },
+                                        { label: "Allergies", value: (formData?.dietaryDetails?.allergies || []).join(", ") || "No" },
+                                        { label: "Restrictions", value: formData?.dietaryDetails?.restrictions || "No" },
+                                        { label: "Foods to Avoid", value: formData?.dietaryDetails?.avoid || "No" },
+                                        {
+                                            label: "Performance Meals",
+                                            value: (formData?.dietaryDetails?.performanceMeals || []).join(" & ") || "No",
+                                        },
+                                    ]}
+                                />
+                            </div>
+                            <div className="sm:pl-5">
                                 <Section
                                     icon={<img src="/pin.svg" className="w-4 h-4" />}
                                     title="Fitness Goal"

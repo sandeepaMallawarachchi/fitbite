@@ -40,6 +40,7 @@ const DashboardLayout = () => {
 
     const coachId = localStorage.getItem("coachId");
     const location = useLocation();
+    const [loading, setLoading] = useState(false);
 
     const navItems: NavItem[] = userRole === "Coach"
         ? [
@@ -89,6 +90,7 @@ const DashboardLayout = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
+            setLoading(true)
             const effectiveUserId = userRole === "Coach" ? coachId : userId;
             if (!effectiveUserId) return;
 
@@ -101,11 +103,38 @@ const DashboardLayout = () => {
                 setUser(res.data?.userDetails || {});
             } catch (error) {
                 console.error("Failed to fetch user:", error);
+            } finally {
+                setLoading(false)
             }
         };
 
         fetchUser();
     }, [userRole, coachId, userId, token]);
+
+    if (loading) {
+        return (
+            <div className="flex flex-col h-screen bg-white">
+                <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
+                    <Link to="/dashboard">
+                        <img src="/logo1.png" alt="Logo" className="h-10 w-auto" />
+                    </Link>
+                    <div className="hidden md:relative w-full max-w-md mx-6">
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="w-full py-2 pl-10 pr-4 rounded-full text-sm border border-gray-200 focus:outline-none"
+                            disabled
+                        />
+                    </div>
+                    <div className="flex items-center gap-3 cursor-pointer animate-pulse">
+                        <div className="w-10 h-10 rounded-full bg-gray-200" />
+                        <div className="hidden md:block w-24 h-4 rounded-md bg-gray-200" />
+                    </div>
+                </header>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col h-screen bg-white">

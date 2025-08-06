@@ -118,7 +118,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
                             </button>
                             <button
                                 onClick={uploadImage}
-                                className="bg-[#89E2AD] hover:bg-green-400 text-black font-semibold cursor-pointer px-4 py-2 rounded"
+                                className={`${isUploading ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#89E2AD] hover:bg-green-400'} text-black font-semibold cursor-pointer px-4 py-2 rounded `}
                                 disabled={isUploading}
                             >
                                 {isUploading ? "Uploading..." : "Upload"}

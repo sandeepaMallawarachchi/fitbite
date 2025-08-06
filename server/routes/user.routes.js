@@ -17,5 +17,6 @@ router.post(
     userController.uploadProfilePicMiddleware,
     userController.uploadProfilePic
 );
+router.delete("/remove-profile-pic", verifyToken, userController.removeProfilePic);
 
 module.exports = router;

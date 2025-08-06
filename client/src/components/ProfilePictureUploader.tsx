@@ -3,7 +3,8 @@ import Cropper from "react-easy-crop";
 import type { Area } from 'react-easy-crop';
 import { getCroppedImg } from "../utils/cropImage";
 import axios from "axios";
-import { X } from "lucide-react";
+import { X, Pencil } from "lucide-react";
+import { useFormContext } from "../context/FormContext";
 
 type ProfilePictureUploaderProps = {
     onClose: () => void;
@@ -19,6 +20,8 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const { formData } = useFormContext();
+    const token = localStorage.getItem("token");
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -43,7 +46,6 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
         formData.append("image", blob);
 
         try {
-            const token = localStorage.getItem("token");
             const res = await axios.post(
                 "http://localhost:5000/user/upload-profile-pic",
                 formData,
@@ -63,6 +65,24 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
         }
     };
 
+    const handleRemoveImage = async () => {
+        if (!token) return;
+        setIsUploading(true);
+
+        try {
+            await axios.delete("http://localhost:5000/user/remove-profile-pic", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            onUploadSuccess("");
+            onClose();
+        } catch (err) {
+            console.error("Failed to remove profile picture", err);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+
     return (
         <div className="fixed inset-0 z-50 bg-black/20 bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-md sm:max-w-[400px] w-full mx-5 sm:mx-0 relative">
@@ -73,14 +93,24 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
                 >
                     <X />
                 </button>
-                <h2 className="text-lg font-semibold mb-4 text-center">Upload Profile Picture</h2>
+                <h2 className="text-lg font-semibold mb-4 text-center">
+                    {formData.picture ? 'Change' : 'Upload'} Profile Picture
+                </h2>
                 {!imageSrc ? (
                     <label className="cursor-pointer flex justify-center">
-                        <img
-                            src="/profileupload.png"
-                            alt="Upload"
-                            className="w-40 h-40 object-contain hover:opacity-80 transition"
-                        />
+                        <div className="relative w-40 h-40 cursor-pointer">
+                            <img
+                                src={formData.picture || "/profileupload.png"}
+                                alt="Profile"
+                                className={`w-40 h-40 object-cover rounded-full ${formData.picture ? 'opacity-50' : ''}`}
+                            />
+                            {formData.picture && (
+                                <div className="absolute inset-0 flex items-center justify-center text-center text-gray-800 font-medium">
+                                    <Pencil />
+                                </div>
+                            )}
+                        </div>
+
                         <input
                             type="file"
                             accept="image/*"
@@ -118,7 +148,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
                             </button>
                             <button
                                 onClick={uploadImage}
-                                className={`${isUploading ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#89E2AD] hover:bg-green-400'} text-black font-semibold cursor-pointer px-4 py-2 rounded `}
+                                className={`${isUploading ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#89E2AD] hover:bg-green-400'} text-black cursor-pointer px-4 py-2 rounded `}
                                 disabled={isUploading}
                             >
                                 {isUploading ? "Uploading..." : "Upload"}
@@ -126,6 +156,16 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
                         </div>
                     </>
                 )}
+
+                {formData.picture && !imageSrc && (
+                    <button
+                        onClick={handleRemoveImage}
+                        className="text-red-500 text-sm hover:underline mt-3 mx-auto block cursor-pointer"
+                    >
+                        Remove Profile Picture
+                    </button>
+                )}
+
             </div>
         </div>
     );

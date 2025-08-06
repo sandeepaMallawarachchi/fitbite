@@ -114,24 +114,45 @@ const DashboardLayout = () => {
     if (loading) {
         return (
             <div className="flex flex-col h-screen bg-white">
+                {/* Header Skeleton */}
                 <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
-                    <Link to="/dashboard">
-                        <img src="/logo1.webp" alt="Logo" className="h-10 w-auto" />
-                    </Link>
-                    <div className="hidden md:relative w-full max-w-md mx-6">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="w-full py-2 pl-10 pr-4 rounded-full text-sm border border-gray-200 focus:outline-none"
-                            disabled
-                        />
+                    <div className="animate-pulse w-32 h-10 bg-gray-200 rounded-lg" />
+
+                    <div className="hidden md:block relative w-full max-w-md mx-6 animate-pulse">
+                        <div className="h-10 rounded-full bg-gray-200" />
                     </div>
-                    <div className="flex items-center gap-3 cursor-pointer animate-pulse">
+
+                    <div className="flex items-center gap-3 animate-pulse">
                         <div className="w-10 h-10 rounded-full bg-gray-200" />
                         <div className="hidden md:block w-24 h-4 rounded-md bg-gray-200" />
                     </div>
                 </header>
+
+                {/* Sidebar + Main Skeleton */}
+                <div className="flex flex-1 overflow-hidden">
+                    {/* Sidebar Skeleton */}
+                    <aside className="w-20 md:w-36 bg-white py-6 px-4 flex flex-col items-center md:items-start">
+                        <nav className="flex flex-col gap-3 w-full justify-between h-full">
+                            <div className="flex flex-col gap-6 items-center md:items-start w-full">
+                                {[...Array(5)].map((_, idx) => (
+                                    <div key={idx} className="flex flex-col items-center gap-2 w-full animate-pulse">
+                                        <div className="p-4 rounded-xl bg-gray-200 w-12 h-12" />
+                                        <div className="hidden md:inline-block w-14 h-4 bg-gray-200 rounded-md" />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex flex-col items-center gap-6 md:items-start w-full">
+                                <div className="p-4 rounded-xl bg-gray-200 w-12 h-12 animate-pulse" />
+                                <div className="hidden md:inline-block w-20 h-4 bg-gray-200 rounded-md animate-pulse" />
+                            </div>
+                        </nav>
+                    </aside>
+
+                    {/* Main Skeleton Area */}
+                    <main className="flex-1 bg-[#F5F6FA] overflow-y-auto md:p-6 rounded-tl-[40px] animate-pulse">
+                        <div className="w-full h-full bg-gray-100 rounded-lg" />
+                    </main>
+                </div>
             </div>
         );
     }
@@ -150,7 +171,9 @@ const DashboardLayout = () => {
                         className="w-full py-2 pl-10 pr-4 rounded-full text-sm border border-gray-200 focus:outline-none"
                     />
                 </div>
-                <div className="flex items-center gap-3 cursor-pointer">
+                <Link
+                    to={'/dashboard/profile'}
+                    className="flex items-center gap-3 cursor-pointer">
                     <img
                         src={user?.picture || "/avatar.webp"}
                         alt="User"
@@ -159,7 +182,7 @@ const DashboardLayout = () => {
                     <span className="text-sm font-medium text-gray-800 hidden md:block">
                         {user?.name || "Error Fetching Name..."}
                     </span>
-                </div>
+                </Link>
             </header>
 
             <div className="flex flex-1 overflow-hidden">

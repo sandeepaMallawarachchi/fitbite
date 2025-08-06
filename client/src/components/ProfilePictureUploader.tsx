@@ -100,7 +100,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
                     <label className="cursor-pointer flex justify-center">
                         <div className="relative w-40 h-40 cursor-pointer">
                             <img
-                                src={formData.picture || "/profileupload.png"}
+                                src={formData.picture || "/profileupload.webp"}
                                 alt="Profile"
                                 className={`w-40 h-40 object-cover rounded-full ${formData.picture ? 'opacity-50' : ''}`}
                             />

@@ -199,17 +199,17 @@ const SignUpForm = () => {
             {/* Right Column - Social Logins */}
             <div className="w-full lg:w-1/2 lg:pl-12 space-y-4 lg:pt-14">
               <button className="flex items-center justify-center sm:justify-between px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
-                <img src="/googlelogo.png" alt="google logo" className="w-6 h-6" />
+                <img src="/googlelogo.webp" alt="google logo" className="w-6 h-6" />
                 <span className="hidden sm:inline sm:pr-8">Sign in with Google</span>
                 <span className="sm:hidden">Google</span>
               </button>
               <button className="flex items-center justify-center sm:justify-between pl-18 pr-14 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
-                <img src="/fblogo.jpg" alt="fb logo" className="w-6 h-6" />
+                <img src="/fblogo.webp" alt="fb logo" className="w-6 h-6" />
                 <span className="hidden sm:inline sm:pr-8">Sign in with Facebook</span>
                 <span className="sm:hidden">Facebook</span>
               </button>
               <button className="flex items-center justify-center sm:justify-between px-18 gap-3 border border-gray-300 font-semibold rounded-full py-3 w-full hover:bg-gray-50 text-sm sm:text-base">
-                <img src="/applelogo.svg" alt="apple logo" className="w-5 h-6" />
+                <img src="/applelogo.webp" alt="apple logo" className="w-5 h-6" />
                 <span className="hidden sm:inline sm:pr-8">Sign in with Apple</span>
                 <span className="sm:hidden">Apple</span>
               </button>

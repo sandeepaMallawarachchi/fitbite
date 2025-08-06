@@ -39,7 +39,7 @@ const OverView = () => {
           onClick={() => editStep && navigate(editStep)}
         >
           <img
-            src="/edit.svg"
+            src="/edit.webp"
             alt="Edit"
             className="w-4 h-4 inline-block cursor-pointer"
           />
@@ -84,7 +84,7 @@ const OverView = () => {
             <Section
               icon={
                 <img
-                  src="/user.svg"
+                  src="/user.webp"
                   alt="User"
                   className="w-5 h-5 inline-block"
                 />
@@ -107,7 +107,7 @@ const OverView = () => {
             <Section
               icon={
                 <img
-                  src="/star.svg"
+                  src="/star.webp"
                   alt="User"
                   className="w-5 h-5 inline-block"
                 />
@@ -123,7 +123,7 @@ const OverView = () => {
             <Section
               icon={
                 <img
-                  src="/pin.svg"
+                  src="/pin.webp"
                   alt="User"
                   className="w-5 h-5 inline-block"
                 />
@@ -141,7 +141,7 @@ const OverView = () => {
             <Section
               icon={
                 <img
-                  src="/pie.svg"
+                  src="/pie.webp"
                   alt="User"
                   className="w-5 h-5 inline-block"
                 />
@@ -162,7 +162,7 @@ const OverView = () => {
             <Section
               icon={
                 <img
-                  src="/heart.svg"
+                  src="/heart.webp"
                   alt="User"
                   className="w-5 h-5 inline-block"
                 />

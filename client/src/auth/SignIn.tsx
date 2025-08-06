@@ -14,6 +14,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { setFormData } = useFormContext();
 
   const isFormValid =
@@ -25,6 +26,7 @@ const SignIn = () => {
 
     if (!isFormValid) return;
 
+    setIsSubmitting(true);
     try {
       const res = await axios.post("https://fitbite-roan.vercel.app/auth/login", {
         email,
@@ -64,6 +66,8 @@ const SignIn = () => {
       } else {
         toast.error("Unexpected error occurred");
       }
+    } finally {
+      setIsSubmitting(false)
     }
   };
 
@@ -124,13 +128,13 @@ const SignIn = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 justify-center pt-2 space-y-4 sm:space-y-0">
                 <button
                   type="submit"
-                  disabled={!isFormValid}
-                  className={`sm:w-1/2 font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${isFormValid
-                    ? "bg-green-300 text-white hover:bg-green-400 cursor-pointer"
-                    : "bg-gray-200 text-gray-800 cursor-not-allowed"
+                  disabled={!isFormValid || isSubmitting}
+                  className={`sm:w-1/2 font-medium py-3 px-6 sm:px-10 rounded-md text-sm sm:text-base order-2 sm:order-1 transition-colors duration-200 ${!isFormValid || isSubmitting
+                      ? "bg-gray-200 text-gray-800 cursor-not-allowed"
+                      : "bg-green-300 text-white hover:bg-green-400 cursor-pointer"
                     }`}
                 >
-                  Sign In
+                  {isSubmitting ? "Signing in..." : "Sign In"}
                 </button>
                 <a
                   href="#"

@@ -35,6 +35,7 @@ const DashboardHome = () => {
           weight: userDetails.weight || "",
           birthday: userDetails.birthday || "",
           gender: userDetails.gender || "",
+          picture: userDetails.picture || "",
           TDEE: fitnessDetails.TDEE || "",
           fitnessGoal: fitnessDetails.fitnessGoal || {},
           mealHabits: fitnessDetails.mealHabits || {},

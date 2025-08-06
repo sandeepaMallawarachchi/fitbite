@@ -216,7 +216,7 @@ const Profile = () => {
                     <button
                         type="button"
                         onClick={handleRestart}
-                        className='font-semibold cursor-pointer py-3 px-8 rounded-lg w-full md:w-1/4 transition-colors duration-200 bg-[#89E2AD] text-black hover:bg-green-400'
+                        className='cursor-pointer py-3 px-8 rounded-lg w-full md:w-1/4 transition-colors duration-200 bg-[#89E2AD] text-black hover:bg-green-400'
                     >
                         Restart
                     </button>

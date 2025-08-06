@@ -215,3 +215,14 @@ exports.uploadProfilePic = async (req, res) => {
     res.status(500).json({ message: "Upload failed", error: err.message });
   }
 };
+
+exports.removeProfilePic = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    await User.findByIdAndUpdate(userId, { picture: null });
+    res.status(200).json({ message: "Profile picture removed" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to remove", error: err.message });
+  }
+};

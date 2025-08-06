@@ -4,7 +4,7 @@ export default function Hero() {
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-top bg-no-repeat z-0"
-        style={{ backgroundImage: `url('/home-page-hero1.png')` }}
+        style={{ backgroundImage: `url('/home-page-hero1.webp')` }}
       />
 
       {/* Foreground Content */}
@@ -24,14 +24,14 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start items-center sm:items-start">
           <a href="#" className="inline-block transition-transform hover:scale-105">
             <img
-              src="/app-store.png?height=60&width=180"
+              src="/app-store.webp?height=60&width=180"
               alt="Download on the App Store"
               className="h-14 md:h-16"
             />
           </a>
           <a href="#" className="inline-block transition-transform hover:scale-105">
             <img
-              src="/google-play.png?height=60&width=180"
+              src="/google-play.webp?height=60&width=180"
               alt="Get it on Google Play"
               className="h-14 md:h-16"
             />

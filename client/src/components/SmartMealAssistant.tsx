@@ -290,7 +290,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 <div className="flex  justify-between items-center gap-4 mb-6 px-2 bg-white rounded-full shadow-md py-1">
                     <div className="flex flex-row justify-center items-center gap-4">
                         <img
-                            src={user?.picture || "/avatar.png"}
+                            src={user?.picture || "/avatar.webp"}
                             alt="User Avatar"
                             className="w-10 h-10 rounded-full border border-gray-300 object-cover"
                         />

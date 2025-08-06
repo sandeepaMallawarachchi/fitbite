@@ -38,13 +38,13 @@ const Background = () => {
                 animate={{ x: 0, y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="absolute inset-0 bg-fit bg-center bg-no-repeat z-0"
-                style={{ backgroundImage: `url('/common-bg.png')` }}
+                style={{ backgroundImage: `url('/common-bg.webp')` }}
             />
             {/* Logo */}
             <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-10">
                 <Link to="/">
                     <img
-                        src="/logo2.png"
+                        src="/logo2.webp"
                         alt="fitbite Logo"
                         className="h-8 sm:h-10 w-auto cursor-pointer"
                     />

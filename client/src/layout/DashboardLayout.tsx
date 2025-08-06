@@ -116,7 +116,7 @@ const DashboardLayout = () => {
             <div className="flex flex-col h-screen bg-white">
                 <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
                     <Link to="/dashboard">
-                        <img src="/logo1.png" alt="Logo" className="h-10 w-auto" />
+                        <img src="/logo1.webp" alt="Logo" className="h-10 w-auto" />
                     </Link>
                     <div className="hidden md:relative w-full max-w-md mx-6">
                         <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -140,7 +140,7 @@ const DashboardLayout = () => {
         <div className="flex flex-col h-screen bg-white">
             <header className="flex items-center justify-between md:px-12 px-5 py-5 bg-white">
                 <Link to="/dashboard">
-                    <img src="/logo1.png" alt="Logo" className="h-10 w-auto" />
+                    <img src="/logo1.webp" alt="Logo" className="h-10 w-auto" />
                 </Link>
                 <div className="hidden md:relative w-full max-w-md mx-6">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -152,7 +152,7 @@ const DashboardLayout = () => {
                 </div>
                 <div className="flex items-center gap-3 cursor-pointer">
                     <img
-                        src={user?.picture || "/avatar.png"}
+                        src={user?.picture || "/avatar.webp"}
                         alt="User"
                         className="w-10 h-10 rounded-full object-cover"
                     />

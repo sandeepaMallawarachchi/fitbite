@@ -61,7 +61,7 @@ const Profile = () => {
                         localStorage.setItem("editedProfile", "true");
                         if (editStep) navigate(editStep);
                     }}                >
-                    <img src="/edit.svg" alt="Edit" className="w-4 h-4" />
+                    <img src="/edit.webp" alt="Edit" className="w-4 h-4" />
                 </button>
             </div>
             <ul className="text-sm text-gray-700">
@@ -82,12 +82,12 @@ const Profile = () => {
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Left Profile Card */}
                     <div className="md:w-1/2 sm:pr-5 flex flex-col items-center sm:border-r">
-                        <div className="relative w-28 h-28">
+                        <div className="relative w-32 h-32">
                             <img
-                                src={formData?.picture || "/avatar.png"}
+                                src={formData?.picture || "/avatar.webp"}
                                 alt="Avatar"
                                 onClick={() => setShowUploader(true)}
-                                className="w-28 h-28 rounded-full object-cover cursor-pointer hover:opacity-80"
+                                className="w-32 h-32 rounded-full object-cover cursor-pointer hover:opacity-80"
                             />
 
                             {showUploader && (
@@ -105,7 +105,7 @@ const Profile = () => {
                             )}
 
                             <img
-                                src="/edit.svg"
+                                src="/edit.webp"
                                 className="absolute bottom-1 right-1 w-4 h-4 cursor-pointer"
                                 onClick={() => setShowUploader(true)}
                                 alt="Edit"
@@ -115,7 +115,7 @@ const Profile = () => {
 
                         <div className="mt-6 w-full">
                             <Section
-                                icon={<img src="/user.svg" className="w-4 h-4" />}
+                                icon={<img src="/user.webp" className="w-4 h-4" />}
                                 title="Personal Details"
                                 editStep="/SignUpStep1"
                                 items={[
@@ -139,7 +139,7 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-0 gap-10">
                             <div className="sm:border-r sm:pr-5">
                                 <Section
-                                    icon={<img src="/star.svg" className="w-4 h-4" />}
+                                    icon={<img src="/star.webp" className="w-4 h-4" />}
                                     title="Body Measurements"
                                     editStep="/SignUpStep1"
                                     items={[
@@ -151,7 +151,7 @@ const Profile = () => {
                             </div>
                             <div className="sm:pl-5">
                                 <Section
-                                    icon={<img src="/heart.svg" className="w-4 h-4" />}
+                                    icon={<img src="/heart.webp" className="w-4 h-4" />}
                                     title="Health & Medical Details"
                                     editStep="/SignUpStep5"
                                     items={[
@@ -168,7 +168,7 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-0 gap-10">
                             <div className="sm:border-r sm:pr-5">
                                 <Section
-                                    icon={<img src="/pie.svg" className="w-4 h-4" />}
+                                    icon={<img src="/pie.webp" className="w-4 h-4" />}
                                     title="Dietary Details"
                                     editStep="/SignUpStep4"
                                     items={[
@@ -185,7 +185,7 @@ const Profile = () => {
                             </div>
                             <div className="sm:pl-5">
                                 <Section
-                                    icon={<img src="/pin.svg" className="w-4 h-4" />}
+                                    icon={<img src="/pin.webp" className="w-4 h-4" />}
                                     title="Fitness Goal"
                                     editStep="/SignUpStep2"
                                     items={[
@@ -193,7 +193,7 @@ const Profile = () => {
                                     ]}
                                 />
                                 <p className="mt-10 flex items-center gap-2">
-                                    <img src="/info-circle.png" alt="Info Icon" />
+                                    <img src="/info-circle.webp" alt="Info Icon" />
                                     <span className="font-semibold text-sm">This Data Supports Your Current Process</span>
                                 </p>
                             </div>
@@ -205,7 +205,7 @@ const Profile = () => {
                 <div className="mt-10 flex sm:flex-row flex-col w-full justify-between items-end sm:gap-0 gap-5">
                     <div>
                         <p className="mb-5 flex items-center gap-2">
-                            <img src="/info-circle.png" alt="Info Icon" />
+                            <img src="/info-circle.webp" alt="Info Icon" />
                             <span className="text-[#7F7F7F] font-semibold text-sm">Warning</span>
                         </p>
                         <p className="text-sm font-semibold">

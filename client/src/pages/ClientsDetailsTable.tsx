@@ -212,7 +212,7 @@ const ClientsDetailsTable = () => {
                                     </td>
                                     <td className="p-3 flex items-center gap-2">
                                         <img
-                                            src={client.avatar || "/avatar.png"}
+                                            src={client.avatar || "/avatar.webp"}
                                             alt="avatar"
                                             className="w-6 h-6 rounded-full"
                                         />

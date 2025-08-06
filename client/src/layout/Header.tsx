@@ -18,7 +18,7 @@ const Header: React.FC = () => {
         {/* Logo */}
         <Link to={"/"}>
           <img
-            src="/logo1.png"
+            src="/logo1.webp"
             alt="fite bite Logo"
             className="h-10 w-auto cursor-pointer"
           />

@@ -1,4 +1,5 @@
 import type { Client } from "../types/User";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
     client: Client;
@@ -7,7 +8,6 @@ interface Props {
 
 const ClientCard: React.FC<Props> = ({ client, onClick }) => {
 
-    console.log(client)
     return (
         <div
             onClick={() => onClick(client)}
@@ -22,8 +22,12 @@ const ClientCard: React.FC<Props> = ({ client, onClick }) => {
                     <h3 className="font-semibold text-center md:text-left">
                         {client.name}
                     </h3>
-                    <p className="text-sm text-gray-700 truncate w-[180px]">
-                        {client.message}
+                    <p className="text-xs text-gray-700 truncate w-[180px]">
+                        <ReactMarkdown>
+                            {(client.message?.length ?? 0) > 40
+                                ? client.message!.slice(0, 40) + "..."
+                                : client.message || ""}
+                        </ReactMarkdown>
                     </p>
                 </div>
             </div>

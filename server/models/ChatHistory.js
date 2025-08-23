@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
-  role: { type: String, enum: ["user", "assistant"], required: true },
+  role: { type: String, enum: ["user", "assistant", "coach"], required: true },
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
   reactions: {

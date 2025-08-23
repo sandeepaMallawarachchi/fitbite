@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Mic, Image, Send, ArrowDown, ThumbsUp, ThumbsDown, EllipsisVertical } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import CoachInput from "./CoachInput";
+import DailyTrackingPanel from "./DailyTrackingPanel";
 
 interface SmartMealAssistantProps {
     userId: string;
@@ -73,9 +74,23 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
         localStorage.setItem(`dailyTracking_${resolvedUserId}_${today}`, JSON.stringify(newTracking));
     };
 
-    const updateDailyTracking = (updatedTracking: DailyTrackingData) => {
+    const updateDailyTracking = async (updatedTracking: DailyTrackingData) => {
         setDailyTracking(updatedTracking);
-        localStorage.setItem(`dailyTracking_${resolvedUserId}_${updatedTracking.date}`, JSON.stringify(updatedTracking));
+
+        localStorage.setItem(
+            `dailyTracking_${resolvedUserId}_${updatedTracking.date}`,
+            JSON.stringify(updatedTracking)
+        );
+
+        try {
+            await axios.post(
+                "http://localhost:5000/dailyTracking/saveDailyTracking",
+                { userId: resolvedUserId, ...updatedTracking },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+        } catch (err) {
+            console.error("Failed to update DB dailyTracking", err);
+        }
     };
 
     const parseNutritionFromResponse = (response: string): DailyNutrition | null => {
@@ -488,12 +503,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                         Let's start tracking...
                     </h1>
                     {dailyTracking && (
-                        <div className="grid sm:grid-cols-4 sm:grid-rows-1 grid-cols-2 grid-rows-2 justify-center gap-6 sm:text-sm text-xs text-gray-600 bg-white rounded-full p-4 shadow-sm">
-                            <span>{dailyTracking.totalNutrition.calories} / {formData.TDEE} kcal</span>
-                            <span>{dailyTracking.totalNutrition.protein}g protein</span>
-                            <span>{dailyTracking.totalNutrition.carbs}g carbs</span>
-                            <span>{dailyTracking.totalNutrition.fat}g fat</span>
-                        </div>
+                        <DailyTrackingPanel userId={resolvedUserId} TDEE={formData.TDEE} token={token ?? ""} tracking={dailyTracking}/>
                     )}
                 </div>
             )}

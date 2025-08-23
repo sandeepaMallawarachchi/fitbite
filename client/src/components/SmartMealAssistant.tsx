@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mic, Image, Send, ArrowDown, ThumbsUp, ThumbsDown, EllipsisVertical } from "lucide-react";
-import { marked } from "marked";
+import ReactMarkdown from "react-markdown";
+import CoachInput from "./CoachInput";
+import DailyTrackingPanel from "./DailyTrackingPanel";
 
 interface SmartMealAssistantProps {
     userId: string;
@@ -72,9 +74,23 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
         localStorage.setItem(`dailyTracking_${resolvedUserId}_${today}`, JSON.stringify(newTracking));
     };
 
-    const updateDailyTracking = (updatedTracking: DailyTrackingData) => {
+    const updateDailyTracking = async (updatedTracking: DailyTrackingData) => {
         setDailyTracking(updatedTracking);
-        localStorage.setItem(`dailyTracking_${resolvedUserId}_${updatedTracking.date}`, JSON.stringify(updatedTracking));
+
+        localStorage.setItem(
+            `dailyTracking_${resolvedUserId}_${updatedTracking.date}`,
+            JSON.stringify(updatedTracking)
+        );
+
+        try {
+            await axios.post(
+                "http://localhost:5000/dailyTracking/saveDailyTracking",
+                { userId: resolvedUserId, ...updatedTracking },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+        } catch (err) {
+            console.error("Failed to update DB dailyTracking", err);
+        }
     };
 
     const parseNutritionFromResponse = (response: string): DailyNutrition | null => {
@@ -372,6 +388,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     const renderMessage = (msg: any, idx: number) => {
         const isUser = msg.role === "user";
+        const isCoach = msg.role === "coach";
         const userReaction = coachId
             ? msg.reactions?.[coachId] || null
             : Object.values(msg.reactions || {})[0] || null;
@@ -407,10 +424,13 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 <div
                     className={`sm:max-w-[80%] max-w-[90%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed shadow 
                         ${isUser
-                            ? "bg-white text-gray-900 rounded-br-none"
-                            : "bg-[#F0F2F5] text-gray-800 rounded-bl-none"}`}
-                    dangerouslySetInnerHTML={{ __html: marked.parse(msg.content) }}
-                />
+                            ? "bg-white text-gray-900 rounded-br-none self-end"
+                            : isCoach
+                                ? "bg-blue-100 text-blue-900 rounded-bl-none self-start"
+                                : "bg-[#F0F2F5] text-gray-800 rounded-bl-none self-start"}`}
+                >
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                </div>
 
                 <div className="flex gap-3 mt-1">
                     {readOnly ? (
@@ -483,12 +503,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                         Let's start tracking...
                     </h1>
                     {dailyTracking && (
-                        <div className="grid sm:grid-cols-4 sm:grid-rows-1 grid-cols-2 grid-rows-2 justify-center gap-6 sm:text-sm text-xs text-gray-600 bg-white rounded-2xl p-4 shadow-sm">
-                            <span>{dailyTracking.totalNutrition.calories} / {formData.TDEE} kcal</span>
-                            <span>{dailyTracking.totalNutrition.protein}g protein</span>
-                            <span>{dailyTracking.totalNutrition.carbs}g carbs</span>
-                            <span>{dailyTracking.totalNutrition.fat}g fat</span>
-                        </div>
+                        <DailyTrackingPanel userId={resolvedUserId} TDEE={formData.TDEE} token={token ?? ""} tracking={dailyTracking}/>
                     )}
                 </div>
             )}
@@ -526,7 +541,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 </div>
             )}
 
-            {!readOnly && (
+            {!readOnly ? (
                 <form onSubmit={handleSend} className="w-full bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4 sticky bottom-0">
                     <input
                         type="text"
@@ -554,6 +569,12 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                         )}
                     </div>
                 </form>
+            ) : (
+                <CoachInput
+                    userId={userId}
+                    token={token ?? ""}
+                    onMessageSent={(msg) => setChatHistory((prev) => [...prev, msg])}
+                />
             )}
         </section>
     );

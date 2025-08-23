@@ -9,13 +9,16 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+//routes
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const chatRoutes = require("./routes/chat.routes");
+const dailyTrackingRoutes = require("./routes/dailyTracking.routes");
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
+app.use("/dailyTracking", dailyTrackingRoutes);
 
 // Connect to DB
 connectDB();

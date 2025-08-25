@@ -503,7 +503,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                         Let's start tracking...
                     </h1>
                     {dailyTracking && (
-                        <DailyTrackingPanel userId={resolvedUserId} TDEE={formData.TDEE} token={token ?? ""} tracking={dailyTracking}/>
+                        <DailyTrackingPanel userId={resolvedUserId} TDEE={formData.TDEE} token={token ?? ""} tracking={dailyTracking} />
                     )}
                 </div>
             )}
@@ -571,7 +571,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 </form>
             ) : (
                 <CoachInput
-                    userId={userId}
+                    userId={resolvedUserId}
                     token={token ?? ""}
                     onMessageSent={(msg) => setChatHistory((prev) => [...prev, msg])}
                 />

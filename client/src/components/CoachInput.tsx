@@ -24,9 +24,8 @@ const CoachInput: React.FC<CoachInputProps> = ({ userId, token, onMessageSent })
     setLoading(true);
 
     try {
-      await axios.post(
-        "http://localhost:5000/chat/saveMessage",
-        { userId, role: "coach", content: coachMsg.content },
+      await axios.post("http://localhost:5000/chat/saveMessage",
+        { userId: userId, role: "coach", content: coachMsg.content },
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {

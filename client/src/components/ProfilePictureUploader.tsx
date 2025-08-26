@@ -47,7 +47,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
 
         try {
             const res = await axios.post(
-                "http://localhost:5000/user/upload-profile-pic",
+                "https://fitbite-roan.vercel.app/user/upload-profile-pic",
                 formData,
                 {
                     headers: {

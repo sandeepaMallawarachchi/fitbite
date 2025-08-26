@@ -161,7 +161,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     const fetchChatHistory = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/chat/getMessages/${resolvedUserId}`, {
+            const res = await axios.get(`https://fitbite-roan.vercel.app/chat/getMessages/${resolvedUserId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setChatHistory(res.data);
@@ -172,7 +172,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     const fetchUser = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/user/getUserById/${resolvedUserId}`, {
+            const res = await axios.get(`https://fitbite-roan.vercel.app/user/getUserById/${resolvedUserId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -212,7 +212,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
         try {
             await axios.post(
-                "http://localhost:5000/chat/saveMessage",
+                "https://fitbite-roan.vercel.app/chat/saveMessage",
                 {
                     userId: formData.userId,
                     role: "user",
@@ -360,7 +360,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                     }
 
                     axios.post(
-                        "http://localhost:5000/chat/saveMessage",
+                        "https://fitbite-roan.vercel.app/chat/saveMessage",
                         {
                             userId: formData.userId,
                             role: "assistant",
@@ -398,7 +398,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
             try {
                 await axios.patch(
-                    `http://localhost:5000/chat/reactMessage/${userId}/${idx}`,
+                    `https://fitbite-roan.vercel.app/chat/reactMessage/${userId}/${idx}`,
                     { coachId, reaction: newReaction },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -476,7 +476,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     useEffect(() => {
         if (readOnly && userId) {
-            axios.patch(`http://localhost:5000/chat/mark-read/${userId}`, {}, {
+            axios.patch(`https://fitbite-roan.vercel.app/chat/mark-read/${userId}`, {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
         }

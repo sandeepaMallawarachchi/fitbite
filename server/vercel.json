@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/cron/update-user-status.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/cron/update-user-status",
+      "dest": "api/cron/update-user-status.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "api/server.js"
+    }
+  ]
+}

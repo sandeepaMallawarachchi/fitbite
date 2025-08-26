@@ -25,7 +25,7 @@ const Profile = () => {
         if (!confirmRestart) return;
 
         try {
-            await axios.delete(`http://localhost:5000/user/restart/${userId}`, {
+            await axios.delete(`https://fitbite-roan.vercel.app/user/restart/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

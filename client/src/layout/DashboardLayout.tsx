@@ -95,7 +95,7 @@ const DashboardLayout = () => {
             if (!effectiveUserId) return;
 
             try {
-                const res = await axios.get(`http://localhost:5000/user/getUserById/${effectiveUserId}`, {
+                const res = await axios.get(`https://fitbite-roan.vercel.app/user/getUserById/${effectiveUserId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -111,6 +111,7 @@ const DashboardLayout = () => {
         fetchUser();
     }, [userRole, coachId, userId, token]);
 
+    //loading skeliton
     if (loading) {
         return (
             <div className="flex flex-col h-screen bg-white">

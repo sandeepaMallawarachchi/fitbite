@@ -1,20 +1,19 @@
-const cron = require("node-cron");
+// cron/updateUserStatus.js
 const User = require("../models/User");
 
-// every minute ("* * * * *") and inactive after 1 min (1000 * 60)
-cron.schedule("0 2 * * *", async () => {
+const updateUserStatus = async () => {
   try {
     const users = await User.find();
     const now = new Date();
 
     for (const user of users) {
       if (user.lastSignedIn) {
-        const minutesDiff = Math.floor((now - new Date(user.lastSignedIn)) / (1000 * 60 * 60 * 24));
+        const daysDiff = Math.floor((now - new Date(user.lastSignedIn)) / (1000 * 60 * 60 * 24));
 
-        if (minutesDiff > 7 && user.status !== "Inactive") {
+        if (daysDiff > 7 && user.status !== "Inactive") {
           user.status = "Inactive";
           await user.save();
-        } else if (minutesDiff <= 1 && user.status !== "Active") {
+        } else if (daysDiff <= 1 && user.status !== "Active") {
           user.status = "Active";
           await user.save();
         }
@@ -22,7 +21,11 @@ cron.schedule("0 2 * * *", async () => {
         console.log(`No lastSignedIn value for ${user.email}`);
       }
     }
+
+    console.log("User status updated.");
   } catch (err) {
     console.error("Cron job failed:", err);
   }
-});
+};
+
+module.exports = updateUserStatus;

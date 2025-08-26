@@ -44,7 +44,7 @@ const TellABoutYouForm = () => {
     }
 
     try {
-      await axios.patch("http://localhost:5000/user/updateUser", {
+      await axios.patch("https://fitbite-roan.vercel.app/user/updateUser", {
         ...formData,
         userId,
       }, {

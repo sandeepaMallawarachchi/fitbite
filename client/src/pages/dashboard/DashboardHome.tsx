@@ -15,10 +15,10 @@ const DashboardHome = () => {
     const fetchAllUserData = async () => {
       try {
         const [userRes, fitnessRes] = await Promise.all([
-          axios.get(`http://localhost:5000/user/getUserById/${userId}`, {
+          axios.get(`https://fitbite-roan.vercel.app/user/getUserById/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`http://localhost:5000/user/getFitnessById/${userId}`, {
+          axios.get(`https://fitbite-roan.vercel.app/user/getFitnessById/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);

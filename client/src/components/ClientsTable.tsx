@@ -20,7 +20,7 @@ const ClientsTable = () => {
       setLoading(true)
 
       try {
-        const res = await axios.get("http://localhost:5000/user/getAllUsers", {
+        const res = await axios.get("https://fitbite-roan.vercel.app/user/getAllUsers", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -32,7 +32,7 @@ const ClientsTable = () => {
               let unreadCount = 0;
 
               try {
-                const msgRes = await axios.get(`http://localhost:5000/chat/getMessages/${user._id}`, {
+                const msgRes = await axios.get(`https://fitbite-roan.vercel.app/chat/getMessages/${user._id}`, {
                   headers: { Authorization: `Bearer ${token}` },
                 });
                 const messages = msgRes.data;
@@ -89,7 +89,7 @@ const ClientsTable = () => {
     try {
       await Promise.all(
         clients.map((client) =>
-          axios.patch(`http://localhost:5000/chat/mark-read/${client._id}`, {}, {
+          axios.patch(`https://fitbite-roan.vercel.app/chat/mark-read/${client._id}`, {}, {
             headers: { Authorization: `Bearer ${token}` },
           })
         )

@@ -1,0 +1,12 @@
+name: Update User Status Daily
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  ping-vercel-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cron API
+        run: curl -s -o /dev/null -w "%{http_code}" https://fitbite-roan.vercel.app/cron/update-user-status

@@ -49,7 +49,7 @@ export default function Progress() {
   const formData = JSON.parse(localStorage.getItem("formData") || "{}");
   const token = localStorage.getItem("token");
   const userId = formData.userId;
-  const TDEE = formData.TDEE;;
+  const TDEE = Number(formData.TDEE || 0);
 
   const [todayDate, setTodayDate] = useState(formatDate(new Date()));
   const [todayTracking, setTodayTracking] = useState<DailyTrackingData | null>(null);
@@ -121,13 +121,12 @@ export default function Progress() {
       const dateStr = d.format("YYYY-MM-DD");
       const doc = weeklyTrackings[dateStr];
       const calories = doc?.totalNutrition?.calories || 0;
-      const percent = TDEE ? Math.round((calories / TDEE) * 100) : 0;
       const status =
-        calories === 0 ? "low" : calories > TDEE ? "over" : "achieved";
+        calories < TDEE ? "low" : calories > TDEE ? "over" : "achieved";
       arr.push({
         dayShort: d.format("dd").slice(0, 1),
         date: dateStr,
-        value: Math.min(percent, 140),
+        value: calories,
         status
       });
     }
@@ -136,10 +135,21 @@ export default function Progress() {
 
   const weeklyMacros: WeeklyMacroItem[] = (() => {
     const doc = weeklyTrackings[weekEndDate];
+
+    const getStatusColor = (value: number, target: number) => {
+      if (value < target) return "bg-yellow-400";   
+      if (value > target) return "bg-red-400";   
+      return "bg-green-400";                    
+    };
+
+    const carbs = doc?.totalNutrition?.carbs || 0;
+    const protein = doc?.totalNutrition?.protein || 0;
+    const fat = doc?.totalNutrition?.fat || 0;
+
     return [
-      { label: "Carbohydrate", min: 140, target: 250, value: doc?.totalNutrition?.carbs || 0, colorClass: "bg-green-400" },
-      { label: "Protein", min: 60, target: 120, value: doc?.totalNutrition?.protein || 0, colorClass: "bg-red-400" },
-      { label: "Fat", min: 30, target: 70, value: doc?.totalNutrition?.fat || 0, colorClass: "bg-yellow-400" }
+      { label: "Carbohydrate", min: 140, target: 250, value: carbs, colorClass: getStatusColor(carbs, 250) },
+      { label: "Protein", min: 60, target: 120, value: protein, colorClass: getStatusColor(protein, 120) },
+      { label: "Fat", min: 30, target: 70, value: fat, colorClass: getStatusColor(fat, 70) }
     ];
   })();
 
@@ -230,30 +240,71 @@ export default function Progress() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-2xl shadow">
-          <h3 className="font-semibold mb-4">Calories</h3>
-          <div className="flex flex-col">
-            <div className="flex justify-end text-xs text-gray-500 mb-2 gap-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold">Calories</h3>
+
+            <div className="flex justify-end text-xs text-gray-500 gap-4">
               <div className="flex items-center gap-1"><span className="w-3 h-3 bg-green-400 rounded-sm inline-block" /> Achieved</div>
               <div className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-400 rounded-sm inline-block" /> Low</div>
               <div className="flex items-center gap-1"><span className="w-3 h-3 bg-red-400 rounded-sm inline-block" /> Over</div>
             </div>
+          </div>
+          <div className="flex flex-col">
+            <div className="relative w-full h-44">
+              {/* dynamic scaling */}
+              {(() => {
+                const chartHeight = 176;
+                const maxCal = Math.max(TDEE, ...weeklyCalories.map(w => w.value));
+                const targetY = chartHeight - (TDEE / maxCal) * chartHeight;
 
-            <div className="grid grid-cols-7 items-end gap-3 h-44">
-              {weeklyCalories.map((d, i) => {
-                const barHeight = Math.max(6, d.value);
-                const bg =
-                  d.status === "achieved"
-                    ? "bg-green-400"
-                    : d.status === "low"
-                      ? "bg-yellow-400"
-                      : "bg-red-400";
                 return (
-                  <div key={i} className="flex flex-col items-center">
-                    <div className={`w-6 ${bg} rounded-md`} style={{ height: `${barHeight}%` }} />
-                    <div className="text-xs mt-2 text-gray-600">{d.dayShort}</div>
-                  </div>
+                  <>
+                    {/* Target label */}
+                    <div
+                      className="absolute left-0 text-xs text-gray-500"
+                      style={{ top: `${targetY - 10}px` }}
+                    >
+                      Target
+                    </div>
+
+                    {/* Target dashed line */}
+                    <div
+                      className="absolute left-10 right-0 border-t border-dashed border-gray-400"
+                      style={{ top: `${targetY}px` }}
+                    />
+
+                    {/* Bar section */}
+                    <div className="absolute bottom-0 grid grid-cols-7 items-end gap-3 w-full h-full">
+                      {weeklyCalories.map((d, i) => {
+                        const barHeight = (d.value / maxCal) * chartHeight;
+
+                        const bg =
+                          d.status === "achieved"
+                            ? "bg-green-400"
+                            : d.status === "low"
+                              ? "bg-yellow-400"
+                              : "bg-red-400";
+
+                        return (
+                          <div key={i} className="flex flex-col items-center">
+                            {/* Bar */}
+                            <div
+                              className={`w-6 ${bg} rounded-md transition-all`}
+                              style={{ height: `${barHeight}px` }}
+                            />
+
+                            {/* Day */}
+                            <div className="text-xs mt-2 text-gray-600">{d.dayShort}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 0 kcal dashed line */}
+                    <div className="absolute left-0 right-0 bottom-0 border-t border-dashed border-gray-400" />
+                  </>
                 );
-              })}
+              })()}
             </div>
           </div>
         </div>
@@ -261,6 +312,12 @@ export default function Progress() {
         <div className="bg-white p-6 rounded-2xl shadow">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold">Macro Nutritions</h3>
+
+            <div className="flex justify-end text-xs text-gray-500 mb-2 gap-4">
+              <div className="flex items-center gap-1"><span className="w-3 h-3 bg-green-400 rounded-sm inline-block" /> Achieved</div>
+              <div className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-400 rounded-sm inline-block" /> Low</div>
+              <div className="flex items-center gap-1"><span className="w-3 h-3 bg-red-400 rounded-sm inline-block" /> Over</div>
+            </div>
           </div>
 
           <div className="space-y-6">

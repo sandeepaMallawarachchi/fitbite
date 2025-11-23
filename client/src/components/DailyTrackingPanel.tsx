@@ -38,7 +38,7 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
     const fetchTracking = async () => {
         const today = getTodayString();
         try {
-            const res = await axios.get(`http://localhost:5000/dailyTracking/getDailyTracking/${userId}/${today}`, {
+            const res = await axios.get(`https://fitbite-roan.vercel.app/dailyTracking/getDailyTracking/${userId}/${today}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -53,7 +53,7 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
                     meals: [],
                 };
                 setTracking(newTracking);
-                await axios.post("http://localhost:5000/dailyTracking/saveDailyTracking", { userId, ...newTracking }, {
+                await axios.post("https://fitbite-roan.vercel.app/dailyTracking/saveDailyTracking", { userId, ...newTracking }, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
             }
@@ -78,10 +78,10 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
 
     return (
         <div className="grid sm:grid-cols-4 sm:grid-rows-1 grid-cols-2 grid-rows-2 justify-center gap-6 sm:text-sm text-xs text-gray-600 bg-white rounded-full p-4 shadow-sm">
-            <span>{tracking.totalNutrition.calories} / {TDEE} kcal</span>
-            <span>{tracking.totalNutrition.protein}g protein</span>
-            <span>{tracking.totalNutrition.carbs}g carbs</span>
-            <span>{tracking.totalNutrition.fat}g fat</span>
+            <p><span className="text-blue-400">{tracking.totalNutrition.calories} / {TDEE} </span>kcal</p>
+            <p><span className="text-yellow-400">{tracking.totalNutrition.protein}g</span> protein</p>
+            <p><span className="text-green-400">{tracking.totalNutrition.carbs}g </span>carbs</p>
+            <p><span className="text-[#C378DD]">{tracking.totalNutrition.fat}g </span>fat</p>
         </div>
     );
 };

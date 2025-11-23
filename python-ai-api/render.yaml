@@ -2,8 +2,9 @@ services:
   - type: web
     name: fitbite-ai-api
     env: python
+    rootDir: python-ai-api
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: GROQ_API_KEY
         sync: false

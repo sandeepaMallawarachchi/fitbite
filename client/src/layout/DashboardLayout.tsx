@@ -6,7 +6,6 @@ import {
     ChartPie,
     File,
     User,
-    Settings,
     Search,
     LogOut,
     Users,
@@ -54,11 +53,11 @@ const DashboardLayout = () => {
                 icon: <Users className="w-5 h-5" />,
                 path: "/dashboard/clients",
             },
-            {
-                label: "Settings",
-                icon: <Settings className="w-5 h-5" />,
-                path: "/dashboard/settings",
-            },
+            // {
+            //     label: "Settings",
+            //     icon: <Settings className="w-5 h-5" />,
+            //     path: "/dashboard/settings",
+            // },
         ]
         : [
             {
@@ -81,11 +80,11 @@ const DashboardLayout = () => {
                 icon: <User className="w-5 h-5" />,
                 path: "/dashboard/profile",
             },
-            {
-                label: "Settings",
-                icon: <Settings className="w-5 h-5" />,
-                path: "/dashboard/settings",
-            },
+            // {
+            //     label: "Settings",
+            //     icon: <Settings className="w-5 h-5" />,
+            //     path: "/dashboard/settings",
+            // },
         ];
 
     useEffect(() => {

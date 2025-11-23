@@ -1,0 +1,63 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+
+# PyInstaller
+*.spec
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+pytest_cache/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+log/
+
+# Database files
+*.sqlite3
+*.db
+
+# Temporary files
+*.temp
+*.tmp
+tmp/
+temp/
+
+# Model files / ML weights
+*.bin
+*.safetensors
+*.pt
+*.pth
+models/
+hf_cache/
+
+# Local uploads
+uploads/

@@ -131,9 +131,9 @@ export default function Progress() {
     };
 
     return [
-      { label: "Protein", goal: goals.Protein, current: t?.totalNutrition?.protein || 0, colorClass: "bg-blue-500" },
-      { label: "Carbs", goal: goals.Carbs, current: t?.totalNutrition?.carbs || 0, colorClass: "bg-yellow-400" },
-      { label: "Fat", goal: goals.Fat, current: t?.totalNutrition?.fat || 0, colorClass: "bg-red-400" }
+      { label: "Carbohydrate", goal: goals.Carbs, current: t?.totalNutrition?.carbs || 0, colorClass: "bg-gradient-to-r from-[#8FE289] to-[#30B7AD]" },
+      { label: "Protein", goal: goals.Protein, current: t?.totalNutrition?.protein || 0, colorClass: "bg-gradient-to-r from-[#E2D389] to-[#FCAF3B]" },
+      { label: "Fat", goal: goals.Fat, current: t?.totalNutrition?.fat || 0, colorClass: "bg-gradient-to-r from-[#E289E1] to-[#C378DD]" }
     ];
   })();
 

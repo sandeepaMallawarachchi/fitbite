@@ -25,6 +25,7 @@ import ClientsDetailsTable from './pages/ClientsDetailsTable';
 import Profile from './pages/Profile';
 import Progress from './components/Progress';
 import MealPlan from './components/MealPlan';
+import Settings from './pages/Settings';
 
 function AppContent() {
   const location = useLocation();
@@ -93,7 +94,7 @@ function AppContent() {
             <Route path="profile" element={<Profile />} />
             <Route path="progress" element={<Progress />} />
             <Route path="meal-plan" element={<MealPlan />} />
-            {/* <Route path="settings" element={<Settings />} /> */}
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
 

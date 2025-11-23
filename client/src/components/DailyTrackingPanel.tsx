@@ -78,10 +78,26 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
 
     return (
         <div className="grid sm:grid-cols-4 sm:grid-rows-1 grid-cols-2 grid-rows-2 justify-center gap-6 sm:text-sm text-xs text-gray-600 bg-white rounded-full p-4 shadow-sm">
-            <p><span className="text-blue-400">{tracking.totalNutrition.calories} / {TDEE} </span>kcal</p>
-            <p><span className="text-yellow-400">{tracking.totalNutrition.protein}g</span> protein</p>
-            <p><span className="text-green-400">{tracking.totalNutrition.carbs}g </span>carbs</p>
-            <p><span className="text-[#C378DD]">{tracking.totalNutrition.fat}g </span>fat</p>
+            <p>
+                <span className="text-blue-400">
+                    {Number(tracking.totalNutrition.calories).toFixed(2)} / {Number(TDEE).toFixed(2)}
+                </span> kcal
+            </p>
+            <p>
+                <span className="text-yellow-400">
+                    {Number(tracking.totalNutrition.protein).toFixed(2)}g
+                </span> protein
+            </p>
+            <p>
+                <span className="text-green-400">
+                    {Number(tracking.totalNutrition.carbs).toFixed(2)}g
+                </span> carbs
+            </p>
+            <p>
+                <span className="text-[#C378DD]">
+                    {Number(tracking.totalNutrition.fat).toFixed(2)}g
+                </span> fat
+            </p>
         </div>
     );
 };

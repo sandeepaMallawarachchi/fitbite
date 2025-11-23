@@ -66,8 +66,13 @@ const ClientsDetailsTable = () => {
                         };
                     });
 
-                setClients(enrichedClients);
-                setFilteredClients(enrichedClients);
+                const sortedClients = enrichedClients.sort(
+                    (a: ExtendedClient, b: ExtendedClient) =>
+                        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
+
+                setClients(sortedClients);
+                setFilteredClients(sortedClients);
             } catch (err) {
                 console.error("Error fetching unified client details", err);
             } finally {

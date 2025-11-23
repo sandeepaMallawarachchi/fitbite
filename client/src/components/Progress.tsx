@@ -42,6 +42,21 @@ type WeeklyMacroItem = {
   colorClass: string;
 };
 
+type MealPlan = {
+  totalCarbs: number;
+  totalProtein: number;
+  totalFat: number;
+};
+
+type MealPlanLimits = {
+  carbsMin: number;
+  proteinMin: number;
+  fatMin: number;
+  carbsTarget: number;
+  proteinTarget: number;
+  fatTarget: number;
+};
+
 const API_BASE = "https://fitbite-roan.vercel.app";
 const formatDate = (d: Date) => d.toISOString().split("T")[0];
 
@@ -57,6 +72,7 @@ export default function Progress() {
 
   const [weekEndDate, setWeekEndDate] = useState(formatDate(new Date()));
   const [weeklyTrackings, setWeeklyTrackings] = useState<Record<string, DailyTrackingData | null>>({});
+  const [mealPlan, setMealPlan] = useState<MealPlan | null>(null);
 
   const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
 
@@ -66,6 +82,15 @@ export default function Progress() {
         `${API_BASE}/dailyTracking/getDailyTracking/${userId}/${dateStr}`,
         { headers }
       );
+      return r.data || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const fetchMealPlan = async () => {
+    try {
+      const r = await axios.get(`${API_BASE}/mealPlan/get/${userId}`, { headers });
       return r.data || null;
     } catch {
       return null;
@@ -91,12 +116,15 @@ export default function Progress() {
     const loadAll = async () => {
       if (token && userId) {
         setLoading(true);
+
+        const mp = await fetchMealPlan();
+        setMealPlan(mp);
+
         await fetchToday();
         await fetchWeek();
         setLoading(false);
       }
     };
-
     loadAll();
   }, [token, userId]);
 
@@ -104,7 +132,13 @@ export default function Progress() {
 
   const todayMacros: MacroItem[] = (() => {
     const t = todayTracking;
-    const goals = { Protein: 120, Carbs: 250, Fat: 70 };
+
+    const goals = {
+      Protein: mealPlan?.totalProtein || 0,
+      Carbs: mealPlan?.totalCarbs || 0,
+      Fat: mealPlan?.totalFat || 0
+    };
+
     return [
       { label: "Protein", goal: goals.Protein, current: t?.totalNutrition?.protein || 0, colorClass: "bg-blue-500" },
       { label: "Carbs", goal: goals.Carbs, current: t?.totalNutrition?.carbs || 0, colorClass: "bg-yellow-400" },
@@ -145,10 +179,19 @@ export default function Progress() {
     const protein = doc?.totalNutrition?.protein || 0;
     const fat = doc?.totalNutrition?.fat || 0;
 
+    const targetCarbs = mealPlan?.totalCarbs || 0;
+    const targetProtein = mealPlan?.totalProtein || 0;
+    const targetFat = mealPlan?.totalFat || 0;
+
+    // define minimums (40–50% of target)
+    const minCarbs = targetCarbs * 0.5;
+    const minProtein = targetProtein * 0.5;
+    const minFat = targetFat * 0.5;
+
     return [
-      { label: "Carbohydrate", min: 140, target: 250, value: carbs, colorClass: getStatusColor(carbs, 250) },
-      { label: "Protein", min: 60, target: 120, value: protein, colorClass: getStatusColor(protein, 120) },
-      { label: "Fat", min: 30, target: 70, value: fat, colorClass: getStatusColor(fat, 70) }
+      { label: "Carbohydrate", min: minCarbs, target: targetCarbs, value: carbs, colorClass: getStatusColor(carbs, targetCarbs) },
+      { label: "Protein", min: minProtein, target: targetProtein, value: protein, colorClass: getStatusColor(protein, targetProtein) },
+      { label: "Fat", min: minFat, target: targetFat, value: fat, colorClass: getStatusColor(fat, targetFat) }
     ];
   })();
 

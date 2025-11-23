@@ -238,7 +238,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
             );
 
             const res = await axios.post(
-                "http://localhost:5001/api/chat",
+                "https://fitbite-3vu1.onrender.com/api/chat",
                 {
                     userData: {
                         name: formData.name,

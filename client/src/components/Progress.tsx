@@ -195,9 +195,9 @@ export default function Progress() {
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
             <h3 className="text-lg font-semibold">Macro Nutritions</h3>
-            <div className="text-sm text-gray-500 grid grid-cols-3 gap-6">
+            <div className="text-sm text-gray-500 grid grid-cols-3 md:gap-16 gap-10">
               <div className="text-right">Goal</div>
               <div className="text-right">Current</div>
               <div className="text-right">Left</div>

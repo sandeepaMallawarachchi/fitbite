@@ -83,6 +83,7 @@ MACRO CALCULATION RULES:
 
 MEAL STRUCTURE:
 Create EXACTLY 4 meals:
+TOTAL daily calories MUST equal EXACTLY TDEE kcal
 1. Meal 1 - Breakfast (500-700 kcal)
 2. Meal 2 - Lunch (500-700 kcal)
 3. Meal 3 - Snack (200-350 kcal)
@@ -92,7 +93,7 @@ Return ONLY a valid JSON object with this structure:
 {{
   "userId": "{user_data.get('userId')}",
   "date": "{current_date}",
-  "totalCalories": <calculated>,
+  "totalCalories": TDEE,
   "totalCarbs": <calculated>,
   "totalProtein": <calculated>,
   "totalFat": <calculated>,

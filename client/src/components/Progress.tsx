@@ -50,6 +50,7 @@ export default function Progress() {
   const token = localStorage.getItem("token");
   const userId = formData.userId;
   const TDEE = Number(formData.TDEE || 0);
+  const [loading, setLoading] = useState(true);
 
   const [todayDate, setTodayDate] = useState(formatDate(new Date()));
   const [todayTracking, setTodayTracking] = useState<DailyTrackingData | null>(null);
@@ -87,19 +88,17 @@ export default function Progress() {
   };
 
   useEffect(() => {
-    if (token && userId) {
-      fetchToday();
-      fetchWeek();
-    }
+    const loadAll = async () => {
+      if (token && userId) {
+        setLoading(true);
+        await fetchToday();
+        await fetchWeek();
+        setLoading(false);
+      }
+    };
+
+    loadAll();
   }, [token, userId]);
-
-  useEffect(() => {
-    fetchToday();
-  }, [todayDate]);
-
-  useEffect(() => {
-    fetchWeek();
-  }, [weekEndDate]);
 
   const calcPercent = (c: number, g: number) => (g > 0 ? Math.min((c / g) * 100, 100) : 0);
 
@@ -137,9 +136,9 @@ export default function Progress() {
     const doc = weeklyTrackings[weekEndDate];
 
     const getStatusColor = (value: number, target: number) => {
-      if (value < target) return "bg-yellow-400";   
-      if (value > target) return "bg-red-400";   
-      return "bg-green-400";                    
+      if (value < target) return "bg-yellow-400";
+      if (value > target) return "bg-red-400";
+      return "bg-green-400";
     };
 
     const carbs = doc?.totalNutrition?.carbs || 0;
@@ -158,6 +157,90 @@ export default function Progress() {
 
   const gotoPrevWeek = () => setWeekEndDate(dayjs(weekEndDate).subtract(7, "day").format("YYYY-MM-DD"));
   const gotoNextWeek = () => setWeekEndDate(dayjs(weekEndDate).add(7, "day").format("YYYY-MM-DD"));
+
+  if (loading) {
+    return (
+      <div className="w-full p-6 space-y-8 animate-pulse">
+
+        {/* Today Skeleton Header */}
+        <div className="flex items-center justify-between">
+          <div className="h-6 w-40 bg-gray-200 rounded-md"></div>
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+            <div className="h-8 w-32 bg-gray-200 rounded-md"></div>
+            <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+          </div>
+        </div>
+
+        {/* Today Progress Skeleton Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Calories Card */}
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <div className="h-5 w-32 bg-gray-200 rounded-md mb-4"></div>
+            <div className="flex flex-col items-center">
+              <div className="w-44 h-44 rounded-full bg-gray-200"></div>
+              <div className="h-4 mt-4 w-28 bg-gray-200 rounded-md"></div>
+            </div>
+          </div>
+
+          {/* Macros Card */}
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <div className="h-5 w-40 bg-gray-200 rounded-md mb-6"></div>
+
+            <div className="space-y-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i}>
+                  <div className="flex justify-between mb-2">
+                    <div className="h-4 w-20 bg-gray-200 rounded-md"></div>
+                    <div className="h-4 w-48 bg-gray-200 rounded-md"></div>
+                  </div>
+                  <div className="w-full h-3 bg-gray-100 rounded-full"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Week Section Header */}
+        <div className="flex items-center justify-between">
+          <div className="h-6 w-40 bg-gray-200 rounded-md"></div>
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+            <div className="h-8 w-44 bg-gray-200 rounded-md"></div>
+            <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+          </div>
+        </div>
+
+        {/* Week Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Weekly Calories Skeleton */}
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <div className="h-5 w-32 bg-gray-200 rounded mb-6"></div>
+            <div className="w-full h-44 bg-gray-100 rounded-xl"></div>
+          </div>
+
+          {/* Weekly Macros Skeleton */}
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <div className="h-5 w-40 bg-gray-200 rounded mb-6"></div>
+
+            <div className="space-y-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i}>
+                  <div className="flex justify-between mb-2">
+                    <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    <div className="h-4 w-10 bg-gray-200 rounded"></div>
+                  </div>
+                  <div className="w-full h-4 bg-gray-100 rounded-full"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-6 space-y-8">

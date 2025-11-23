@@ -23,6 +23,8 @@ import CoachDashboard from './pages/dashboard/CoachDashboard';
 import SmartMealAssistantWrapper from './pages/SmartMealAssistantWrapper';
 import ClientsDetailsTable from './pages/ClientsDetailsTable';
 import Profile from './pages/Profile';
+import Progress from './components/Progress';
+import MealPlan from './components/MealPlan';
 
 function AppContent() {
   const location = useLocation();
@@ -89,9 +91,9 @@ function AppContent() {
             <Route path="smart-assistant" element={<SmartMealAssistantWrapper />} />
             <Route path="clients" element={<ClientsDetailsTable />} />
             <Route path="profile" element={<Profile />} />
-            {/* <Route path="meal-plan" element={<MealPlan />} />
-          <Route path="progress" element={<Progress />} />
-          <Route path="settings" element={<Settings />} /> */}
+            <Route path="progress" element={<Progress />} />
+            <Route path="meal-plan" element={<MealPlan />} />
+            {/* <Route path="settings" element={<Settings />} /> */}
           </Route>
         </Route>
 

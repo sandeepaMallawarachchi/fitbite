@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
+import MealPlanGeneratorButton from "./MealPlanGeneratorButton";
 
 type Item = {
     id: string;
@@ -40,7 +41,7 @@ export default function MealPlan() {
     const headers = { Authorization: `Bearer ${token}` };
 
     const [plan, setPlan] = useState<MealPlan | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(true);
 
     const defaultPlan = (uid: string): MealPlan => ({
         userId: uid,
@@ -59,16 +60,19 @@ export default function MealPlan() {
 
     const fetchPlan = async () => {
         if (!userId || !token) return;
-        setLoading(true);
         try {
             const res = await axios.get(`${API_BASE}/mealPlan/get/${userId}`, { headers });
             if (res.data) {
                 setPlan(res.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error("Error fetching meal plan:", err);
+            // If 404 or no plan found, keep plan as null to show generate button
+            if (err.response?.status === 404) {
+                setPlan(null);
+            }
         } finally {
-            setLoading(false);
+            setInitialLoading(false);
         }
     };
 
@@ -86,14 +90,79 @@ export default function MealPlan() {
         };
     }, [plan]);
 
-    if (loading) {
-        return <div className="w-full p-6">Loading...</div>;
+    const handlePlanGenerated = (generatedPlan: MealPlan) => {
+        setPlan(generatedPlan);
+    };
+
+    const hasExistingPlan = plan !== null && plan.meals.some(meal => meal.items.length > 0);
+
+    if (initialLoading) {
+        return (
+            <div className="w-full p-6 space-y-6 animate-pulse">
+                {/* Top Header Skeleton */}
+                <div className="flex items-center justify-between">
+                    <div className="h-6 w-40 bg-gray-200 rounded"></div>
+
+                    <div className="bg-white px-4 py-3 rounded-2xl shadow flex items-center gap-10">
+                        <div className="flex items-center gap-10">
+                            <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                            <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                            <div className="h-4 w-28 bg-gray-200 rounded"></div>
+                            <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                            <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                            <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Cards Skeleton */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    {[1, 2, 3, 4].map((num) => (
+                        <div key={num} className="bg-white p-6 rounded-2xl shadow space-y-4">
+                            {/* Title + Calories */}
+                            <div className="flex justify-between items-start">
+                                <div className="h-5 w-40 bg-gray-200 rounded"></div>
+                                <div className="h-5 w-16 bg-gray-200 rounded"></div>
+                            </div>
+
+                            {/* Items Skeleton */}
+                            <div className="space-y-2">
+                                {[1, 2].map((i) => (
+                                    <div key={i} className="flex justify-between items-center">
+                                        <div className="h-4 w-40 bg-gray-200 rounded"></div>
+                                        <div className="h-4 w-10 bg-gray-200 rounded"></div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Macros Footer */}
+                            <div className="flex items-center justify-between mt-4 bg-gray-100 px-4 py-3 rounded-lg">
+                                <div className="h-4 w-24 bg-gray-300 rounded"></div>
+                                <div className="h-4 w-20 bg-gray-300 rounded"></div>
+                                <div className="h-4 w-16 bg-gray-300 rounded"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
     }
 
     return (
         <div className="w-full p-6 space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold">Daily Meal Plan</h1>
+                <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-semibold">Daily Meal Plan</h1>
+                    
+                    {/* Generate Button Component */}
+                    <MealPlanGeneratorButton
+                        userId={userId}
+                        formData={formData}
+                        token={token}
+                        onPlanGenerated={handlePlanGenerated}
+                        hasExistingPlan={hasExistingPlan}
+                    />
+                </div>
 
                 <div className="bg-white px-4 py-2 rounded-2xl shadow flex items-center justify-between">
                     <div className="flex items-center gap-10">

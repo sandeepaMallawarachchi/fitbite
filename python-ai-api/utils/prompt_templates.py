@@ -1,5 +1,6 @@
+from datetime import datetime
+
 def get_meal_tracking_prompt(user_data, daily_tracking, user_message):
-    """Generate prompt for meal tracking chat"""
     return f"""You are a professional nutrition assistant for FitBite. Help users track their meals and provide nutritional guidance.
 
 User Profile:
@@ -11,7 +12,7 @@ User Profile:
 - Goal: {user_data.get('fitnessGoal', {}).get('primaryGoal')}
 - Dietary Preference: {user_data.get('dietaryDetails', {}).get('preference')}
 
-Current Daily Totals:
+CURRENT DAILY TOTALS (ALREADY CONSUMED TODAY):
 - Calories: {daily_tracking.get('totalNutrition', {}).get('calories', 0)} kcal
 - Carbs: {daily_tracking.get('totalNutrition', {}).get('carbs', 0)}g
 - Protein: {daily_tracking.get('totalNutrition', {}).get('protein', 0)}g  
@@ -20,21 +21,42 @@ Current Daily Totals:
 
 User Message: {user_message}
 
-Instructions:
-1. Analyze the food mentioned and provide nutritional breakdown
-2. Use standard nutritional values per 100g
-3. Calculate exact macros based on portion size
-4. Format response with clear sections:
-   - **Meal Breakdown** with items and their macros
-   - **Total for this Meal** (sum of all items)
-   - **Updated Daily Totals** (add to existing totals)
-   - **Remaining Calories** (TDEE - total consumed)
-   - **Suggestion** (one sentence recommendation)
+CRITICAL INSTRUCTIONS:
+1. Calculate macros for THIS MEAL ONLY based on the foods mentioned
+2. In "Updated Daily Totals" section, ADD this meal's macros to the CURRENT totals above
+3. Show the calculation clearly: Current + New = Updated Total
 
-Respond in a structured, professional format with bullet points and clear calculations."""
+Response Format:
 
+**Meal Breakdown**
+- [Food 1]: [amount]g
+  Per 100g: [kcal] kcal, [carbs]g carbs, [protein]g protein, [fat]g fat
+  Scaled: [calculated_kcal] kcal, [calculated_carbs]g carbs, [calculated_protein]g protein, [calculated_fat]g fat
+
+**Total for this Meal**
+- Calories: [sum] kcal
+- Carbs: [sum]g
+- Protein: [sum]g
+- Fat: [sum]g
+
+**Updated Daily Totals**
+- Calories: {daily_tracking.get('totalNutrition', {}).get('calories', 0)} kcal + [this_meal_kcal] kcal = [new_total] kcal
+- Carbs: {daily_tracking.get('totalNutrition', {}).get('carbs', 0)}g + [this_meal_carbs]g = [new_total]g
+- Protein: {daily_tracking.get('totalNutrition', {}).get('protein', 0)}g + [this_meal_protein]g = [new_total]g
+- Fat: {daily_tracking.get('totalNutrition', {}).get('fat', 0)}g + [this_meal_fat]g = [new_total]g
+
+**Remaining Calories**
+- Remaining TDEE: {user_data.get('TDEE')} kcal - [new_total_kcal] kcal = [remaining] kcal
+
+**Suggestion**
+[One short, goal-based recommendation]
+
+CRITICAL: The "Total for this Meal" section must ONLY contain the macros from THIS meal. The "Updated Daily Totals" must show the equation of adding THIS meal to existing totals."""
 
 def get_meal_plan_generation_prompt(user_data):
+    
+    current_date = datetime.now().strftime('%Y-%m-%d')
+
     """Generate prompt for meal plan creation"""
     return f"""You are a professional nutritionist creating a daily meal plan.
 
@@ -69,7 +91,7 @@ Create EXACTLY 4 meals:
 Return ONLY a valid JSON object with this structure:
 {{
   "userId": "{user_data.get('userId')}",
-  "date": "2025-01-01",
+  "date": "{current_date}",
   "totalCalories": <calculated>,
   "totalCarbs": <calculated>,
   "totalProtein": <calculated>,

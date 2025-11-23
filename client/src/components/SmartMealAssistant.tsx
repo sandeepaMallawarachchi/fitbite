@@ -95,47 +95,61 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     const parseNutritionFromResponse = (response: string): DailyNutrition | null => {
         try {
+            const updatedDailyTotalsSection = response.match(/\*\*Updated Daily Totals\*\*([\s\S]*?)(?:\*\*|$)/i);
 
-            const totalMealMatch = response.match(/\*\*Total for this Meal\*\*[^]*?Calories:[^]*?(\d+(?:\.\d+)?)\s*kcal[^]*?Carbs:[^]*?(\d+(?:\.\d+)?)g[^]*?Protein:[^]*?(\d+(?:\.\d+)?)g[^]*?Fat:[^]*?(\d+(?:\.\d+)?)g/i);
+            if (updatedDailyTotalsSection) {
+                const section = updatedDailyTotalsSection[1];
 
-            if (totalMealMatch) {
-                const nutrition = {
-                    calories: parseFloat(totalMealMatch[1]),
-                    carbs: parseFloat(totalMealMatch[2]),
-                    protein: parseFloat(totalMealMatch[3]),
-                    fat: parseFloat(totalMealMatch[4]),
-                    fiber: 0
-                };
-                return nutrition;
+                const calorieMatch = section.match(/Calories?:[^=]*=\s*(\d+(?:\.\d+)?)\s*kcal/i);
+                const carbMatch = section.match(/Carbs?:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+                const proteinMatch = section.match(/Protein:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+                const fatMatch = section.match(/Fat:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+
+                if (calorieMatch && carbMatch && proteinMatch && fatMatch) {
+                    return {
+                        calories: parseFloat(calorieMatch[1]),
+                        carbs: parseFloat(carbMatch[1]),
+                        protein: parseFloat(proteinMatch[1]),
+                        fat: parseFloat(fatMatch[1]),
+                        fiber: 0
+                    };
+                }
             }
 
-            const updatedTotalsSection = response.match(/\*\*Updated Daily Totals\*\*[^]*?Calories:\s*\d+\s*kcal\s*\+\s*(\d+(?:\.\d+)?)\s*kcal[^]*?Carbs:\s*[\d.]+g\s*\+\s*([\d.]+)g[^]*?Protein:\s*[\d.]+g\s*\+\s*([\d.]+)g[^]*?Fat:\s*[\d.]+g\s*\+\s*([\d.]+)g/i);
+            const totalMealSection = response.match(/\*\*Total for this Meal\*\*([\s\S]*?)(?:\*\*|$)/i);
 
-            if (updatedTotalsSection) {
-                const nutrition = {
-                    calories: parseFloat(updatedTotalsSection[1]),
-                    carbs: parseFloat(updatedTotalsSection[2]),
-                    protein: parseFloat(updatedTotalsSection[3]),
-                    fat: parseFloat(updatedTotalsSection[4]),
-                    fiber: 0
-                };
-                return nutrition;
+            if (totalMealSection) {
+                const section = totalMealSection[1];
+
+                const calorieMatch = section.match(/Calories?:[^=]*=\s*(\d+(?:\.\d+)?)\s*kcal/i);
+                const carbMatch = section.match(/Carbs?:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+                const proteinMatch = section.match(/Protein:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+                const fatMatch = section.match(/Fat:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+
+                if (calorieMatch && carbMatch && proteinMatch && fatMatch) {
+                    return {
+                        calories: parseFloat(calorieMatch[1]),
+                        carbs: parseFloat(carbMatch[1]),
+                        protein: parseFloat(proteinMatch[1]),
+                        fat: parseFloat(fatMatch[1]),
+                        fiber: 0
+                    };
+                }
             }
 
             const calorieMatch = response.match(/(\d+(?:\.\d+)?)\s*(?:kcal|calories)/i);
-            const carbMatch = response.match(/(\d+(?:\.\d+)?)g[^]*?carbs?/i);
-            const proteinMatch = response.match(/(\d+(?:\.\d+)?)g[^]*?protein/i);
-            const fatMatch = response.match(/(\d+(?:\.\d+)?)g[^]*?fat/i);
+            const carbMatch = response.match(/(\d+(?:\.\d+)?)g?\s*carbs?/i);
+            const proteinMatch = response.match(/(\d+(?:\.\d+)?)g?\s*protein/i);
+            const fatMatch = response.match(/(\d+(?:\.\d+)?)g?\s*fat/i);
 
             if (calorieMatch) {
-                const nutrition = {
+                return {
                     calories: parseFloat(calorieMatch[1]),
                     carbs: carbMatch ? parseFloat(carbMatch[1]) : 0,
                     protein: proteinMatch ? parseFloat(proteinMatch[1]) : 0,
                     fat: fatMatch ? parseFloat(fatMatch[1]) : 0,
                     fiber: 0
                 };
-                return nutrition;
             }
 
         } catch (error) {
@@ -143,7 +157,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
         }
         return null;
     };
-
+    
     const findExistingMeal = (messageContent: string): string | null => {
         if (!dailyTracking) return null;
 
@@ -223,80 +237,41 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 }
             );
 
-            const systemPrompt = `
-              You're a professional smart meal tracking assistant for a fitness client with the following profile:
-                - Name: ${formData.name}
-                - Email: ${formData.email}
-                - Phone: ${formData.phone}
-                - Gender: ${formData.gender}
-                - Height: ${formData.height} cm
-                - Weight: ${formData.weight} kg
-                - Birthday: ${formData.birthday}
-                - TDEE: ${formData.TDEE} kcal
-                - Primary Goal: ${formData.fitnessGoal?.primaryGoal}
-                - Goal Weight: ${formData.fitnessGoal?.goalWeight}
-                - Progress: ${formData.fitnessGoal?.progress || "N/A"}
-                - Meal Frequency: ${formData.mealHabits?.dailyMeals}
-                - Dietary Preference: ${formData.dietaryDetails?.preference}
-                - Medical Conditions: ${formData.medicalDetails?.medicalConditions}
-
-                CURRENT DAILY TOTALS (so far today):
-                - Calories: ${dailyTracking.totalNutrition.calories} kcal
-                - Carbs: ${dailyTracking.totalNutrition.carbs}g
-                - Protein: ${dailyTracking.totalNutrition.protein}g  
-                - Fat: ${dailyTracking.totalNutrition.fat}g
-                - Remaining TDEE: ${dailyTracking.remainingTDEE} kcal
-
-                The user will log meals with food names and portion sizes.
-
-                Respond ONLY in this exact structured format:
-
-                1. **Meal Breakdown** – List each item with standard macros per 100g, then show the user's quantity and scaled macros (Calories, Carbs, Protein, Fat) with clear multiplication.
-                2. **Total for this Meal** – Sum Calories, Carbs, Protein, Fat for the meal.
-                3. **Updated Daily Totals** – Show totals so far vs daily targets (Calories, Protein, Carbs, Fat).
-                4. **Remaining Calories** – Show kcal left for the day.
-                5. **Suggestion** – Give 1 short, goal-based recommendation (e.g., "Add more protein to your next meal").
-
-                Rules:
-                - Use bullet points and clean markdown formatting.
-                - Perform precise calculations (show equations where relevant).
-                - No extra commentary or greetings.
-                - Keep suggestion to 1 sentence only.
-                - When showing Updated Daily Totals, add the new meal to existing totals.
-
-                CRITICAL TRACKING REQUIREMENTS:
-                - Always calculate and display the EXACT remaining TDEE calories after subtracting this meal
-                - Maintain running totals for protein, carbs, and fat throughout the entire day
-                - Show cumulative progress toward daily macro targets in Updated Daily Totals
-                - Ensure all calculations are mathematically accurate and consistent
-                - Track and preserve nutritional data across all meals for continuous monitoring
-            `;
-
             const res = await axios.post(
-                "https://api.openai.com/v1/chat/completions",
+                "http://localhost:5001/api/chat",
                 {
-                    model: "gpt-4-1106-preview",
-                    messages: [
-                        {
-                            role: "system",
-                            content: systemPrompt,
-                        },
-                        {
-                            role: "user",
-                            content: currentMessage,
-                        },
-                    ],
-                    temperature: 0.7,
+                    userData: {
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        gender: formData.gender,
+                        height: formData.height,
+                        weight: formData.weight,
+                        birthday: formData.birthday,
+                        TDEE: formData.TDEE,
+                        fitnessGoal: formData.fitnessGoal,
+                        mealHabits: formData.mealHabits,
+                        dietaryDetails: formData.dietaryDetails,
+                        medicalDetails: formData.medicalDetails,
+                    },
+                    dailyTracking: {
+                        date: dailyTracking.date,
+                        totalNutrition: dailyTracking.totalNutrition,
+                        remainingTDEE: dailyTracking.remainingTDEE,
+                        originalTDEE: dailyTracking.originalTDEE,
+                    },
+                    message: currentMessage
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
                         "Content-Type": "application/json",
                     },
                 }
             );
 
-            const reply = res.data.choices[0].message.content;
+            const reply = res.data.response;
+            const nutritionFromAPI = res.data.nutrition;
+
             let index = 0;
             const fullText = reply;
             const typedTextRef = { current: "" };
@@ -320,7 +295,8 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
                 } else {
                     setLoading(false);
 
-                    const mealNutrition = parseNutritionFromResponse(fullText);
+                    const mealNutrition = nutritionFromAPI || parseNutritionFromResponse(fullText);
+
                     if (mealNutrition) {
                         const existingMealId = findExistingMeal(currentMessage);
 
@@ -374,9 +350,21 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
             };
 
             requestAnimationFrame(typeWriter);
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
             setLoading(false);
+
+            if (err.code === "ERR_NETWORK" || err.message?.includes("Network Error")) {
+                setChatHistory((prev) => [...prev, {
+                    role: "assistant",
+                    content: "Cannot connect to AI service. Please make sure the Python API is running on port 5001."
+                }]);
+            } else {
+                setChatHistory((prev) => [...prev, {
+                    role: "assistant",
+                    content: "Failed to get response. Please try again."
+                }]);
+            }
         }
     };
 

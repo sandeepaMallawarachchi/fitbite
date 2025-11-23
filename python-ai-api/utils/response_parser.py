@@ -2,14 +2,7 @@ import json
 import re
 
 def parse_nutrition_response(response_text):
-    """Parse AI response to extract nutrition data"""
     try:
-        # Try to extract JSON if present
-        json_match = re.search(r'\{[\s\S]*\}', response_text)
-        if json_match:
-            return json.loads(json_match.group())
-        
-        # If no JSON, extract macros from text
         nutrition = {
             'calories': 0,
             'carbs': 0,
@@ -17,32 +10,46 @@ def parse_nutrition_response(response_text):
             'fat': 0
         }
         
-        # Extract calories
+        total_meal_pattern = r'\*\*Total for this Meal\*\*[^\*]*?Calories?:\s*(\d+(?:\.\d+)?)\s*kcal[^\*]*?Carbs?:\s*(\d+(?:\.\d+)?)g[^\*]*?Protein:\s*(\d+(?:\.\d+)?)g[^\*]*?Fat:\s*(\d+(?:\.\d+)?)g'
+        match = re.search(total_meal_pattern, response_text, re.IGNORECASE | re.DOTALL)
+        
+        if match:
+            nutrition['calories'] = float(match.group(1))
+            nutrition['carbs'] = float(match.group(2))
+            nutrition['protein'] = float(match.group(3))
+            nutrition['fat'] = float(match.group(4))
+            return nutrition
+        
+        json_match = re.search(r'\{[\s\S]*\}', response_text)
+        if json_match:
+            parsed = json.loads(json_match.group())
+            if 'calories' in parsed:
+                return parsed
+        
         cal_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:kcal|calories)', response_text, re.IGNORECASE)
         if cal_match:
             nutrition['calories'] = float(cal_match.group(1))
         
-        # Extract carbs
         carb_match = re.search(r'(?:carbs?|carbohydrate)[\s:]*(\d+(?:\.\d+)?)g', response_text, re.IGNORECASE)
         if carb_match:
             nutrition['carbs'] = float(carb_match.group(1))
         
-        # Extract protein
         protein_match = re.search(r'protein[\s:]*(\d+(?:\.\d+)?)g', response_text, re.IGNORECASE)
         if protein_match:
             nutrition['protein'] = float(protein_match.group(1))
         
-        # Extract fat
         fat_match = re.search(r'fat[\s:]*(\d+(?:\.\d+)?)g', response_text, re.IGNORECASE)
         if fat_match:
             nutrition['fat'] = float(fat_match.group(1))
         
-        return nutrition
+        if nutrition['calories'] > 0:
+            return nutrition
+        
+        return None
         
     except Exception as e:
         print(f"Error parsing response: {str(e)}")
         return None
-
 
 def clean_json_response(text):
     """Clean and extract JSON from response"""

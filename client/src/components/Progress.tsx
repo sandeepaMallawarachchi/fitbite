@@ -48,15 +48,6 @@ type MealPlan = {
   totalFat: number;
 };
 
-type MealPlanLimits = {
-  carbsMin: number;
-  proteinMin: number;
-  fatMin: number;
-  carbsTarget: number;
-  proteinTarget: number;
-  fatTarget: number;
-};
-
 const API_BASE = "https://fitbite-roan.vercel.app";
 const formatDate = (d: Date) => d.toISOString().split("T")[0];
 

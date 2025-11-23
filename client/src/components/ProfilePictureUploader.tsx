@@ -70,7 +70,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({ onClose
         setIsUploading(true);
 
         try {
-            await axios.delete("http://localhost:5000/user/remove-profile-pic", {
+            await axios.delete("https://fitbite-roan.vercel.app/user/remove-profile-pic", {
                 headers: { Authorization: `Bearer ${token}` },
             });
             onUploadSuccess("");

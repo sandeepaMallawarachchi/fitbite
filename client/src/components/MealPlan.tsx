@@ -31,7 +31,7 @@ type MealPlan = {
     meals: Meal[];
 };
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://fitbite-roan.vercel.app";
 
 export default function MealPlan() {
     const formData = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("formData") || "{}") : {};

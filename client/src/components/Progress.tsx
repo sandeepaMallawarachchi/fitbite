@@ -42,7 +42,7 @@ type WeeklyMacroItem = {
   colorClass: string;
 };
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://fitbite-roan.vercel.app";
 const formatDate = (d: Date) => d.toISOString().split("T")[0];
 
 export default function Progress() {

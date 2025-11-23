@@ -24,7 +24,7 @@ const CoachInput: React.FC<CoachInputProps> = ({ userId, token, onMessageSent })
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/chat/saveMessage",
+      await axios.post("https://fitbite-roan.vercel.app/chat/saveMessage",
         { userId: userId, role: "coach", content: coachMsg.content },
         { headers: { Authorization: `Bearer ${token}` } }
       );

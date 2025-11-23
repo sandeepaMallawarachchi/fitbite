@@ -38,7 +38,7 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
     const fetchTracking = async () => {
         const today = getTodayString();
         try {
-            const res = await axios.get(`http://localhost:5000/dailyTracking/getDailyTracking/${userId}/${today}`, {
+            const res = await axios.get(`https://fitbite-roan.vercel.app/dailyTracking/getDailyTracking/${userId}/${today}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -53,7 +53,7 @@ const DailyTrackingPanel: React.FC<DailyTrackingPanelProps> = ({ userId, TDEE, t
                     meals: [],
                 };
                 setTracking(newTracking);
-                await axios.post("http://localhost:5000/dailyTracking/saveDailyTracking", { userId, ...newTracking }, {
+                await axios.post("https://fitbite-roan.vercel.app/dailyTracking/saveDailyTracking", { userId, ...newTracking }, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
             }

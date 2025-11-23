@@ -84,7 +84,7 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
         try {
             await axios.post(
-                "http://localhost:5000/dailyTracking/saveDailyTracking",
+                "https://fitbite-roan.vercel.app/dailyTracking/saveDailyTracking",
                 { userId: resolvedUserId, ...updatedTracking },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

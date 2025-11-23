@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: fitbite-ai-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: PORT
+        value: 10000
+      - key: FLASK_ENV
+        value: production

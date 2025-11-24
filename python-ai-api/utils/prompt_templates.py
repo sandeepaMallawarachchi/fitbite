@@ -86,16 +86,18 @@ MACRO CALCULATION RULES:
 
 MEAL STRUCTURE:
 Create EXACTLY 4 meals:
-1. Meal 1 - Breakfast (500-700 kcal)
-2. Meal 2 - Lunch (500-700 kcal)
-3. Meal 3 - Snack (200-350 kcal)
-4. Meal 4 - Dinner (500-700 kcal)
+TOTAL daily calories MUST equal EXACTLY TDEE kcal
+Distribute calories across 4 meals as follows:
+  1 Breakfast: 25-30% of TDEE kcal = TDEE * 0.25 - TDEE * 0.35 kcal
+  2 Lunch: 30-35% of TDEE kcal = TDEE * 0.30 - TDEE * 0.35 kcal
+  3 Snack: 10-15% of TDEE kcal = TDEE * 0.10 - TDEE * 0.15 kcal
+  4 Dinner: 30-35% of TDEE kcal = TDEE * 0.30 - TDEE * 0.35 kcal
 
 Return ONLY a valid JSON object with this structure:
 {{
   "userId": "{user_data.get('userId')}",
   "date": "{current_date}",
-  "totalCalories": <calculated>,
+  "totalCalories": TDEE,
   "totalCarbs": <calculated>,
   "totalProtein": <calculated>,
   "totalFat": <calculated>,

@@ -56,7 +56,6 @@ temp/
 *.safetensors
 *.pt
 *.pth
-models/
 hf_cache/
 
 # Local uploads

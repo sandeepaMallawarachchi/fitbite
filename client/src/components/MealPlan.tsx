@@ -151,9 +151,9 @@ export default function MealPlan() {
     return (
         <div className="w-full p-6 space-y-6">
             <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-semibold">Daily Meal Plan</h1>
+
                 <div className="flex items-center gap-4">
-                    <h1 className="text-2xl font-semibold">Daily Meal Plan</h1>
-                    
                     {/* Generate Button Component */}
                     <MealPlanGeneratorButton
                         userId={userId}
@@ -162,18 +162,17 @@ export default function MealPlan() {
                         onPlanGenerated={handlePlanGenerated}
                         hasExistingPlan={hasExistingPlan}
                     />
-                </div>
-
-                <div className="bg-white px-4 py-2 rounded-2xl shadow flex items-center justify-between">
-                    <div className="flex items-center gap-10">
-                        <div className="text-sm text-gray-500">Calories:</div>
-                        <div className="text-sm font-semibold text-blue-400">{topTotals.calories} kcal</div>
-                        <div className="text-sm text-gray-500">Carbohydrate:</div>
-                        <div className="text-sm font-semibold text-green-400">{topTotals.carbs}g</div>
-                        <div className="text-sm text-gray-500">Protein:</div>
-                        <div className="text-sm font-semibold text-yellow-400">{topTotals.protein}g</div>
-                        <div className="text-sm text-gray-500">Fat:</div>
-                        <div className="text-sm font-semibold text-[#C378DD]">{topTotals.fat}g</div>
+                    <div className="bg-white px-4 py-2 rounded-2xl shadow flex items-center justify-between">
+                        <div className="flex items-center gap-10">
+                            <div className="text-sm text-gray-500">Calories:</div>
+                            <div className="text-sm font-semibold text-blue-400">{topTotals.calories} kcal</div>
+                            <div className="text-sm text-gray-500">Carbohydrate:</div>
+                            <div className="text-sm font-semibold text-green-400">{topTotals.carbs}g</div>
+                            <div className="text-sm text-gray-500">Protein:</div>
+                            <div className="text-sm font-semibold text-yellow-400">{topTotals.protein}g</div>
+                            <div className="text-sm text-gray-500">Fat:</div>
+                            <div className="text-sm font-semibold text-[#C378DD]">{topTotals.fat}g</div>
+                        </div>
                     </div>
                 </div>
             </div>

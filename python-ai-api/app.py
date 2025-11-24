@@ -19,8 +19,8 @@ app = Flask(__name__)
 # Enable CORS
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:5173", "http://localhost:3000"],
-        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "origins": ["http://localhost:5173", "http://localhost:3000", "https://fitbite-three.vercel.app"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
 })
@@ -47,18 +47,18 @@ def health():
     })
 
 if __name__ == '__main__':
-    # Load model on startup
     print("Starting FitBite AI API...")
-    print("Loading AI model (this may take a few minutes)...")
+    print("Loading AI model...")
     
     if nutrition_ai.load_model():
         print("Model loaded successfully!")
-        print(f"Starting Flask server on port {os.getenv('PORT', 5001)}...")
+        port = int(os.getenv('PORT', 5001))
+        print(f"Starting Flask server on port {port}...")
         
         app.run(
             host='0.0.0.0',
-            port=int(os.getenv('PORT', 5001)),
-            debug=os.getenv('FLASK_ENV') == 'development'
+            port=port,
+            debug=False  # Always False in production
         )
     else:
         print("Failed to load model. Exiting...")

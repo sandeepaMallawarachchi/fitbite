@@ -198,11 +198,14 @@ export default function MealPlan() {
                                     </div>
 
                                     <div className="w-20 text-right text-xs text-gray-500">
-                                        <input
-                                            className="w-full text-right text-xs"
-                                            value={it.grams || ""}
-                                            readOnly
-                                        />
+                                        <div className="flex flex-row justify-between items-center gap-1">
+                                            <input
+                                                className="w-full text-right text-xs"
+                                                value={it.grams || ""}
+                                                readOnly
+                                            />
+                                            g
+                                        </div>
                                         <div className="text-xs text-gray-400">{it.kcal ?? 0} kcal</div>
                                     </div>
                                 </li>

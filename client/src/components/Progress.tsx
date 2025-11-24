@@ -329,9 +329,9 @@ export default function Progress() {
                   <div className="flex justify-between text-sm text-gray-600 mb-2 items-center">
                     <span>{m.label}</span>
                     <div className="flex gap-6 items-center text-sm">
-                      <span className="w-20 text-right">{m.goal}g</span>
-                      <span className="w-20 text-right text-teal-600">{m.current}g</span>
-                      <span className="w-24 text-right text-gray-500">{Math.max(0, m.goal - m.current)}g</span>
+                      <span className="w-20 text-right">{Number(m.goal).toFixed(2)}g</span>
+                      <span className="w-20 text-right text-teal-600">{Number(m.current).toFixed(2)}g</span>
+                      <span className="w-24 text-right text-gray-500">{Number(Math.max(0, m.goal - m.current)).toFixed(2)}g</span>
                     </div>
                   </div>
                   <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -445,7 +445,7 @@ export default function Progress() {
                 <div key={i}>
                   <div className="flex justify-between text-sm mb-2 text-gray-600">
                     <span>{m.label}</span>
-                    <span>{m.value}g</span>
+                    <span>{Number(m.value).toFixed(2)}g</span>
                   </div>
 
                   <div className="relative w-full h-4 bg-gray-100 rounded-full">

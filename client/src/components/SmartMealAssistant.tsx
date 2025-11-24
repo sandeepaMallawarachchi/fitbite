@@ -95,69 +95,62 @@ const SmartMealAssistant: React.FC<SmartMealAssistantProps> = ({ userId, userNam
 
     const parseNutritionFromResponse = (response: string): DailyNutrition | null => {
         try {
-            const updatedDailyTotalsSection = response.match(/\*\*Updated Daily Totals\*\*([\s\S]*?)(?:\*\*|$)/i);
-
-            if (updatedDailyTotalsSection) {
-                const section = updatedDailyTotalsSection[1];
-
-                const calorieMatch = section.match(/Calories?:[^=]*=\s*(\d+(?:\.\d+)?)\s*kcal/i);
-                const carbMatch = section.match(/Carbs?:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
-                const proteinMatch = section.match(/Protein:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
-                const fatMatch = section.match(/Fat:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
-
-                if (calorieMatch && carbMatch && proteinMatch && fatMatch) {
-                    return {
-                        calories: parseFloat(calorieMatch[1]),
-                        carbs: parseFloat(carbMatch[1]),
-                        protein: parseFloat(proteinMatch[1]),
-                        fat: parseFloat(fatMatch[1]),
-                        fiber: 0
-                    };
-                }
-            }
+            console.log("Parsing response:", response.substring(0, 500));
 
             const totalMealSection = response.match(/\*\*Total for this Meal\*\*([\s\S]*?)(?:\*\*|$)/i);
 
             if (totalMealSection) {
                 const section = totalMealSection[1];
+                console.log("Found Total for this Meal section:", section);
 
-                const calorieMatch = section.match(/Calories?:[^=]*=\s*(\d+(?:\.\d+)?)\s*kcal/i);
-                const carbMatch = section.match(/Carbs?:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
-                const proteinMatch = section.match(/Protein:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
-                const fatMatch = section.match(/Fat:[^=]*=\s*(\d+(?:\.\d+)?)g/i);
+                const calorieMatch = section.match(/Calories?:[^\n]*=\s*(\d+(?:\.\d+)?)\s*kcal/i);
+                const carbMatch = section.match(/Carbs?:[^\n]*=\s*(\d+(?:\.\d+)?)g/i);
+                const proteinMatch = section.match(/Protein:[^\n]*=\s*(\d+(?:\.\d+)?)g/i);
+                const fatMatch = section.match(/Fat:[^\n]*=\s*(\d+(?:\.\d+)?)g/i);
 
                 if (calorieMatch && carbMatch && proteinMatch && fatMatch) {
-                    return {
+                    const nutrition = {
                         calories: parseFloat(calorieMatch[1]),
                         carbs: parseFloat(carbMatch[1]),
                         protein: parseFloat(proteinMatch[1]),
                         fat: parseFloat(fatMatch[1]),
                         fiber: 0
                     };
+                    console.log("Extracted nutrition:", nutrition);
+                    return nutrition;
+                } else {
+                    console.log("Could not find equation format, trying simple format");
+
+                    const lines = section.split('\n');
+                    let calories = 0, carbs = 0, protein = 0, fat = 0;
+
+                    for (const line of lines) {
+                        const calMatch = line.match(/Calories?:\s*(\d+(?:\.\d+)?)\s*kcal/i);
+                        const carbMatch = line.match(/Carbs?:\s*(\d+(?:\.\d+)?)g/i);
+                        const protMatch = line.match(/Protein:\s*(\d+(?:\.\d+)?)g/i);
+                        const fatMatch = line.match(/Fat:\s*(\d+(?:\.\d+)?)g/i);
+
+                        if (calMatch) calories = parseFloat(calMatch[1]);
+                        if (carbMatch) carbs = parseFloat(carbMatch[1]);
+                        if (protMatch) protein = parseFloat(protMatch[1]);
+                        if (fatMatch) fat = parseFloat(fatMatch[1]);
+                    }
+
+                    if (calories > 0) {
+                        return { calories, carbs, protein, fat, fiber: 0 };
+                    }
                 }
             }
 
-            const calorieMatch = response.match(/(\d+(?:\.\d+)?)\s*(?:kcal|calories)/i);
-            const carbMatch = response.match(/(\d+(?:\.\d+)?)g?\s*carbs?/i);
-            const proteinMatch = response.match(/(\d+(?:\.\d+)?)g?\s*protein/i);
-            const fatMatch = response.match(/(\d+(?:\.\d+)?)g?\s*fat/i);
-
-            if (calorieMatch) {
-                return {
-                    calories: parseFloat(calorieMatch[1]),
-                    carbs: carbMatch ? parseFloat(carbMatch[1]) : 0,
-                    protein: proteinMatch ? parseFloat(proteinMatch[1]) : 0,
-                    fat: fatMatch ? parseFloat(fatMatch[1]) : 0,
-                    fiber: 0
-                };
-            }
+            console.log("Could not parse nutrition data");
+            return null;
 
         } catch (error) {
             console.error("Error parsing nutrition:", error);
+            return null;
         }
-        return null;
     };
-    
+
     const findExistingMeal = (messageContent: string): string | null => {
         if (!dailyTracking) return null;
 

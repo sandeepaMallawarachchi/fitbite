@@ -1,57 +1,60 @@
 from datetime import datetime
 
 def get_meal_tracking_prompt(user_data, daily_tracking, user_message):
-    return f"""You are a professional nutrition assistant for FitBite. Help users track their meals and provide nutritional guidance.
+    current_calories = daily_tracking.get('totalNutrition', {}).get('calories', 0)
+    current_carbs = daily_tracking.get('totalNutrition', {}).get('carbs', 0)
+    current_protein = daily_tracking.get('totalNutrition', {}).get('protein', 0)
+    current_fat = daily_tracking.get('totalNutrition', {}).get('fat', 0)
+    remaining_tdee = daily_tracking.get('remainingTDEE', 0)
+    
+    return f"""You are a professional nutrition assistant for FitBite. Analyze the user's meal and calculate exact nutrition.
 
 User Profile:
 - Name: {user_data.get('name')}
-- Gender: {user_data.get('gender')}
-- Height: {user_data.get('height')} cm
 - Weight: {user_data.get('weight')} kg
 - TDEE: {user_data.get('TDEE')} kcal
 - Goal: {user_data.get('fitnessGoal', {}).get('primaryGoal')}
-- Dietary Preference: {user_data.get('dietaryDetails', {}).get('preference')}
 
-CURRENT DAILY TOTALS (ALREADY CONSUMED TODAY):
-- Calories: {daily_tracking.get('totalNutrition', {}).get('calories', 0)} kcal
-- Carbs: {daily_tracking.get('totalNutrition', {}).get('carbs', 0)}g
-- Protein: {daily_tracking.get('totalNutrition', {}).get('protein', 0)}g  
-- Fat: {daily_tracking.get('totalNutrition', {}).get('fat', 0)}g
-- Remaining TDEE: {daily_tracking.get('remainingTDEE', 0)} kcal
+CURRENT DAILY TOTALS (ALREADY CONSUMED):
+- Calories: {current_calories} kcal
+- Carbs: {current_carbs}g
+- Protein: {current_protein}g  
+- Fat: {current_fat}g
+- Remaining: {remaining_tdee} kcal
 
-User Message: {user_message}
+User's Meal: {user_message}
 
-CRITICAL INSTRUCTIONS:
-1. Calculate macros for THIS MEAL ONLY based on the foods mentioned
-2. In "Updated Daily Totals" section, ADD this meal's macros to the CURRENT totals above
-3. Show the calculation clearly: Current + New = Updated Total
-
-Response Format:
+RESPONSE FORMAT (FOLLOW EXACTLY):
 
 **Meal Breakdown**
-- [Food 1]: [amount]g
+- [Food 1]: [X]g
   Per 100g: [kcal] kcal, [carbs]g carbs, [protein]g protein, [fat]g fat
-  Scaled: [calculated_kcal] kcal, [calculated_carbs]g carbs, [calculated_protein]g protein, [calculated_fat]g fat
+  Scaled to [X]g: [calculated_kcal] kcal, [calculated_carbs]g carbs, [calculated_protein]g protein, [calculated_fat]g fat
 
 **Total for this Meal**
-- Calories: [sum] kcal
-- Carbs: [sum]g
-- Protein: [sum]g
-- Fat: [sum]g
+- Calories: [calculation] = [FINAL_SUM] kcal
+- Carbs: [calculation] = [FINAL_SUM]g
+- Protein: [calculation] = [FINAL_SUM]g
+- Fat: [calculation] = [FINAL_SUM]g
 
 **Updated Daily Totals**
-- Calories: {daily_tracking.get('totalNutrition', {}).get('calories', 0)} kcal + [this_meal_kcal] kcal = [new_total] kcal
-- Carbs: {daily_tracking.get('totalNutrition', {}).get('carbs', 0)}g + [this_meal_carbs]g = [new_total]g
-- Protein: {daily_tracking.get('totalNutrition', {}).get('protein', 0)}g + [this_meal_protein]g = [new_total]g
-- Fat: {daily_tracking.get('totalNutrition', {}).get('fat', 0)}g + [this_meal_fat]g = [new_total]g
+- Calories: {current_calories} + [meal_kcal] = [new_total] kcal
+- Carbs: {current_carbs}g + [meal_carbs]g = [new_total]g
+- Protein: {current_protein}g + [meal_protein]g = [new_total]g
+- Fat: {current_fat}g + [meal_fat]g = [new_total]g
 
 **Remaining Calories**
-- Remaining TDEE: {user_data.get('TDEE')} kcal - [new_total_kcal] kcal = [remaining] kcal
+- Remaining: {user_data.get('TDEE')} - [new_total_kcal] = [remaining] kcal
 
 **Suggestion**
-[One short, goal-based recommendation]
+[One short goal-based tip]
 
-CRITICAL: The "Total for this Meal" section must ONLY contain the macros from THIS meal. The "Updated Daily Totals" must show the equation of adding THIS meal to existing totals."""
+CRITICAL RULES:
+1. In "Total for this Meal", show the equation AND put the final sum after "="
+2. Example: "Calories: 260 + 165 + 77.5 = 502.5 kcal" (NOT just "260 kcal")
+3. Use accurate nutrition values per 100g
+4. Show all calculations clearly
+5. Final sums must be accurate"""
 
 def get_meal_plan_generation_prompt(user_data):
     

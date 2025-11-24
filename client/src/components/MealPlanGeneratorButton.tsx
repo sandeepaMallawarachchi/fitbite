@@ -155,29 +155,25 @@ const MealPlanGeneratorButton: React.FC<MealPlanGeneratorButtonProps> = ({
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all cursor-pointer ${loading
                         ? "bg-blue-400 text-white cursor-wait"
                         : hasExistingPlan
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md hover:shadow-lg"
-                            : "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg"
+                            ? "bg-[#8fe289] text-white"
+                            : "bg-blue-400 text-white"
                     }`}
             >
                 {loading ? (
                     <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>{hasExistingPlan ? "Updating..." : "Generating..."}</span>
                     </>
                 ) : success ? (
                     <>
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>{hasExistingPlan ? "Updated!" : "Generated!"}</span>
                     </>
                 ) : hasExistingPlan ? (
                     <>
                         <RefreshCw className="w-4 h-4" />
-                        <span>Regenerate Plan</span>
                     </>
                 ) : (
                     <>
                         <Sparkles className="w-4 h-4" />
-                        <span>Generate Meal Plan</span>
                     </>
                 )}
             </button>

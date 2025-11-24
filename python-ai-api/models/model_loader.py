@@ -15,8 +15,6 @@ class NutritionAIModel:
         }
         
     def load_model(self):
-        print(f"Using Groq API")
-        print(f"Model: Llama 3.3 70B")
         return True
     
     def generate_response(self, prompt, max_tokens=2000):

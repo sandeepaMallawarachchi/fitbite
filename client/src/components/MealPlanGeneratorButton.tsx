@@ -72,7 +72,7 @@ const MealPlanGeneratorButton: React.FC<MealPlanGeneratorButtonProps> = ({
 
         try {
             const res = await axios.post(
-                "http://localhost:5001/api/generate-meal-plan",
+                "https://fitbite-3vu1.onrender.com/api/generate-meal-plan",
                 {
                     userData: {
                         userId: userId,
